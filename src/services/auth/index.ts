@@ -2,36 +2,36 @@
 
 import { envConfig } from "@/config/envConfig";
 import Response from "@/types/response";
-import { DecodedSession, Session } from "@/types/session";
+import { Session } from "@/types/session";
 import { cookies } from "next/headers";
 
-export const verifySession = async () => {
+export const verifySession = async (): Promise<Session | null> => {
   try {
+    const sessionToken = (await cookies()).get("accessToken")?.value;
+
+    if (!sessionToken) {
+      return null;
+    }
+
     // try verifying the session
     const response = await fetch(`${envConfig.baseApi}/auth/verify-session`, {
       method: "POST",
-      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${sessionToken}`,
+      },
     });
 
-    const result: Response<DecodedSession> = await response.json();
+    const session: Response<Session> = await response.json();
 
     // if session valid
-    if (result.data?.session) {
-      // return decoded session
-      return result.data.session;
+    if (session.data) {
+      // return session
+      return session.data;
     }
 
     // if session not valid, try refreshing the session
-    const newSession = await refreshSession();
+    return await refreshSession();
 
-    // if new session generated
-    if (newSession) {
-      // verify the session again to get the decoded session
-      await verifySession();
-    }
-
-    // if none of the tries work
-    return null;
   } catch (error: unknown) {
     console.error((error as Error).message);
     // if error happens return null
@@ -39,8 +39,14 @@ export const verifySession = async () => {
   }
 };
 
-export const refreshSession = async () => {
+export const refreshSession = async (): Promise<Session | null> => {
   try {
+    const refreshSessionToken = (await cookies()).get("refreshToken")?.value;
+
+    if (!refreshSessionToken) {
+      return null;
+    }
+
     const response = await fetch(`${envConfig.baseApi}/auth/refresh-session`, {
       method: "POST",
       // send all the tokens including refresh token
@@ -48,14 +54,17 @@ export const refreshSession = async () => {
       credentials: "include",
     });
 
-    const result: Response<Session> = await response.json();
+    const session: Response<Session> = await response.json();
 
     // if success in getting a new session
-    // session will be a string
-    // otherwise undefined
-    return result.data?.session;
+    if (session.data) {
+      return session.data;
+    } else {
+      return null;
+    }
   } catch (error: unknown) {
     console.error((error as Error).message);
+    return null;
   }
 };
 
