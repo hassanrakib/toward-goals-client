@@ -1,6 +1,6 @@
 import { envConfig } from "@/config/envConfig";
 import { cookies } from "next/headers";
-import { getNewAccessTokenInTheCookie } from "../utils/getNewAccessToken";
+import { refreshSession } from "../services/auth";
 import {
   createApi,
   BaseQueryFn,
@@ -13,20 +13,20 @@ import {
 const baseQuery = fetchBaseQuery({
   baseUrl: envConfig.baseApi,
   prepareHeaders: async (headers) => {
-    // if accessToken found in the cookie
+    // if session found in the cookie
     // send it with every request
-    const accessToken = (await cookies()).get("accessToken")?.value;
+    const session = (await cookies()).get("session")?.value;
 
-    if (accessToken) {
-      headers.set("authorization", `Bearer ${accessToken}`);
+    if (session) {
+      headers.set("authorization", `Bearer ${session}`);
     }
 
     return headers;
   },
 });
 
-// if accessToken is expired, we can generate a new accessToken using a valid refreshToken
-const baseQueryWithRefreshToken: BaseQueryFn<
+// if session is expired, we can generate a new session using a valid refreshToken
+const baseQueryWithRefreshSession: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError,
@@ -40,13 +40,13 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   // get the result by calling the baseQuery function
   let baseQueryResult = await baseQuery(args, api, extraOptions);
 
-  // if there is any sort of problem with the accessToken
+  // if there is any sort of problem with the session
   // we get to know it in the baseQueryResult
   if (baseQueryResult.error?.status === UNAUTHORIZED) {
-    // get new accessToken using a valid refreshToken
-    const newAccessTokenSetup = await getNewAccessTokenInTheCookie();
+    // get new session using a valid refreshToken
+    const newSession = await refreshSession();
 
-    if (newAccessTokenSetup?.success) {
+    if (newSession) {
       baseQueryResult = await baseQuery(args, api, extraOptions);
     }
   }
@@ -56,6 +56,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
 export const baseApi = createApi({
     reducerPath: 'baseApi',
-    baseQuery: baseQueryWithRefreshToken,
+    baseQuery: baseQueryWithRefreshSession,
     endpoints: () => ({}),
 });
