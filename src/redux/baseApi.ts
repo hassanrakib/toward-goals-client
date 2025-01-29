@@ -8,7 +8,7 @@ const baseQuery = fetchBaseQuery({
     // if sessionToken found in the cookie
     // send it with every request
     // protected apis will need the Authorization header
-    const sessionToken = (await cookies()).get("accessToken")?.value;
+    const sessionToken = (await cookies()).get("sessionToken")?.value;
 
     if (sessionToken) {
       headers.set("Authorization", `Bearer ${sessionToken}`);

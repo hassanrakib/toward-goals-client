@@ -1,4 +1,4 @@
-import { verifySession } from "@/services/auth";
+import { createSession } from "@/services/auth";
 import { Session } from "@/types/session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -23,10 +23,11 @@ export async function middleware(request: NextRequest) {
   }
 
   // if this is the first request of an authenticated user there will be no session cookie
-  // verify the session token which is 'accessToken' using verifySession()
-  // verifySession() call will set new "session" in the cookie
+  // create new session by calling the createSession()
+  // createSession() call will set new "session" in the cookie
+  // also return the created session
   if (!sessionCookie) {
-    const newSession = await verifySession();
+    const newSession = await createSession();
 
     const newSessionCookie = (await cookies()).get("session")?.value;
 
