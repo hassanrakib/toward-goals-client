@@ -1,5 +1,5 @@
 import { createSession } from "@/services/auth";
-import { Session } from "@/types/session";
+import { Session } from "@/types/auth/session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 

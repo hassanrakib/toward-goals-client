@@ -1,8 +1,8 @@
 "use server";
 
 import { envConfig } from "@/config/envConfig";
-import Response from "@/types/response";
-import { Session } from "@/types/session";
+import Response from "@/types/global/response";
+import { Session } from "@/types/auth/session";
 import { cookies } from "next/headers";
 
 export const createSession = async (): Promise<Session | null> => {

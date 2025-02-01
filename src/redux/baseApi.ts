@@ -1,3 +1,5 @@
+"use server"
+
 import { envConfig } from "@/config/envConfig";
 import { cookies } from "next/headers";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -20,6 +22,6 @@ const baseQuery = fetchBaseQuery({
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: baseQuery,
+  baseQuery,
   endpoints: () => ({}),
 });
