@@ -5,7 +5,8 @@ export default function Providers({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ChakraUIProvider>
+    // don't use system preference use "light" theme by default
+    <ChakraUIProvider enableSystem={false}>
       <ReduxStoreProvider>{children}</ReduxStoreProvider>
     </ChakraUIProvider>
   );

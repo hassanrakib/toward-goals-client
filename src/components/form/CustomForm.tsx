@@ -1,6 +1,6 @@
 "use client";
 
-import { Fieldset, Stack } from "@chakra-ui/react";
+import { Fieldset } from "@chakra-ui/react";
 import {
   FieldValues,
   FormProvider,
@@ -18,16 +18,12 @@ type CustomizedUseFormProps<FormValues extends FieldValues> =
 interface ICustomFormProps<FormValues extends FieldValues> {
   children: React.ReactNode;
   submitHandler: SubmitHandler<FormValues>;
-  title: string;
-  description: string;
   useFormProps: CustomizedUseFormProps<FormValues>;
 }
 
 export default function CustomForm<FormValues extends FieldValues>({
   children,
   submitHandler,
-  title,
-  description,
   useFormProps,
 }: ICustomFormProps<FormValues>) {
   const methods = useForm<FormValues>(useFormProps);
@@ -41,14 +37,9 @@ export default function CustomForm<FormValues extends FieldValues>({
 
   return (
     <FormProvider {...methods}>
-      <Fieldset.Root size="lg" maxW="md">
-        <Stack>
-          <Fieldset.Legend>{title}</Fieldset.Legend>
-          <Fieldset.HelperText>{description}</Fieldset.HelperText>
-        </Stack>
-
-        <Fieldset.Content>{children}</Fieldset.Content>
-      </Fieldset.Root>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <Fieldset.Root>{children}</Fieldset.Root>
+      </form>
     </FormProvider>
   );
 }

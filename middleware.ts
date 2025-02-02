@@ -1,5 +1,4 @@
-import { createSession } from "@/services/auth";
-import { Session } from "@/types/auth/session";
+import { decrypt } from "@/services/auth";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,33 +7,11 @@ const authRoutes = ["/login", "/register"];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // the session parsed from the "session" cookie
-  let session: Session | null = null;
+  // if the user is authenticated the cookie will be found
+  const cookie = (await cookies()).get("session")?.value;
 
-  // initially for the first request the session cookie will be undefined
-  // but later for the subsequest requests
-  // if the user is authenticated the session cookie will be found
-  const sessionCookie = (await cookies()).get("session")?.value;
-
-  // if session cookie found
-  // set the session variable
-  if (sessionCookie) {
-    session = JSON.parse(sessionCookie);
-  }
-
-  // if this is the first request of an authenticated user there will be no session cookie
-  // create new session by calling the createSession()
-  // createSession() call will set new "session" in the cookie
-  // also return the created session
-  if (!sessionCookie) {
-    const newSession = await createSession();
-
-    const newSessionCookie = (await cookies()).get("session")?.value;
-
-    if (newSession && newSessionCookie) {
-      session = JSON.parse(newSessionCookie);
-    }
-  }
+  // optimistic check
+  const session = decrypt(cookie);
 
   // if the user is uauthenticated
   if (!session) {

@@ -1,3 +1,5 @@
+"use client";
+
 import CustomForm from "@/components/form/CustomForm";
 import CustomInput from "@/components/form/CustomInput";
 import { SubmitHandler } from "react-hook-form";
@@ -22,14 +24,12 @@ const Login = () => {
 
   return (
     <CustomForm
-      title="Login"
-      description="Start your journey towards goals"
       submitHandler={submitHandler}
       useFormProps={{ defaultValues }}
     >
       <CustomInput
         name="username"
-        placeholder="Enter username of your choice"
+        placeholder="Username"
         registerOptions={{ required: true }}
       />
     </CustomForm>
