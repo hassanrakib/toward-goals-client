@@ -1,6 +1,5 @@
 "use client";
 
-import { Fieldset } from "@chakra-ui/react";
 import {
   FieldValues,
   FormProvider,
@@ -37,9 +36,7 @@ export default function CustomForm<FormValues extends FieldValues>({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <Fieldset.Root>{children}</Fieldset.Root>
-      </form>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
     </FormProvider>
   );
 }
