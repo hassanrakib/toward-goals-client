@@ -2,23 +2,19 @@
 
 import CustomForm from "@/components/form/CustomForm";
 import CustomInput from "@/components/form/CustomInput";
+import { ILoginCredentials } from "@/types/auth";
 import { Button, Card, Flex } from "@chakra-ui/react";
 import { AtSign, LockKeyhole } from "lucide-react";
 import { SubmitHandler } from "react-hook-form";
 
-interface IFormValues {
-  username: string;
-  password: string;
-}
-
 const SignIn = () => {
   // default values for the signin form
-  const defaultValues: IFormValues = {
+  const defaultValues: ILoginCredentials = {
     username: "",
     password: "",
   };
 
-  const submitHandler: SubmitHandler<IFormValues> = (data) => {
+  const submitHandler: SubmitHandler<ILoginCredentials> = (data) => {
     console.log(data);
   };
 
@@ -39,14 +35,14 @@ const SignIn = () => {
               placeholder="Username"
               type="text"
               registerOptions={{ required: "Username is required" }}
-              inputIcon={<AtSign size={18} />}
+              startElement={<AtSign size={18} />}
             />
             <CustomInput
               name="password"
               placeholder="Password"
               type="password"
               registerOptions={{ required: "Password is required" }}
-              inputIcon={<LockKeyhole size={18} />}
+              startElement={<LockKeyhole size={18} />}
             />
           </Card.Body>
           <Card.Footer>

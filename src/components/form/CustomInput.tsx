@@ -11,7 +11,7 @@ interface ICustomInputProps {
   placeholder: string;
   type: HTMLInputTypeAttribute
   registerOptions?: RegisterOptions;
-  inputIcon?: React.ReactNode;
+  startElement?: React.ReactNode;
 }
 
 export default function CustomInput({
@@ -19,7 +19,7 @@ export default function CustomInput({
   placeholder,
   type,
   registerOptions,
-  inputIcon,
+  startElement,
 }: ICustomInputProps) {
   const {
     register,
@@ -31,7 +31,7 @@ export default function CustomInput({
       invalid={!!errors[name]}
       errorText={(errors[name]?.message as string) || ""}
     >
-      <InputGroup width="100%" startElement={inputIcon || null}>
+      <InputGroup width="100%" startElement={startElement || null}>
         <Input placeholder={placeholder} type={type} {...register(name, registerOptions)} />
       </InputGroup>
     </Field>

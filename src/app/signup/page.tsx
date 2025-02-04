@@ -2,17 +2,21 @@
 
 import CustomForm from "@/components/form/CustomForm";
 import CustomInput from "@/components/form/CustomInput";
-import { Button, Card, Flex } from "@chakra-ui/react";
+import { useCreateUserMutation } from "@/redux/features/user/user.api";
+import { IUser } from "@/types/user";
+import { Alert, Button, Card, Flex } from "@chakra-ui/react";
 import { AtSign, LockKeyhole, Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { SubmitHandler } from "react-hook-form";
 
-interface IFormValues {
-  username: string;
-  email: string;
-  password: string;
-}
+type IFormValues = Pick<IUser, "username" | "email" | "password">;
 
 const SignUp = () => {
+  // router from next/navigation
+  const router = useRouter();
+
+  const [createUser, { isLoading, error, data }] = useCreateUserMutation();
+
   // default values for the register form
   const defaultValues: IFormValues = {
     username: "",
@@ -20,8 +24,12 @@ const SignUp = () => {
     password: "",
   };
 
-  const submitHandler: SubmitHandler<IFormValues> = (data) => {
-    console.log(data);
+  const submitHandler: SubmitHandler<IFormValues> = async (data) => {
+    const result = await createUser(data);
+
+    if (result.data?.data) {
+      router.push("/");
+    }
   };
 
   return (
@@ -43,24 +51,32 @@ const SignUp = () => {
               placeholder="Username"
               type="text"
               registerOptions={{ required: "Username is required" }}
-              inputIcon={<AtSign size={18} />}
+              startElement={<AtSign size={18} />}
             />
             <CustomInput
               name="email"
               placeholder="Email"
               type="email"
               registerOptions={{ required: "Email is required" }}
-              inputIcon={<Mail size={18} />}
+              startElement={<Mail size={18} />}
             />
             <CustomInput
               name="password"
               placeholder="Password"
               type="password"
               registerOptions={{ required: "Password is required" }}
-              inputIcon={<LockKeyhole size={18} />}
+              startElement={<LockKeyhole size={18} />}
             />
           </Card.Body>
-          <Card.Footer>
+          <Card.Footer flexDir="column">
+            {!isLoading && error ? (
+              <Alert.Root status="error" variant="outline" size="sm">
+                <Alert.Indicator />
+                <Alert.Title>
+                  There was an error processing your request
+                </Alert.Title>
+              </Alert.Root>
+            ) : null}
             <Button
               type="submit"
               colorScheme="gray"
@@ -69,6 +85,8 @@ const SignUp = () => {
               _hover={{ bg: "gray.700" }}
               w="100%"
               borderRadius="md"
+              loading={isLoading}
+              loadingText="Creating user..."
             >
               Sign up
             </Button>

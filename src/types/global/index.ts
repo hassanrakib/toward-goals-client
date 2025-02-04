@@ -5,7 +5,7 @@ type ErrorSources = {
 
 // combination of both error response & success response
 // as client side doesn't know about the response type
-export default interface Response<T> {
+export interface IResponse<T> {
   statusCode: number;
   success: boolean;
   message: string;
