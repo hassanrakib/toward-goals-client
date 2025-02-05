@@ -34,14 +34,12 @@ const SignIn = () => {
               name="username"
               placeholder="Username"
               type="text"
-              registerOptions={{ required: "Username is required" }}
               startElement={<AtSign size={18} />}
             />
             <CustomInput
               name="password"
               placeholder="Password"
               type="password"
-              registerOptions={{ required: "Password is required" }}
               startElement={<LockKeyhole size={18} />}
             />
           </Card.Body>

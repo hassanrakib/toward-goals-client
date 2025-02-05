@@ -2,15 +2,14 @@
 
 import { Field } from "@/components/ui/field";
 import { Input } from "@chakra-ui/react";
-import { RegisterOptions, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { InputGroup } from "@/components/ui/input-group";
 import { HTMLInputTypeAttribute } from "react";
 
 interface ICustomInputProps {
   name: string;
   placeholder: string;
-  type: HTMLInputTypeAttribute
-  registerOptions?: RegisterOptions;
+  type: HTMLInputTypeAttribute;
   startElement?: React.ReactNode;
 }
 
@@ -18,7 +17,6 @@ export default function CustomInput({
   name,
   placeholder,
   type,
-  registerOptions,
   startElement,
 }: ICustomInputProps) {
   const {
@@ -32,7 +30,7 @@ export default function CustomInput({
       errorText={(errors[name]?.message as string) || ""}
     >
       <InputGroup width="100%" startElement={startElement || null}>
-        <Input placeholder={placeholder} type={type} {...register(name, registerOptions)} />
+        <Input placeholder={placeholder} type={type} {...register(name)} />
       </InputGroup>
     </Field>
   );

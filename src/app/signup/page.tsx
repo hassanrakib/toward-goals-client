@@ -3,12 +3,11 @@
 import CustomForm from "@/components/form/CustomForm";
 import CustomInput from "@/components/form/CustomInput";
 import SubmitButton from "@/components/form/SubmitButton";
-import { envConfig } from "@/config/envConfig";
 import { useCreateUserMutation } from "@/redux/features/user/user.api";
-import { IResponse } from "@/types/global";
+import { createUserSchema } from "@/schemas/user";
 import { IUser } from "@/types/user";
-import debounce from "@/utils/debounce";
 import { Alert, Card, Flex } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, LockKeyhole, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { SubmitHandler } from "react-hook-form";
@@ -29,42 +28,6 @@ const SignUp = () => {
     password: "",
   };
 
-  // check username existence in registerOptions' prop
-  const checkUsername = debounce(async (username: string) => {
-    const res = await fetch(
-      `${envConfig.baseApi}/auth/check-username?username=${username}`
-    );
-
-    const data: IResponse<{ exists: boolean }> = await res.json();
-
-    // if username exists
-    if (data.data?.exists) {
-      // error message
-      return "Username is not available";
-    } else {
-      // no error
-      return true;
-    }
-  }, 2000);
-
-  // check email existence in registerOptions' prop
-  const checkEmail = debounce(async (email: string) => {
-    const res = await fetch(
-      `${envConfig.baseApi}/auth/check-email?email=${email}`
-    );
-
-    const data: IResponse<{ exists: boolean }> = await res.json();
-
-    // if email exists
-    if (data.data?.exists) {
-      // error message
-      return "Email is already used";
-    } else {
-      // no error
-      return true;
-    }
-  }, 2000);
-
   const submitHandler: SubmitHandler<IFormValues> = async (data) => {
     const result = await createUser(data);
 
@@ -84,35 +47,28 @@ const SignUp = () => {
         </Card.Header>
         <CustomForm
           submitHandler={submitHandler}
-          useFormProps={{ defaultValues }}
+          useFormProps={{
+            defaultValues,
+            resolver: zodResolver(createUserSchema),
+          }}
         >
           <Card.Body gap={3}>
             <CustomInput
               name="username"
               placeholder="Username"
               type="text"
-              registerOptions={{
-                required: "Username is required",
-                validate: async (username: string) =>
-                  await checkUsername(username),
-              }}
               startElement={<AtSign size={18} />}
             />
             <CustomInput
               name="email"
               placeholder="Email"
               type="email"
-              registerOptions={{
-                required: "Email is required",
-                validate: async (email: string) => await checkEmail(email),
-              }}
               startElement={<Mail size={18} />}
             />
             <CustomInput
               name="password"
               placeholder="Password"
               type="password"
-              registerOptions={{ required: "Password is required" }}
               startElement={<LockKeyhole size={18} />}
             />
           </Card.Body>
