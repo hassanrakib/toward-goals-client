@@ -3,13 +3,13 @@ import { useFormContext } from "react-hook-form";
 
 interface ISubmitButtonProps {
   children: React.ReactNode;
-  loading: boolean;
+  isServerActionLoading: boolean;
   loadingText: string;
 }
 
 const SubmitButton = ({
   children,
-  loading,
+  isServerActionLoading,
   loadingText,
 }: ISubmitButtonProps) => {
   const {
@@ -24,7 +24,7 @@ const SubmitButton = ({
       _hover={{ bg: "gray.700" }}
       w="100%"
       borderRadius="md"
-      loading={loading || isSubmitting}
+      loading={isServerActionLoading || isSubmitting}
       loadingText={loadingText}
     >
       {children}

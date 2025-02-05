@@ -2,20 +2,45 @@
 
 import CustomForm from "@/components/form/CustomForm";
 import CustomInput from "@/components/form/CustomInput";
-import { ILoginCredentials } from "@/types/auth";
-import { Button, Card, Flex } from "@chakra-ui/react";
+import SubmitButton from "@/components/form/SubmitButton";
+import Alert from "@/components/ui/alert";
+import { useSignInMutation } from "@/redux/features/auth/auth.api";
+import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
+import { signInCredentialsSchema } from "@/schemas/auth";
+import { Card, Flex } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, LockKeyhole } from "lucide-react";
-import { SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { UseFormReset } from "react-hook-form";
+
+interface IFormValues {
+  username: string;
+  password: string;
+}
 
 const SignIn = () => {
+  // router from next/navigation
+  const router = useRouter();
+
+  const [signIn, { isLoading: isSigningIn, error: signInError }] =
+    useSignInMutation();
+
   // default values for the signin form
-  const defaultValues: ILoginCredentials = {
+  const defaultValues: IFormValues = {
     username: "",
     password: "",
   };
 
-  const submitHandler: SubmitHandler<ILoginCredentials> = (data) => {
-    console.log(data);
+  const onSubmit = async (
+    data: IFormValues,
+    reset: UseFormReset<IFormValues>
+  ) => {
+    const result = await signIn(data);
+
+    if (result.data?.data) {
+      reset(defaultValues);
+      router.push("/");
+    }
   };
 
   return (
@@ -26,8 +51,11 @@ const SignIn = () => {
           <Card.Description>Sign in to access your account</Card.Description>
         </Card.Header>
         <CustomForm
-          submitHandler={submitHandler}
-          useFormProps={{ defaultValues }}
+          onSubmit={onSubmit}
+          useFormProps={{
+            defaultValues,
+            resolver: zodResolver(signInCredentialsSchema),
+          }}
         >
           <Card.Body gap={3}>
             <CustomInput
@@ -43,18 +71,20 @@ const SignIn = () => {
               startElement={<LockKeyhole size={18} />}
             />
           </Card.Body>
-          <Card.Footer>
-            <Button
-              type="submit"
-              colorScheme="gray"
-              bg="gray.600"
-              color="white"
-              _hover={{ bg: "gray.700" }}
-              w="100%"
-              borderRadius="md"
+          <Card.Footer flexDir="column">
+            {!isSigningIn && signInError ? (
+              <Alert status="error">
+                {isFetchBaseQueryErrorWithData(signInError)
+                  ? signInError.data.message
+                  : "There was an error processing your request"}
+              </Alert>
+            ) : null}
+            <SubmitButton
+              isServerActionLoading={isSigningIn}
+              loadingText="Signing in..."
             >
               Sign in
-            </Button>
+            </SubmitButton>
           </Card.Footer>
         </CustomForm>
       </Card.Root>

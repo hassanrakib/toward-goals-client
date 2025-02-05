@@ -6,6 +6,7 @@ import {
   SubmitHandler,
   useForm,
   UseFormProps,
+  UseFormReset,
 } from "react-hook-form";
 
 // make some props mandatory for useForm
@@ -16,27 +17,27 @@ type CustomizedUseFormProps<FormValues extends FieldValues> =
 
 interface ICustomFormProps<FormValues extends FieldValues> {
   children: React.ReactNode;
-  submitHandler: SubmitHandler<FormValues>;
+  onSubmit: (
+    data: FormValues,
+    reset: UseFormReset<FormValues>
+  ) => Promise<void>;
   useFormProps: CustomizedUseFormProps<FormValues>;
 }
 
 export default function CustomForm<FormValues extends FieldValues>({
   children,
-  submitHandler,
+  onSubmit,
   useFormProps,
 }: ICustomFormProps<FormValues>) {
   const methods = useForm<FormValues>(useFormProps);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    submitHandler(data);
-
-    // reset the form after submission
-    methods.reset(useFormProps.defaultValues);
+  const submitHandler: SubmitHandler<FormValues> = (data) => {
+    onSubmit(data, methods.reset);
   };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+      <form onSubmit={methods.handleSubmit(submitHandler)}>{children}</form>
     </FormProvider>
   );
 }

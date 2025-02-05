@@ -3,14 +3,15 @@
 import CustomForm from "@/components/form/CustomForm";
 import CustomInput from "@/components/form/CustomInput";
 import SubmitButton from "@/components/form/SubmitButton";
+import Alert from "@/components/ui/alert";
 import { useCreateUserMutation } from "@/redux/features/user/user.api";
 import { createUserSchema } from "@/schemas/user";
 import { IUser } from "@/types/user";
-import { Alert, Card, Flex } from "@chakra-ui/react";
+import { Card, Flex } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, LockKeyhole, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { SubmitHandler } from "react-hook-form";
+import { UseFormReset } from "react-hook-form";
 
 type IFormValues = Pick<IUser, "username" | "email" | "password">;
 
@@ -28,10 +29,14 @@ const SignUp = () => {
     password: "",
   };
 
-  const submitHandler: SubmitHandler<IFormValues> = async (data) => {
+  const onSubmit = async (
+    data: IFormValues,
+    reset: UseFormReset<IFormValues>
+  ) => {
     const result = await createUser(data);
 
     if (result.data?.data) {
+      reset(defaultValues);
       router.push("/");
     }
   };
@@ -46,7 +51,7 @@ const SignUp = () => {
           </Card.Description>
         </Card.Header>
         <CustomForm
-          submitHandler={submitHandler}
+          onSubmit={onSubmit}
           useFormProps={{
             defaultValues,
             resolver: zodResolver(createUserSchema),
@@ -74,15 +79,12 @@ const SignUp = () => {
           </Card.Body>
           <Card.Footer flexDir="column">
             {!isCreatingUser && createUserError ? (
-              <Alert.Root status="error" variant="outline" size="sm">
-                <Alert.Indicator />
-                <Alert.Title>
-                  There was an error processing your request
-                </Alert.Title>
-              </Alert.Root>
+              <Alert status="error">
+                There was an error processing your request
+              </Alert>
             ) : null}
             <SubmitButton
-              loading={isCreatingUser}
+              isServerActionLoading={isCreatingUser}
               loadingText="Creating user..."
             >
               Sign up

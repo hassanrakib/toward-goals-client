@@ -30,7 +30,11 @@ export default function CustomInput({
       errorText={(errors[name]?.message as string) || ""}
     >
       <InputGroup width="100%" startElement={startElement || null}>
-        <Input placeholder={placeholder} type={type} {...register(name)} />
+        <Input
+          placeholder={placeholder}
+          type={type}
+          {...register(name)}
+        />
       </InputGroup>
     </Field>
   );
