@@ -11,7 +11,7 @@ export async function middleware(request: NextRequest) {
   const cookie = (await cookies()).get("session")?.value;
 
   // optimistic check
-  const session = decrypt(cookie);
+  const session = await decrypt(cookie);
 
   // if the user is uauthenticated
   if (!session) {

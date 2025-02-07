@@ -1,5 +1,5 @@
-import { Button } from "@chakra-ui/react";
 import { useFormContext } from "react-hook-form";
+import Button from "../ui/button";
 
 interface ISubmitButtonProps {
   children: React.ReactNode;
@@ -18,12 +18,6 @@ const SubmitButton = ({
   return (
     <Button
       type="submit"
-      colorScheme="gray"
-      bg="gray.600"
-      color="white"
-      _hover={{ bg: "gray.700" }}
-      w="100%"
-      borderRadius="md"
       loading={isServerActionLoading || isSubmitting}
       loadingText={loadingText}
     >

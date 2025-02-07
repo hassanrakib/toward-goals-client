@@ -1,13 +1,14 @@
 "use server";
 
+import { ISessionPayload } from "@/types/auth";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
-export const decrypt = (session: string | undefined = "") => {
+export const decrypt = async (session: string | undefined = "") => {
   try {
-    return jwtDecode(session);
+    return jwtDecode<ISessionPayload>(session);
   } catch (err: unknown) {
-    console.error((err as Error).message);
+    console.log((err as Error).message);
     return null;
   }
 };
