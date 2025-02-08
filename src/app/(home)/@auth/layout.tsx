@@ -1,6 +1,15 @@
-import { Grid, GridItem, Box, Flex, IconButton, Text } from "@chakra-ui/react";
+import {
+  Grid,
+  GridItem,
+  Box,
+  Flex,
+  IconButton,
+  Icon,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
-import { BellIcon } from "lucide-react";
+import { BellIcon, Circle, CircleArrowOutUpRight, CircleDashed, CircleDot, CircleDotDashed, FlagTriangleRight } from "lucide-react";
 import SidebarItems from "@/components/layout/sidebar-items";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -9,43 +18,49 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Sidebar (Fixed) */}
       <Box
         as="aside"
-        bg="gray.100"
-        rounded="2xl"
-        p={4}
-        width="250px"
+        pl={4}
+        pt={8}
+        width="220px"
+        bgGradient="to-r"
+        gradientFrom="bg.muted"
+        gradientTo="bg"
         position="fixed"
-        left={4}
-        top={4}
-        bottom={4}
+        left={0}
+        top={0}
+        bottom={0}
       >
-        <SidebarItems />
+        <VStack align="stretch" gap={5}>
+          {/* Toward Goals Logo */}
+          <Flex align="center" gap={2} cursor="pointer">
+            <Icon boxSize={7} color="red">
+            <Circle />
+            </Icon>
+            <Text
+              fontSize="lg"
+              fontWeight={300}
+              color="red"
+              letterSpacing="widest"
+              textDecoration="underline"
+            >
+              Toward Goals
+            </Text>
+          </Flex>
+          <SidebarItems />
+        </VStack>
       </Box>
 
       {/* Grid Layout for Navbar + Main Content */}
       <Grid
         templateRows="60px 1fr"
         height="100vh"
-        gap={4}
-        p={4}
+        gap={3}
+        p={2}
         // Offsets content so it doesn't go under the sidebar
-        // sidebar width + left prop value
-        ml="266px"
+        ml="220px"
       >
         {/* Top Navbar */}
-        <GridItem
-          as="header"
-          p={4}
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          borderRadius="lg"
-        >
-          {/* Left: Logo */}
-          <Text fontSize="xl" fontWeight="bold">
-            App Logo
-          </Text>
-
-          {/* Right: Notification Icon & Avatar */}
+        <GridItem as="header" display="flex" justifyContent="flex-end">
+          {/* Notification Icon & Avatar */}
           <Flex align="center" gap={4}>
             <IconButton aria-label="Notifications" variant="ghost">
               <BellIcon />
@@ -55,9 +70,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </GridItem>
 
         {/* Main Content */}
-        <GridItem as="main" bg="gray.50" p={4} borderRadius="lg">
-          {children}
-        </GridItem>
+        <GridItem as="main">{children}</GridItem>
       </Grid>
     </>
   );

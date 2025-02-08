@@ -1,37 +1,36 @@
-import { Flex, Text, Icon, Box, VStack } from "@chakra-ui/react";
-import { ChevronDown } from "lucide-react";
-import { Avatar } from "../ui/avatar";
+import { Flex, Text, Icon, VStack } from "@chakra-ui/react";
+import {
+  CalendarSync,
+  Goal,
+  Logs,
+  SquareCheck,
+  Target,
+} from "lucide-react";
 
 interface ISidebarItemProps {
   name: string;
-  img: string;
+  icon: React.ReactNode;
 }
 
-const SidebarItem = ({ name, img }: ISidebarItemProps) => {
+const SidebarItem = ({ name, icon }: ISidebarItemProps) => {
   return (
     <Flex
       align="center"
       gap={3}
-      p={1}
-      borderWidth="1px"
+      p={1.5}
       rounded="xl"
       cursor="pointer"
-      _hover={{ bg: "gray.600" }}
+      _hover={{ bg: "bg.muted" }}
     >
-      {/* Small Avatar */}
-      <Avatar size="xs" src={img} />
+      {/* Small Icon */}
+      <Icon boxSize={6} color="fg.muted">
+        {icon}
+      </Icon>
 
       {/* Text */}
-      <Text fontSize="md" fontWeight="medium">
+      <Text fontSize="md" fontWeight={200}>
         {name}
       </Text>
-
-      {/* Down Arrow Icon */}
-      <Box ml="auto">
-        <Icon boxSize={3.5}>
-          <ChevronDown />
-        </Icon>
-      </Box>
     </Flex>
   );
 };
@@ -39,15 +38,17 @@ const SidebarItem = ({ name, img }: ISidebarItemProps) => {
 const SidebarItems = () => {
   // Sample data for sidebar items
   const items = [
-    { id: 1, text: "Dashboard", img: "https://via.placeholder.com/40" },
-    { id: 2, text: "Profile", img: "https://via.placeholder.com/40" },
-    { id: 3, text: "Settings", img: "https://via.placeholder.com/40" },
+    { id: 1, name: "Goals", icon: <Goal /> },
+    { id: 2, name: "Subgoals", icon: <Target /> },
+    { id: 3, name: "Habits", icon: <CalendarSync /> },
+    { id: 4, name: "My Tasks", icon: <SquareCheck /> },
+    { id: 5, name: "Tasks Feed", icon: <Logs /> },
   ];
 
   return (
-    <VStack gap={3} align="stretch">
+    <VStack gap={2} align="stretch">
       {items.map((item) => (
-        <SidebarItem key={item.id} name={item.text} img={item.img} />
+        <SidebarItem key={item.id} name={item.name} icon={item.icon} />
       ))}
     </VStack>
   );
