@@ -1,4 +1,4 @@
-import { inter } from "@/config/fonts";
+import { sora } from "@/config/fonts";
 import Providers from "@/providers";
 import type { Metadata } from "next";
 
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
+    <html lang="en" className={sora.className} suppressHydrationWarning>
       <body>
         <Providers>{children}</Providers>
       </body>

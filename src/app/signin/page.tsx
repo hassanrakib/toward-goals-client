@@ -1,9 +1,7 @@
 "use client";
 
-import CustomForm from "@/components/form/CustomForm";
-import CustomInput from "@/components/form/CustomInput";
-import SubmitButton from "@/components/form/SubmitButton";
-import Alert from "@/components/ui/alert";
+import Form from "@/components/derived-ui/form";
+import Alert from "@/components/derived-ui/alert";
 import { useSignInMutation } from "@/redux/features/auth/auth.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { signInCredentialsSchema } from "@/schemas/auth";
@@ -12,6 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, LockKeyhole } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
+import StyledInput from "@/components/derived-ui/styled-input";
+import SubmitButton from "@/components/derived-ui/submit-button";
 
 interface IFormValues {
   username: string;
@@ -50,7 +50,7 @@ const SignIn = () => {
           <Card.Title fontSize="2xl">Welcome Back!</Card.Title>
           <Card.Description>Sign in to access your account</Card.Description>
         </Card.Header>
-        <CustomForm
+        <Form
           onSubmit={onSubmit}
           useFormProps={{
             defaultValues,
@@ -58,13 +58,13 @@ const SignIn = () => {
           }}
         >
           <Card.Body gap={3}>
-            <CustomInput
+            <StyledInput
               name="username"
               placeholder="Username"
               type="text"
               startElement={<AtSign size={18} />}
             />
-            <CustomInput
+            <StyledInput
               name="password"
               placeholder="Password"
               type="password"
@@ -86,7 +86,7 @@ const SignIn = () => {
               Sign in
             </SubmitButton>
           </Card.Footer>
-        </CustomForm>
+        </Form>
       </Card.Root>
     </Flex>
   );

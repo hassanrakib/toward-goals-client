@@ -23,12 +23,12 @@ const SidebarItem = ({ name, icon }: ISidebarItemProps) => {
       _hover={{ bg: "bg.muted" }}
     >
       {/* Small Icon */}
-      <Icon boxSize={6} color="fg.muted">
+      <Icon boxSize={5}>
         {icon}
       </Icon>
 
       {/* Text */}
-      <Text fontSize="md" fontWeight={200}>
+      <Text fontSize="md" color="fg.muted">
         {name}
       </Text>
     </Flex>

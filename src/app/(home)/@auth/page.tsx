@@ -1,5 +1,10 @@
+import { VStack } from "@chakra-ui/react";
+
 const Goals = () => {
-  return <div></div>;
+  
+  return <VStack align="stretch">
+    hello, boss!
+  </VStack>;
 };
 
 export default Goals;

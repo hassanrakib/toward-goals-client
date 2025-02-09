@@ -9,8 +9,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
-import { BellIcon, Circle, CircleArrowOutUpRight, CircleDashed, CircleDot, CircleDotDashed, FlagTriangleRight } from "lucide-react";
-import SidebarItems from "@/components/layout/sidebar-items";
+import { BellIcon, CircleFadingArrowUp } from "lucide-react";
+import SidebarItems from "@/components/layout/auth/sidebar-items";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,54 +18,56 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Sidebar (Fixed) */}
       <Box
         as="aside"
-        pl={4}
-        pt={8}
+        p={3}
         width="220px"
-        bgGradient="to-r"
-        gradientFrom="bg.muted"
+        bgGradient="to-b"
+        gradientFrom="bg.subtle"
         gradientTo="bg"
+        borderRadius="4xl"
         position="fixed"
-        left={0}
-        top={0}
-        bottom={0}
+        left={4}
+        top={4}
+        bottom={4}
       >
-        <VStack align="stretch" gap={5}>
+        <VStack gap={8} mt={2} align="stretch">
           {/* Toward Goals Logo */}
-          <Flex align="center" gap={2} cursor="pointer">
-            <Icon boxSize={7} color="red">
-            <Circle />
+          <Flex align="baseline" justify="center" gap={1} cursor="pointer">
+            <Text fontSize="lg">Toward Goals</Text>
+            <Icon boxSize={7}>
+              <CircleFadingArrowUp />
             </Icon>
-            <Text
-              fontSize="lg"
-              fontWeight={300}
-              color="red"
-              letterSpacing="widest"
-              textDecoration="underline"
-            >
-              Toward Goals
-            </Text>
           </Flex>
+          {/* Sidebar Items */}
           <SidebarItems />
         </VStack>
       </Box>
 
       {/* Grid Layout for Navbar + Main Content */}
       <Grid
-        templateRows="60px 1fr"
+        templateRows="50px 1fr"
         height="100vh"
         gap={3}
-        p={2}
+        p={4}
         // Offsets content so it doesn't go under the sidebar
-        ml="220px"
+        ml="236px"
       >
         {/* Top Navbar */}
-        <GridItem as="header" display="flex" justifyContent="flex-end">
+        <GridItem
+          as="header"
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-end"
+        >
           {/* Notification Icon & Avatar */}
           <Flex align="center" gap={4}>
-            <IconButton aria-label="Notifications" variant="ghost">
+            <IconButton
+              aria-label="Notifications"
+              variant="ghost"
+              rounded="full"
+            >
               <BellIcon />
             </IconButton>
-            <Avatar name="User" />
+            <Avatar name="User" cursor="pointer" />
           </Flex>
         </GridItem>
 

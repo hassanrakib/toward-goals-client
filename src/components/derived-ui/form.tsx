@@ -15,7 +15,7 @@ type CustomizedUseFormProps<FormValues extends FieldValues> =
     defaultValues: FormValues;
   };
 
-interface ICustomFormProps<FormValues extends FieldValues> {
+interface IFormProps<FormValues extends FieldValues> {
   children: React.ReactNode;
   onSubmit: (
     data: FormValues,
@@ -24,11 +24,11 @@ interface ICustomFormProps<FormValues extends FieldValues> {
   useFormProps: CustomizedUseFormProps<FormValues>;
 }
 
-export default function CustomForm<FormValues extends FieldValues>({
+export default function Form<FormValues extends FieldValues>({
   children,
   onSubmit,
   useFormProps,
-}: ICustomFormProps<FormValues>) {
+}: IFormProps<FormValues>) {
   const methods = useForm<FormValues>(useFormProps);
 
   const submitHandler: SubmitHandler<FormValues> = (data) => {

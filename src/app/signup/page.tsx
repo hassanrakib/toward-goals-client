@@ -1,9 +1,8 @@
 "use client";
 
-import CustomForm from "@/components/form/CustomForm";
-import CustomInput from "@/components/form/CustomInput";
-import SubmitButton from "@/components/form/SubmitButton";
-import Alert from "@/components/ui/alert";
+import Form from "@/components/derived-ui/form";
+import StyledInput from "@/components/derived-ui/styled-input";
+import Alert from "@/components/derived-ui/alert";
 import { useCreateUserMutation } from "@/redux/features/user/user.api";
 import { createUserSchema } from "@/schemas/user";
 import { IUser } from "@/types/user";
@@ -12,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, LockKeyhole, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
+import SubmitButton from "@/components/derived-ui/submit-button";
 
 type IFormValues = Pick<IUser, "username" | "email" | "password">;
 
@@ -50,7 +50,7 @@ const SignUp = () => {
             Fill in the form below to create an account
           </Card.Description>
         </Card.Header>
-        <CustomForm
+        <Form
           onSubmit={onSubmit}
           useFormProps={{
             defaultValues,
@@ -58,19 +58,19 @@ const SignUp = () => {
           }}
         >
           <Card.Body gap={3}>
-            <CustomInput
+            <StyledInput
               name="username"
               placeholder="Username"
               type="text"
               startElement={<AtSign size={18} />}
             />
-            <CustomInput
+            <StyledInput
               name="email"
               placeholder="Email"
               type="email"
               startElement={<Mail size={18} />}
             />
-            <CustomInput
+            <StyledInput
               name="password"
               placeholder="Password"
               type="password"
@@ -90,7 +90,7 @@ const SignUp = () => {
               Sign up
             </SubmitButton>
           </Card.Footer>
-        </CustomForm>
+        </Form>
       </Card.Root>
     </Flex>
   );

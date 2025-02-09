@@ -1,12 +1,14 @@
-import { ButtonProps, Button as ChakraButton } from "@chakra-ui/react";
+import { ButtonProps, Button } from "@chakra-ui/react";
 import { forwardRef } from "react";
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  function Button(props, ref) {
+export interface StyledButtonProps extends ButtonProps {};
+
+const StyledButton = forwardRef<HTMLButtonElement, ButtonProps>(
+  function StyledButton(props, ref) {
     const { children, ...rest } = props;
 
     return (
-      <ChakraButton
+      <Button
         ref={ref}
         colorScheme="gray"
         bg="gray.600"
@@ -17,9 +19,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...rest}
       >
         {children}
-      </ChakraButton>
+      </Button>
     );
   }
 );
 
-export default Button;
+export default StyledButton;
