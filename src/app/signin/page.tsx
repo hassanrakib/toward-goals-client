@@ -44,8 +44,8 @@ const SignIn = () => {
   };
 
   return (
-    <Flex justify="center" align="center" minHeight="100vh" bg="gray.50" p={4}>
-      <Card.Root maxW="sm" w="100%" borderRadius="lg" boxShadow="lg" bg="white">
+    <Flex justify="center" align="center" minHeight="100vh" bg="bg.subtle" p={4}>
+      <Card.Root maxW="sm" w="100%" borderRadius="2xl" boxShadow="xs" bg="white">
         <Card.Header>
           <Card.Title fontSize="2xl">Welcome Back!</Card.Title>
           <Card.Description>Sign in to access your account</Card.Description>

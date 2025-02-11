@@ -1,3 +1,5 @@
+"use client";
+
 import { useFormContext } from "react-hook-form";
 import StyledButton, { StyledButtonProps } from "../derived-ui/styled-button";
 import { forwardRef } from "react";

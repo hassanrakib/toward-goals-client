@@ -1,3 +1,5 @@
+"use client";
+
 import { ButtonProps, Button } from "@chakra-ui/react";
 import { forwardRef } from "react";
 
@@ -15,7 +17,7 @@ const StyledButton = forwardRef<HTMLButtonElement, ButtonProps>(
         color="white"
         _hover={{ bg: "gray.700" }}
         w="100%"
-        borderRadius="md"
+        borderRadius="2xl"
         {...rest}
       >
         {children}
