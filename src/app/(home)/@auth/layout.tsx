@@ -59,10 +59,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           display="flex"
           alignItems="center"
           justifyContent="flex-end"
-          bgColor="bg"
           px={4}
           borderRadius="3xl"
-          boxShadow="xs"
         >
           {/* Notification Icon & Avatar */}
           <Flex align="center" gap={4}>

@@ -29,11 +29,12 @@ const StyledNumberInput = (props: StyledNumberInputProps) => {
         name={name}
         render={({ field }) => (
           <NumberInputRoot
+            width="full"
             disabled={field.disabled}
             name={field.name}
             value={field.value}
             onValueChange={({ value }) => {
-              field.onChange(value);
+              field.onChange(Number(value));
             }}
             {...rest}
           >

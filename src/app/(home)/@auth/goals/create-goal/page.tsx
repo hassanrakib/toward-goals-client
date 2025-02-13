@@ -1,12 +1,19 @@
 "use client";
 
+import Alert from "@/components/derived-ui/alert";
 import DateInput from "@/components/derived-ui/date-input";
 import Form from "@/components/derived-ui/form";
 import StyledInput from "@/components/derived-ui/styled-input";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
 import SubmitButton from "@/components/derived-ui/submit-button";
+import { useCreateGoalMutation } from "@/redux/features/goal/goal.api";
+import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
+import { createGoalSchema } from "@/schemas/goal";
+import { GoalCreationData } from "@/types/goal";
 import { Card, Flex, Grid, GridItem } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { startOfTomorrow } from "date-fns";
+import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
 
 interface IFormValues {
@@ -17,6 +24,12 @@ interface IFormValues {
 }
 
 const CreateGoal = () => {
+  // router from next/navigation
+  const router = useRouter();
+
+  const [createGoal, { isLoading: isCreatingGoal, error: createGoalError }] =
+    useCreateGoalMutation();
+
   const defaultValues: IFormValues = {
     title: "",
     duration: 7,
@@ -28,9 +41,16 @@ const CreateGoal = () => {
     data: IFormValues,
     reset: UseFormReset<IFormValues>
   ) => {
-    console.log(data);
+    const goalCreationData: GoalCreationData = {
+      ...data,
+      startDate: data.startDate.toISOString(),
+    };
+    const result = await createGoal(goalCreationData);
 
-    reset(defaultValues);
+    if (result.data?.data) {
+      reset(defaultValues);
+      router.push("/");
+    }
   };
 
   return (
@@ -46,6 +66,7 @@ const CreateGoal = () => {
           onSubmit={onSubmit}
           useFormProps={{
             defaultValues,
+            resolver: zodResolver(createGoalSchema),
           }}
         >
           <Card.Body>
@@ -61,7 +82,7 @@ const CreateGoal = () => {
               <GridItem>
                 <StyledNumberInput
                   name="duration"
-                  label="Duration"
+                  label="Duration (in days)"
                   placeholder="Enter Goal Duration"
                   min={7}
                   max={365 * 5}
@@ -86,8 +107,15 @@ const CreateGoal = () => {
             </Grid>
           </Card.Body>
           <Card.Footer flexDir="column">
+            {!isCreatingGoal && createGoalError ? (
+              <Alert status="error">
+                {isFetchBaseQueryErrorWithData(createGoalError)
+                  ? createGoalError.data.message
+                  : "There was an error processing your request"}
+              </Alert>
+            ) : null}
             <SubmitButton
-              isServerActionLoading={false}
+              isServerActionLoading={isCreatingGoal}
               loadingText="Creating goal..."
             >
               Create goal
