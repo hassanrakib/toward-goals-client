@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createSubgoalSchema = z.object({
-  goalId: z.string().min(1, { message: "Goal selection is required" }),
+  goalId: z.array(z.string()).min(1, { message: "Goal selection is required" }),
   title: z
     .string()
     .min(1, { message: "Title is required" })

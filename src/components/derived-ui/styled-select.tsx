@@ -7,9 +7,9 @@ import {
   SelectTrigger,
   SelectValueText,
 } from "../ui/select";
-import { ListCollection } from "@chakra-ui/react";
+import { ListCollection, Select } from "@chakra-ui/react";
 
-export interface StyledSelectProps<T> {
+export interface StyledSelectProps<T> extends Select.RootProps {
   name: string;
   label?: string;
   placeholder: string;
@@ -23,7 +23,7 @@ export default function StyledSelect<
     formState: { errors },
   } = useFormContext();
 
-  const { name, label, placeholder, collection } = props;
+  const { name, label, placeholder, collection, ...rest } = props;
 
   return (
     <Field
@@ -40,6 +40,7 @@ export default function StyledSelect<
             onValueChange={({ value }) => field.onChange(value)}
             onInteractOutside={() => field.onBlur()}
             collection={collection}
+            {...rest}
           >
             <SelectTrigger>
               <SelectValueText placeholder={placeholder} />

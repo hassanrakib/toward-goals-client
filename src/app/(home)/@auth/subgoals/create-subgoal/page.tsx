@@ -6,6 +6,7 @@ import StyledInput from "@/components/derived-ui/styled-input";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
 import StyledSelect from "@/components/derived-ui/styled-select";
 import SubmitButton from "@/components/derived-ui/submit-button";
+import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
 import { useCreateSubgoalMutation } from "@/redux/features/subgoal/subgoal.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { createSubgoalSchema } from "@/schemas/subgoal";
@@ -15,26 +16,45 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
 
-const CreateGoal = () => {
+interface IFormValues {
+  goalId: string[];
+  title: string;
+  duration: number;
+}
+
+const CreateSubgoal = () => {
   // router from next/navigation
   const router = useRouter();
+
+  const {
+    data: goalsProgress,
+    isLoading: isGettingGoalsProgress,
+    error: getGoalsProgressError,
+  } = useGetGoalsProgressQuery({
+    fields: "goal",
+    isCompleted: false,
+  });
 
   const [
     createSubgoal,
     { isLoading: isCreatingSubgoal, error: createSubgoalError },
   ] = useCreateSubgoalMutation();
 
-  const defaultValues: SubgoalCreationData = {
-    goalId: "",
+  const defaultValues: IFormValues = {
+    goalId: [],
     title: "",
     duration: 1,
   };
 
   const onSubmit = async (
-    data: SubgoalCreationData,
-    reset: UseFormReset<SubgoalCreationData>
+    data: IFormValues,
+    reset: UseFormReset<IFormValues>
   ) => {
-    const result = await createSubgoal(data);
+    const newSubgoal: SubgoalCreationData = {
+      ...data,
+      goalId: data.goalId[0],
+    };
+    const result = await createSubgoal(newSubgoal);
 
     if (result.data?.data) {
       reset(defaultValues);
@@ -42,17 +62,13 @@ const CreateGoal = () => {
     }
   };
 
+  // generate options for selecting a goal
   const availableGoalsCollection = createListCollection({
-    items: [
-      {
-        label: "Learn X",
-        value: "Learn X",
-      },
-      {
-        label: "Learn Y",
-        value: "Learn Y",
-      },
-    ],
+    items:
+      goalsProgress?.data?.map(({ goal }) => ({
+        label: goal.title,
+        value: goal._id,
+      })) || [],
   });
 
   return (
@@ -83,6 +99,9 @@ const CreateGoal = () => {
               name="title"
               label="Title"
               placeholder="Enter a descriptive subgoal title"
+              disabled={
+                isGettingGoalsProgress || Boolean(getGoalsProgressError)
+              }
             />
             <StyledNumberInput
               name="duration"
@@ -103,6 +122,9 @@ const CreateGoal = () => {
             <SubmitButton
               isServerActionLoading={isCreatingSubgoal}
               loadingText="Creating subgoal..."
+              disabled={
+                isGettingGoalsProgress || Boolean(getGoalsProgressError)
+              }
             >
               Create subgoal
             </SubmitButton>
@@ -113,4 +135,4 @@ const CreateGoal = () => {
   );
 };
 
-export default CreateGoal;
+export default CreateSubgoal;

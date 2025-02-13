@@ -21,3 +21,14 @@ export interface IResponse<T> {
     limit: number;
   };
 }
+
+export type QueryParams =
+  | {
+      searchTerm?: string;
+      sort?: string;
+      limit?: string;
+      page?: string;
+      fields?: string;
+      [key: string]: unknown;
+    }
+  | undefined;
