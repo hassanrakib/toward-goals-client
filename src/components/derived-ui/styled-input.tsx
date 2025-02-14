@@ -2,7 +2,7 @@
 
 import { Field } from "@/components/ui/field";
 import { Input, InputProps } from "@chakra-ui/react";
-import { useFormContext } from "react-hook-form";
+import { RegisterOptions, useFormContext } from "react-hook-form";
 import { InputGroup } from "@/components/ui/input-group";
 import { forwardRef, InputHTMLAttributes, ReactNode } from "react";
 
@@ -12,6 +12,7 @@ export interface StyledInputProps extends InputProps {
   label?: string;
   type: InputHTMLAttributes<HTMLInputElement>["type"];
   startElement?: ReactNode;
+  registerOptions?: RegisterOptions;
 }
 
 const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
@@ -22,7 +23,7 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
       formState: { errors },
     } = useFormContext();
 
-    const { name, placeholder, label, type, startElement, ...rest } = props;
+    const { name, placeholder, label, type, startElement, registerOptions, ...rest } = props;
 
     return (
       <Field
@@ -36,7 +37,7 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
             type={type}
             borderRadius="2xl"
             {...rest}
-            {...register(name)}
+            {...register(name, registerOptions)}
           />
         </InputGroup>
       </Field>

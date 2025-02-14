@@ -99,13 +99,11 @@ const CreateSubgoal = () => {
               name="title"
               label="Title"
               placeholder="Enter a descriptive subgoal title"
-              disabled={
-                isGettingGoalsProgress || Boolean(getGoalsProgressError)
-              }
             />
             <StyledNumberInput
               name="duration"
-              label="Duration (in days)"
+              label="Duration"
+              unit="days"
               placeholder="Enter Subgoal Duration"
               min={1}
               max={365}

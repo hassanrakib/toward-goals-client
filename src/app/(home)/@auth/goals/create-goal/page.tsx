@@ -84,6 +84,7 @@ const CreateGoal = () => {
                   name="duration"
                   label="Duration (in days)"
                   placeholder="Enter Goal Duration"
+                  unit="days"
                   min={7}
                   max={365 * 5}
                 />
@@ -93,6 +94,7 @@ const CreateGoal = () => {
                   name="userLimit"
                   label="User Limit"
                   placeholder="Enter User Limit"
+                  unit="users"
                   min={1}
                   max={200}
                 />
