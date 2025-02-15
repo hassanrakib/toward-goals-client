@@ -8,6 +8,7 @@ import { Field } from "../ui/field";
 import { Controller, useFormContext } from "react-hook-form";
 import { InputGroup } from "../ui/input-group";
 import { Text } from "@chakra-ui/react";
+import { getHookFormError } from "@/utils/form";
 
 export interface StyledNumberInputProps extends NumberInputProps {
   name: string;
@@ -25,8 +26,8 @@ const StyledNumberInput = (props: StyledNumberInputProps) => {
   return (
     <Field
       label={label}
-      invalid={!!errors[name]}
-      errorText={(errors[name]?.message as string) || ""}
+      invalid={Boolean(getHookFormError(errors, name))}
+      errorText={getHookFormError(errors, name)?.message}
     >
       <Controller
         name={name}

@@ -1,15 +1,26 @@
 "use client";
 
+import Alert from "@/components/derived-ui/alert";
 import Form from "@/components/derived-ui/form";
 import StyledInput from "@/components/derived-ui/styled-input";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
 import StyledSelect from "@/components/derived-ui/styled-select";
 import SubmitButton from "@/components/derived-ui/submit-button";
 import {
+  useCreateHabitMutation,
+  useCreateHabitUnitMutation,
+} from "@/redux/features/habit/habit.api";
+import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
+import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
+import { createHabitSchema } from "@/schemas/habit";
+import {
+  HabitCreationData,
+  HabitUnitCreationData,
   HabitUnitName,
   HabitUnitType,
   IHabitDifficulties,
 } from "@/types/habit";
+import { generateAvailableGoalsCollection } from "@/utils/progress";
 import {
   Box,
   Card,
@@ -19,13 +30,15 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 
 interface IFormValues {
+  goalId: string[];
   title: string;
   unit: {
     type: HabitUnitType[];
-    name: HabitUnitName[];
+    name: HabitUnitName;
   };
   difficulties: IHabitDifficulties;
 }
@@ -33,11 +46,31 @@ interface IFormValues {
 const CreateHabit = () => {
   const [unit, setUnit] = useState("");
 
+  // query hooks
+  const {
+    data: goalsProgress,
+    isLoading: isGettingGoalsProgress,
+    error: getGoalsProgressError,
+  } = useGetGoalsProgressQuery({
+    fields: "goal",
+    isCompleted: false,
+  });
+
+  // mutation hooks
+  const [
+    createHabitUnit,
+    { isLoading: isCreatingHabitUnit, error: createHabitUnitError },
+  ] = useCreateHabitUnitMutation();
+
+  const [createHabit, { isLoading: isCreatingHabit, error: createHabitError }] =
+    useCreateHabitMutation();
+
   const defaultValues: IFormValues = {
+    goalId: [],
     title: "",
     unit: {
       type: [],
-      name: [],
+      name: "",
     },
     difficulties: {
       mini: 1,
@@ -46,7 +79,30 @@ const CreateHabit = () => {
     },
   };
   const onSubmit = async (data: IFormValues) => {
-    console.log(data);
+    const habitUnit: HabitUnitCreationData = {
+      goalId: data.goalId[0],
+      type: data.unit.type[0],
+      name: data.unit.name,
+    };
+
+    try {
+      const habitUnitResult = await createHabitUnit(habitUnit).unwrap();
+
+      // if successful in creating habit unit
+      if (habitUnitResult.data) {
+        const habit: HabitCreationData = {
+          goalId: data.goalId[0],
+          unit: habitUnitResult.data?._id,
+          title: data.title,
+          difficulties: data.difficulties,
+        };
+
+        // create habit
+        await createHabit(habit);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // generate options for selecting a unit type
@@ -70,10 +126,16 @@ const CreateHabit = () => {
           onSubmit={onSubmit}
           useFormProps={{
             defaultValues,
-            // resolver: zodResolver(),
+            resolver: zodResolver(createHabitSchema),
           }}
         >
           <Card.Body gap={4}>
+            <StyledSelect
+              name="goalId"
+              placeholder="Select goal"
+              label="Which goal do you want to create a subgoal for?"
+              collection={generateAvailableGoalsCollection(goalsProgress)}
+            />
             <StyledInput
               type="text"
               name="title"
@@ -83,11 +145,17 @@ const CreateHabit = () => {
             <Box
               position="relative"
               borderWidth="thin"
-              px={2}
-              py={4}
+              px={3}
+              py={5}
               rounded="2xl"
             >
-              <Float placement="top-start" offsetX={12} bgColor="bg">
+              <Float
+                placement="top-start"
+                offsetX={12}
+                px={2}
+                bgColor="bg"
+                rounded="2xl"
+              >
                 <Text fontSize="sm" fontWeight={500}>
                   Habit Unit
                 </Text>
@@ -115,11 +183,17 @@ const CreateHabit = () => {
             <Box
               position="relative"
               borderWidth="thin"
-              px={2}
-              py={4}
+              px={3}
+              py={5}
               rounded="2xl"
             >
-              <Float placement="top-start" offsetX="70px" bgColor="bg">
+              <Float
+                placement="top-start"
+                offsetX="70px"
+                px={2}
+                bgColor="bg"
+                rounded="2xl"
+              >
                 <Text fontSize="sm" fontWeight={500}>
                   Habit Difficulties
                 </Text>
@@ -147,16 +221,25 @@ const CreateHabit = () => {
             </Box>
           </Card.Body>
           <Card.Footer flexDir="column">
-            {/* {!isCreatingGoal && createGoalError ? (
+            {!isCreatingHabitUnit && createHabitUnitError ? (
               <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createGoalError)
-                  ? createGoalError.data.message
+                {isFetchBaseQueryErrorWithData(createHabitUnitError)
+                  ? createHabitUnitError.data.message
                   : "There was an error processing your request"}
               </Alert>
-            ) : null} */}
+            ) : !isCreatingHabit && createHabitError ? (
+              <Alert status="error">
+                {isFetchBaseQueryErrorWithData(createHabitError)
+                  ? createHabitError.data.message
+                  : "There was an error processing your request"}
+              </Alert>
+            ) : null}
             <SubmitButton
-              isServerActionLoading={false}
+              isServerActionLoading={isCreatingHabitUnit || isCreatingHabit}
               loadingText="Creating habit..."
+              disabled={
+                isGettingGoalsProgress || Boolean(getGoalsProgressError)
+              }
             >
               Create habit
             </SubmitButton>

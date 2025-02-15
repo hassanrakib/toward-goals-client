@@ -8,6 +8,7 @@ import {
   SelectValueText,
 } from "../ui/select";
 import { ListCollection, Select } from "@chakra-ui/react";
+import { getHookFormError } from "@/utils/form";
 
 export interface StyledSelectProps<T> extends Select.RootProps {
   name: string;
@@ -28,8 +29,8 @@ export default function StyledSelect<
   return (
     <Field
       label={label}
-      invalid={!!errors[name]}
-      errorText={(errors[name]?.message as string) || ""}
+      invalid={Boolean(getHookFormError(errors, name))}
+      errorText={getHookFormError(errors, name)?.message}
     >
       <Controller
         name={name}

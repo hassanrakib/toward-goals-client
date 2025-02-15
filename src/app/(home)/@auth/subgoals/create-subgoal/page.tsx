@@ -11,7 +11,8 @@ import { useCreateSubgoalMutation } from "@/redux/features/subgoal/subgoal.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { createSubgoalSchema } from "@/schemas/subgoal";
 import { SubgoalCreationData } from "@/types/subgoal";
-import { Card, createListCollection, Flex } from "@chakra-ui/react";
+import { generateAvailableGoalsCollection } from "@/utils/progress";
+import { Card, Flex } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
@@ -62,15 +63,6 @@ const CreateSubgoal = () => {
     }
   };
 
-  // generate options for selecting a goal
-  const availableGoalsCollection = createListCollection({
-    items:
-      goalsProgress?.data?.map(({ goal }) => ({
-        label: goal.title,
-        value: goal._id,
-      })) || [],
-  });
-
   return (
     <Flex justify="center" align="center">
       <Card.Root maxW="lg" w="100%" borderRadius="2xl" boxShadow="xs" bg="bg">
@@ -92,7 +84,7 @@ const CreateSubgoal = () => {
               name="goalId"
               placeholder="Select goal"
               label="Which goal do you want to create a subgoal for?"
-              collection={availableGoalsCollection}
+              collection={generateAvailableGoalsCollection(goalsProgress)}
             />
             <StyledInput
               type="text"

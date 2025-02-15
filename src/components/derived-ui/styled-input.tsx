@@ -5,6 +5,7 @@ import { Input, InputProps } from "@chakra-ui/react";
 import { RegisterOptions, useFormContext } from "react-hook-form";
 import { InputGroup } from "@/components/ui/input-group";
 import { forwardRef, InputHTMLAttributes, ReactNode } from "react";
+import { getHookFormError } from "@/utils/form";
 
 export interface StyledInputProps extends InputProps {
   name: string;
@@ -23,13 +24,21 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
       formState: { errors },
     } = useFormContext();
 
-    const { name, placeholder, label, type, startElement, registerOptions, ...rest } = props;
+    const {
+      name,
+      placeholder,
+      label,
+      type,
+      startElement,
+      registerOptions,
+      ...rest
+    } = props;
 
     return (
       <Field
         label={label}
-        invalid={!!errors[name]}
-        errorText={(errors[name]?.message as string) || ""}
+        invalid={Boolean(getHookFormError(errors, name))}
+        errorText={getHookFormError(errors, name)?.message}
       >
         <InputGroup width="100%" startElement={startElement}>
           <Input

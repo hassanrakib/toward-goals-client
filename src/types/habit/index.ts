@@ -10,12 +10,15 @@ export enum HabitUnitNameForTime {
 export type HabitUnitName = HabitUnitNameForTime | string;
 
 export interface IHabitUnit {
+  _id: string;
   type: HabitUnitType;
   name: HabitUnitName;
   usageCount?: number;
 }
 
-export type HabitUnitCreationData = Pick<IHabitUnit, "type" | "name">;
+export type HabitUnitCreationData = Omit<IHabitUnit, "_id" | "usageCount"> & {
+  goalId: string;
+};
 
 export interface IHabitDifficulties {
   mini: number;
@@ -30,4 +33,6 @@ export interface IHabit {
   difficulties: IHabitDifficulties;
 }
 
-export type HabitCreationData = Omit<IHabit, "usageCount">;
+export type HabitCreationData = Omit<IHabit, "usageCount"> & {
+  goalId: string;
+};
