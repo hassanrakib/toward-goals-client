@@ -12,12 +12,16 @@ import { AtSign, LockKeyhole, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
 import SubmitButton from "@/components/derived-ui/submit-button";
+import { useAppDispatch } from "@/redux/hooks";
+import { setSession } from "@/redux/features/auth/auth.slice";
 
 type IFormValues = Pick<IUser, "username" | "email" | "password">;
 
 const SignUp = () => {
   // router from next/navigation
   const router = useRouter();
+  // redux dispatch
+  const dispatch = useAppDispatch();
 
   const [createUser, { isLoading: isCreatingUser, error: createUserError }] =
     useCreateUserMutation();
@@ -35,8 +39,13 @@ const SignUp = () => {
   ) => {
     const result = await createUser(data);
 
+    // after successful submission
     if (result.data?.data) {
+      // reset the form
       reset(defaultValues);
+      // set the session in the redux store
+      dispatch(setSession(result.data.data));
+      // redirect user to the home page
       router.push("/");
     }
   };

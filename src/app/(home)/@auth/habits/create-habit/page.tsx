@@ -31,7 +31,9 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { UseFormReset } from "react-hook-form";
 
 interface IFormValues {
   goalId: string[];
@@ -45,6 +47,8 @@ interface IFormValues {
 
 const CreateHabit = () => {
   const [unit, setUnit] = useState("");
+
+  const router = useRouter();
 
   // query hooks
   const {
@@ -78,30 +82,33 @@ const CreateHabit = () => {
       elite: 3,
     },
   };
-  const onSubmit = async (data: IFormValues) => {
+  const onSubmit = async (
+    data: IFormValues,
+    reset: UseFormReset<IFormValues>
+  ) => {
     const habitUnit: HabitUnitCreationData = {
       goalId: data.goalId[0],
       type: data.unit.type[0],
       name: data.unit.name,
     };
 
-    try {
-      const habitUnitResult = await createHabitUnit(habitUnit).unwrap();
+    const habitUnitResult = await createHabitUnit(habitUnit);
 
-      // if successful in creating habit unit
-      if (habitUnitResult.data) {
-        const habit: HabitCreationData = {
-          goalId: data.goalId[0],
-          unit: habitUnitResult.data?._id,
-          title: data.title,
-          difficulties: data.difficulties,
-        };
+    // if successful in creating habit unit
+    if (habitUnitResult.data?.data) {
+      const habit: HabitCreationData = {
+        goalId: data.goalId[0],
+        unit: habitUnitResult.data?.data._id,
+        title: data.title,
+        difficulties: data.difficulties,
+      };
 
-        // create habit
-        await createHabit(habit);
+      // create habit
+      const habitResult = await createHabit(habit);
+      if (habitResult.data?.data) {
+        reset(defaultValues);
+        router.push("/habits");
       }
-    } catch (err) {
-      console.log(err);
     }
   };
 
@@ -133,7 +140,7 @@ const CreateHabit = () => {
             <StyledSelect
               name="goalId"
               placeholder="Select goal"
-              label="Which goal do you want to create a subgoal for?"
+              label="Which goal do you want to create a habit for?"
               collection={generateAvailableGoalsCollection(goalsProgress)}
             />
             <StyledInput

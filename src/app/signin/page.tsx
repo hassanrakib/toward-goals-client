@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
 import StyledInput from "@/components/derived-ui/styled-input";
 import SubmitButton from "@/components/derived-ui/submit-button";
+import { useAppDispatch } from "@/redux/hooks";
+import { setSession } from "@/redux/features/auth/auth.slice";
 
 interface IFormValues {
   username: string;
@@ -21,6 +23,7 @@ interface IFormValues {
 const SignIn = () => {
   // router from next/navigation
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const [signIn, { isLoading: isSigningIn, error: signInError }] =
     useSignInMutation();
@@ -37,15 +40,32 @@ const SignIn = () => {
   ) => {
     const result = await signIn(data);
 
+    // after successful submission
     if (result.data?.data) {
+      // reset the form
       reset(defaultValues);
+      // set the session in the redux store
+      dispatch(setSession(result.data.data));
+      // redirect user to the home page
       router.push("/");
     }
   };
 
   return (
-    <Flex justify="center" align="center" minHeight="100vh" bg="bg.subtle" p={4}>
-      <Card.Root maxW="sm" w="100%" borderRadius="2xl" boxShadow="xs" bg="white">
+    <Flex
+      justify="center"
+      align="center"
+      minHeight="100vh"
+      bg="bg.subtle"
+      p={4}
+    >
+      <Card.Root
+        maxW="sm"
+        w="100%"
+        borderRadius="2xl"
+        boxShadow="xs"
+        bg="white"
+      >
         <Card.Header>
           <Card.Title fontSize="2xl">Welcome Back!</Card.Title>
           <Card.Description>Sign in to access your account</Card.Description>
