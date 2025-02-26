@@ -1,4 +1,6 @@
 import { IGoal } from "../goal";
+import { IHabit } from "../habit";
+import { ISubgoal } from "../subgoal";
 
 export interface IGoalProgress {
   user: string;
@@ -18,3 +20,29 @@ export interface IGoalProgress {
   };
   isCompleted?: boolean;
 }
+
+export type GoalProgressCreationData = { goal: string };
+
+export interface ISubgoalProgress {
+  user: string;
+  goal: string;
+  subgoal: ISubgoal;
+  keyMilestones?: string[];
+  reward?: string;
+  isCompleted?: boolean;
+  isRewarded?: boolean;
+}
+
+export type SubgoalProgressCreationData = { goal: string; subgoal: string };
+
+export interface IHabitProgress {
+  user: string;
+  goal: string;
+  habit: IHabit;
+  totalUnitCompleted?: number;
+  miniCompletion?: number;
+  plusCompletion?: number;
+  eliteCompletion?: number;
+}
+
+export type HabitProgressCreationData = { goal: string; habit: string };

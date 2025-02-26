@@ -11,6 +11,7 @@ import {
   useCreateHabitUnitMutation,
 } from "@/redux/features/habit/habit.api";
 import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
+import { useCreateHabitProgressMutation } from "@/redux/features/progress/habit-progress.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { createHabitSchema } from "@/schemas/habit";
 import {
@@ -69,6 +70,11 @@ const CreateHabit = () => {
   const [createHabit, { isLoading: isCreatingHabit, error: createHabitError }] =
     useCreateHabitMutation();
 
+  const [
+    createHabitProgress,
+    { isLoading: isCreatingHabitProgress, error: createHabitProgressError },
+  ] = useCreateHabitProgressMutation();
+
   const defaultValues: IFormValues = {
     goalId: [],
     title: "",
@@ -105,9 +111,19 @@ const CreateHabit = () => {
 
       // create habit
       const habitResult = await createHabit(habit);
+
+      // after successful creation of habit
       if (habitResult.data?.data) {
-        reset(defaultValues);
-        router.push("/habits");
+        const habitProgressCreationResult = await createHabitProgress({
+          goal: data.goalId[0],
+          habit: habitResult.data.data._id,
+        });
+
+        // after successful creation of habit progress
+        if (habitProgressCreationResult.data?.data) {
+          reset(defaultValues);
+          router.push("/habits");
+        }
       }
     }
   };
@@ -228,6 +244,7 @@ const CreateHabit = () => {
             </Box>
           </Card.Body>
           <Card.Footer flexDir="column">
+            {/* errors */}
             {!isCreatingHabitUnit && createHabitUnitError ? (
               <Alert status="error">
                 {isFetchBaseQueryErrorWithData(createHabitUnitError)
@@ -240,9 +257,19 @@ const CreateHabit = () => {
                   ? createHabitError.data.message
                   : "There was an error processing your request"}
               </Alert>
+            ) : !isCreatingHabitProgress && createHabitProgressError ? (
+              <Alert status="error">
+                {isFetchBaseQueryErrorWithData(createHabitProgressError)
+                  ? createHabitProgressError.data.message
+                  : "There was an error processing your request"}
+              </Alert>
             ) : null}
             <SubmitButton
-              isServerActionLoading={isCreatingHabitUnit || isCreatingHabit}
+              isServerActionLoading={
+                isCreatingHabitUnit ||
+                isCreatingHabit ||
+                isCreatingHabitProgress
+              }
               loadingText="Creating habit..."
               disabled={
                 isGettingGoalsProgress || Boolean(getGoalsProgressError)

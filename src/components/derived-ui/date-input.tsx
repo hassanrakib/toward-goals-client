@@ -54,7 +54,7 @@ export default function DateInput(props: DateInputProps) {
               borderRadius="2xl"
               value={format(value, "PPPp")}
               readOnly
-              disabled={true}
+              // disabled={true}
               {...rest}
             />
           </Flex>

@@ -7,6 +7,7 @@ import StyledNumberInput from "@/components/derived-ui/styled-number-input";
 import StyledSelect from "@/components/derived-ui/styled-select";
 import SubmitButton from "@/components/derived-ui/submit-button";
 import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
+import { useCreateSubgoalProgressMutation } from "@/redux/features/progress/subgoal-progress.api";
 import { useCreateSubgoalMutation } from "@/redux/features/subgoal/subgoal.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { createSubgoalSchema } from "@/schemas/subgoal";
@@ -36,10 +37,17 @@ const CreateSubgoal = () => {
     isCompleted: false,
   });
 
+  // create subgoal mutation
   const [
     createSubgoal,
     { isLoading: isCreatingSubgoal, error: createSubgoalError },
   ] = useCreateSubgoalMutation();
+
+  // create subgoal progress mutation
+  const [
+    createSubgoalProgress,
+    { isLoading: isCreatingSubgoalProgress, error: createSubgoalProgressError },
+  ] = useCreateSubgoalProgressMutation();
 
   const defaultValues: IFormValues = {
     goalId: [],
@@ -57,9 +65,18 @@ const CreateSubgoal = () => {
     };
     const result = await createSubgoal(newSubgoal);
 
+    // after successful creation of subgoal
     if (result.data?.data) {
-      reset(defaultValues);
-      router.push("/subgoals");
+      const subgoalProgressCreationResult = await createSubgoalProgress({
+        goal: data.goalId[0],
+        subgoal: result.data.data._id,
+      });
+
+      // after successful creation of subgoal progress
+      if (subgoalProgressCreationResult.data?.data) {
+        reset(defaultValues);
+        router.push("/subgoals");
+      }
     }
   };
 
@@ -108,9 +125,17 @@ const CreateSubgoal = () => {
                   ? createSubgoalError.data.message
                   : "There was an error processing your request"}
               </Alert>
+            ) : !isCreatingSubgoalProgress && createSubgoalProgressError ? (
+              <Alert status="error">
+                {isFetchBaseQueryErrorWithData(createSubgoalProgressError)
+                  ? createSubgoalProgressError.data.message
+                  : "There was an error processing your request"}
+              </Alert>
             ) : null}
             <SubmitButton
-              isServerActionLoading={isCreatingSubgoal}
+              isServerActionLoading={
+                isCreatingSubgoal || isCreatingSubgoalProgress
+              }
               loadingText="Creating subgoal..."
               disabled={
                 isGettingGoalsProgress || Boolean(getGoalsProgressError)

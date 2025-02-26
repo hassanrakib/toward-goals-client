@@ -27,12 +27,13 @@ export interface IHabitDifficulties {
 }
 
 export interface IHabit {
+  _id: string;
   title: string;
   unit: string;
   usageCount?: number;
   difficulties: IHabitDifficulties;
 }
 
-export type HabitCreationData = Omit<IHabit, "usageCount"> & {
+export type HabitCreationData = Omit<IHabit, "_id" | "usageCount"> & {
   goalId: string;
 };

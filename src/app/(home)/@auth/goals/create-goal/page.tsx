@@ -7,6 +7,7 @@ import StyledInput from "@/components/derived-ui/styled-input";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
 import SubmitButton from "@/components/derived-ui/submit-button";
 import { useCreateGoalMutation } from "@/redux/features/goal/goal.api";
+import { useCreateGoalProgressMutation } from "@/redux/features/progress/goal-progress.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { createGoalSchema } from "@/schemas/goal";
 import { GoalCreationData } from "@/types/goal";
@@ -30,6 +31,11 @@ const CreateGoal = () => {
   const [createGoal, { isLoading: isCreatingGoal, error: createGoalError }] =
     useCreateGoalMutation();
 
+  const [
+    createGoalProgress,
+    { isLoading: isCreatingGoalProgress, error: createGoalProgressError },
+  ] = useCreateGoalProgressMutation();
+
   const defaultValues: IFormValues = {
     title: "",
     duration: 7,
@@ -47,9 +53,17 @@ const CreateGoal = () => {
     };
     const result = await createGoal(goalCreationData);
 
+    // after successful submission
     if (result.data?.data) {
-      reset(defaultValues);
-      router.push("/");
+      // create goal progress in the background
+      const goalProgressCreationResult = await createGoalProgress({
+        goal: result.data.data._id,
+      });
+
+      if (goalProgressCreationResult.data?.data) {
+        reset(defaultValues);
+        router.push("/");
+      }
     }
   };
 
@@ -71,6 +85,7 @@ const CreateGoal = () => {
         >
           <Card.Body>
             <Grid templateColumns="repeat(2, 1fr)" gap={3}>
+              {/* input fields */}
               <GridItem colSpan={2}>
                 <StyledInput
                   type="text"
@@ -108,6 +123,7 @@ const CreateGoal = () => {
               </GridItem>
             </Grid>
           </Card.Body>
+          {/* errors */}
           <Card.Footer flexDir="column">
             {!isCreatingGoal && createGoalError ? (
               <Alert status="error">
@@ -115,9 +131,16 @@ const CreateGoal = () => {
                   ? createGoalError.data.message
                   : "There was an error processing your request"}
               </Alert>
+            ) : !isCreatingGoalProgress && createGoalProgressError ? (
+              <Alert status="error">
+                {isFetchBaseQueryErrorWithData(createGoalProgressError)
+                  ? createGoalProgressError.data.message
+                  : "There was an error processing your request"}
+              </Alert>
             ) : null}
+            {/* submit button */}
             <SubmitButton
-              isServerActionLoading={isCreatingGoal}
+              isServerActionLoading={isCreatingGoal || isCreatingGoalProgress}
               loadingText="Creating goal..."
             >
               Create goal
