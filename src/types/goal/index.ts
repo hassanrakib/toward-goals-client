@@ -14,3 +14,11 @@ export type GoalCreationData = Pick<
   IGoal,
   "title" | "userLimit" | "duration"
 > & { startDate: string };
+
+export type TGoalSearchResult = Omit<
+  IGoal,
+  "_id" | "creator" | "admins" | "users"
+> & {
+  userCount: string;
+  objectID: string;
+};

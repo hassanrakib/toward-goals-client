@@ -32,3 +32,7 @@ export type QueryParams =
       [key: string]: unknown;
     }
   | undefined;
+
+export enum SearchIndices {
+  goals = "goals",
+}
