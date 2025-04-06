@@ -27,19 +27,19 @@ const SearchGoal = () => {
   };
 
   return (
-    <Form onSubmit={onSubmit} useFormProps={{ defaultValues }}>
-      <InstantSearchProvider indexName={SearchIndices.goals}>
-        <SearchInput
-          name="goalName"
-          type="text"
-          placeholder="Search for a goal to start"
-          startElement={<Search size={18} />}
-          bgColor="bg"
-          setHasQuery={setHasQuery}
-        />
-        {hasQuery && <GoalSearchResults />}
-      </InstantSearchProvider>
-    </Form>
+      <Form onSubmit={onSubmit} useFormProps={{ defaultValues }}>
+        <InstantSearchProvider indexName={SearchIndices.goals}>
+          <SearchInput
+            name="goalName"
+            type="text"
+            placeholder="Search for a goal to start"
+            startElement={<Search size={18} />}
+            bgColor="bg"
+            setHasQuery={setHasQuery}
+          />
+          {hasQuery && <GoalSearchResults />}
+        </InstantSearchProvider>
+      </Form>
   );
 };
 
