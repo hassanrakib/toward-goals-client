@@ -35,8 +35,8 @@ const GoalSearchResults = () => {
   }, [isLastPage, showMore]);
 
   return (
-    <Box mt="2" p="4" bgColor="bg" borderRadius="md" maxH="300px">
-      <Box height="250px" overflow="auto">
+    <Box mt="2" p="4" bgColor="bg" borderRadius="md">
+      <Box maxHeight="300px" overflow="auto">
         <VStack align="stretch">
           {goals.map((goal) => (
             <Card.Root
@@ -54,7 +54,7 @@ const GoalSearchResults = () => {
                   </Box>
                   <Box display="flex" alignItems="center" spaceX="1">
                     <Hourglass />
-                    <Text>Goal duration 30 days</Text>
+                    <Text>Goal duration {goal.duration} days</Text>
                   </Box>
                   <Badge>{goal.userCount} people joined</Badge>
                 </VStack>
@@ -68,9 +68,23 @@ const GoalSearchResults = () => {
           <Box ref={sentinelRef} aria-hidden="true"></Box>
         </VStack>
       </Box>
-      <Text fontSize="sm" color="blue.500" p="2">
-        <Link href="/goals/create-goal">Create a new goal instead?</Link>
-      </Text>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-around"
+        border="solid"
+        borderWidth="thin"
+        borderColor="fg.subtle"
+        borderRadius="md"
+        p="3"
+      >
+        <Text>Haven&apos;t you find your goal?</Text>
+        <Text>
+          <Link href="/goals/create-goal">
+            <StyledButton>Create Goal</StyledButton>
+          </Link>
+        </Text>
+      </Box>
     </Box>
   );
 };

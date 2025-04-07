@@ -1,9 +1,10 @@
+import { envConfig } from "@/config/envConfig";
 import { liteClient as algoliasearch } from "algoliasearch/lite";
 import { InstantSearch } from "react-instantsearch";
 
 const searchClient = algoliasearch(
-  process.env.NEXT_PUBLIC_ALGOLIA_APP_ID!,
-  process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY!
+  envConfig.algolia_app_id!,
+  envConfig.algolia_search_api_key!
 );
 
 const InstantSearchProvider = ({

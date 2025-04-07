@@ -1,11 +1,13 @@
 import { IGoal } from "../goal";
 import { IHabit } from "../habit";
+import { ILevel, IRequirementLevel } from "../level";
 import { ISubgoal } from "../subgoal";
 
 export interface IGoalProgress {
+  _id: string;
   user: string;
   goal: IGoal;
-  level: string;
+  level: ILevel;
   points?: number;
   totalMiniCompletion?: number;
   totalPlusCompletion?: number;
@@ -14,9 +16,9 @@ export interface IGoalProgress {
   skippedDays?: number;
   todosDeadlines?: { missed: number; met: number };
   analytics: {
-    consistency: { percent?: number; level: string };
-    deepFocus: { percent?: number; level: string };
-    commitment: { percent?: number; level: string };
+    consistency: { percent?: number; level: IRequirementLevel };
+    deepFocus: { percent?: number; level: IRequirementLevel };
+    commitment: { percent?: number; level: IRequirementLevel };
   };
   isCompleted?: boolean;
 }
