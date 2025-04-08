@@ -4,7 +4,7 @@ import { VStack } from "@chakra-ui/react";
 
 const Goals = async () => {
   const goalsProgress = await getMyGoalsProgress();
-  console.log(goalsProgress);
+
   return (
     <VStack alignItems="stretch">
       {goalsProgress.data?.map((goalProgress) => (

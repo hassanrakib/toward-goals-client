@@ -8,8 +8,8 @@ import { cookies } from "next/headers";
 export const getMyGoalsProgress = async (): Promise<
   IResponse<IGoalProgress[]>
 > => {
-    // send cookies explicitly
-    // as it is running in server not on the browser
+  // send cookies explicitly
+  // as it is running in server not on the browser
   const cookieStore = (await cookies()).toString();
   try {
     const res = await fetch(`${envConfig.baseApi}/progress/my-goals-progress`, {

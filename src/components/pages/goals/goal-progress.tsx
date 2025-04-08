@@ -1,21 +1,19 @@
 import { IGoalProgress } from "@/types/progress";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import NextImage from "next/image";
 import { Gem } from "lucide-react";
 import { differenceInDays, format, isAfter, startOfToday } from "date-fns";
+import HabitCompletionsChart from "./habit-completions-chart";
+import CurrentWorkStreak from "./current-work-streak";
 
-const GoalProgress = async ({
-  goalProgress,
-}: {
-  goalProgress: IGoalProgress;
-}) => {
+const GoalProgress = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   // destructuring properties from the goal progress
-  const { goal, level } = goalProgress;
+  const { goal, level, workStreak } = goalProgress;
 
   return (
     <Box
       width="full"
-      maxW="600px"
+      maxW="900px"
       mx="auto"
       bgColor="bg"
       rounded="md"
@@ -26,7 +24,7 @@ const GoalProgress = async ({
       {/* Top section with goal image in the background */}
       <Box
         position="relative"
-        h="200px"
+        h="150px"
         w="full"
         bgImg={`url(${goal.image ? goal.image : "https://placehold.co/600x400"})`}
         _after={{
@@ -77,14 +75,19 @@ const GoalProgress = async ({
             <Text fontSize="2xl" fontWeight="bold">
               {goal.title}
             </Text>
-            <Text fontSize="sm" color="whiteAlpha.800">
+            <Text fontSize="sm" color="white" fontWeight="medium">
               {isAfter(startOfToday(), goal.startDate)
-                ? `Goal day: ${differenceInDays(startOfToday(), goal.startDate)}`
+                ? `Remaining ${goal.duration - differenceInDays(startOfToday(), goal.startDate)} days`
                 : `Starting on ${format(goal.startDate, "PPP")}`}
             </Text>
           </Box>
         </Flex>
       </Box>
+      {/* showing goal progress visually */}
+      <Grid templateColumns="repeat(2, 1fr)" px="6" py="4">
+        <HabitCompletionsChart goalProgress={goalProgress} />
+        <CurrentWorkStreak days={workStreak.current} />
+      </Grid>
     </Box>
   );
 };
