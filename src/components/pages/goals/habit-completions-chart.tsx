@@ -13,12 +13,28 @@ const HabitCompletionsChart = ({
   const { totalMiniCompletion, totalPlusCompletion, totalEliteCompletion } =
     goalProgress;
 
+  // total habit completions
+  const totalHabitCompletion =
+    totalMiniCompletion + totalPlusCompletion + totalEliteCompletion;
+
   // create chart instance
   const chart = useChart({
     data: [
-      { name: "Mini", value: totalMiniCompletion || 1, color: "green.400" },
-      { name: "Plus", value: totalPlusCompletion || 1, color: "yellow.400" },
-      { name: "Elite", value: totalEliteCompletion || 1, color: "red.400" },
+      {
+        name: "Mini",
+        value: totalHabitCompletion === 0 ? 1 : totalMiniCompletion,
+        color: "green.400",
+      },
+      {
+        name: "Plus",
+        value: totalHabitCompletion === 0 ? 1 : totalMiniCompletion,
+        color: "yellow.400",
+      },
+      {
+        name: "Elite",
+        value: totalHabitCompletion === 0 ? 1 : totalMiniCompletion,
+        color: "red.400",
+      },
     ],
   });
 
@@ -54,7 +70,7 @@ const HabitCompletionsChart = ({
             // customized label
             label={({ name, index }) => {
               const { value } = chart.data[index ?? -1];
-              const percent = value / chart.getTotal("value");
+              const percent = value / (totalHabitCompletion || 3);
               return `${name}: ${(percent * 100).toFixed(1)}%`;
             }}
           >
@@ -68,6 +84,7 @@ const HabitCompletionsChart = ({
                     totalEliteCompletion
                   }
                   description="completions"
+                  fontSize="30px"
                 />
               )}
             />

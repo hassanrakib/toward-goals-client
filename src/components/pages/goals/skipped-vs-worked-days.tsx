@@ -1,0 +1,113 @@
+"use client";
+
+import { IGoalProgress } from "@/types/progress";
+import { getPercentageLabel } from "@/utils/global";
+import { Chart, useChart } from "@chakra-ui/charts";
+import { Box, Text, VStack } from "@chakra-ui/react";
+import {
+  Bar,
+  BarChart,
+  LabelList,
+  LabelProps,
+  Legend,
+  XAxis,
+  YAxis,
+} from "recharts";
+
+const SkippedVsWorkedDays = ({
+  goalProgress,
+}: {
+  goalProgress: IGoalProgress;
+}) => {
+  const {
+    workStreak: { total: workedDays },
+    skippedDays,
+  } = goalProgress;
+
+  const totalDays = workedDays + skippedDays;
+
+  const chart = useChart({
+    data: [
+      {
+        name: "skipped_vs_worked_days",
+        worked: totalDays === 0 ? 1 : workedDays,
+        skipped: totalDays === 0 ? 1 : skippedDays,
+      },
+    ],
+    series: [
+      { name: "worked", color: "green.400", stackId: "a" },
+      { name: "skipped", color: "yellow.400", stackId: "a" },
+    ],
+  });
+
+  const renderCustomizedLabel = (props: LabelProps) => {
+    const { x, y, height, value } = props;
+    const fontSize = 14;
+    return (
+      <text
+        x={Number(x) + 10}
+        y={Number(y) + Number(height) / 2 + fontSize / 2 - 2}
+        fill="black"
+        fontSize={fontSize}
+        fontWeight="bold"
+      >
+        {Number(value) === 0
+          ? null
+          : `${getPercentageLabel(Number(value), totalDays || 2)} days`}
+      </text>
+    );
+  };
+
+  return (
+    <Box
+      bgGradient="to-r"
+      gradientFrom="orange.100"
+      gradientTo="orange.50"
+      borderRadius="xl"
+      p={6}
+      shadow="md"
+      maxW="sm"
+      position="relative"
+    >
+      <VStack gap={1} alignItems="flex-start">
+        <Text fontSize="sm" fontWeight="light">
+          Worked: {workedDays} days
+        </Text>
+        <Text fontSize="sm" fontWeight="light">
+          Skipped: {skippedDays} days
+        </Text>
+      </VStack>
+      <Chart.Root maxH="100px" chart={chart}>
+        <BarChart layout="vertical" data={chart.data}>
+          <XAxis type="number" axisLine={false} tickLine={false} hide />
+          <YAxis
+            type="category"
+            axisLine={false}
+            tickLine={false}
+            dataKey={chart.key("name")}
+            hide
+          />
+          <Legend content={<Chart.Legend />} />
+          {chart.series.map((item) => (
+            <Bar
+              barSize={30}
+              isAnimationActive={false}
+              key={item.name}
+              dataKey={chart.key(item.name)}
+              fill={chart.color(item.color)}
+              stroke={chart.color(item.color)}
+              stackId={item.stackId}
+            >
+              <LabelList
+                dataKey={chart.key(item.name)}
+                fill="white"
+                content={renderCustomizedLabel}
+              />
+            </Bar>
+          ))}
+        </BarChart>
+      </Chart.Root>
+    </Box>
+  );
+};
+export default SkippedVsWorkedDays;

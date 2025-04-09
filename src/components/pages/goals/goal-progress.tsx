@@ -5,6 +5,8 @@ import { Gem } from "lucide-react";
 import { differenceInDays, format, isAfter, startOfToday } from "date-fns";
 import HabitCompletionsChart from "./habit-completions-chart";
 import CurrentWorkStreak from "./current-work-streak";
+import SkippedVsWorkedDays from "./skipped-vs-worked-days";
+import TodosDeadlines from "./todos-deadlines";
 
 const GoalProgress = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   // destructuring properties from the goal progress
@@ -84,9 +86,11 @@ const GoalProgress = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
         </Flex>
       </Box>
       {/* showing goal progress visually */}
-      <Grid templateColumns="repeat(2, 1fr)" px="6" py="4">
+      <Grid templateColumns="repeat(2, 1fr)" gap={4} px="6" py="4">
         <HabitCompletionsChart goalProgress={goalProgress} />
         <CurrentWorkStreak days={workStreak.current} />
+        <SkippedVsWorkedDays goalProgress={goalProgress} />
+        <TodosDeadlines goalProgress={goalProgress} />
       </Grid>
     </Box>
   );

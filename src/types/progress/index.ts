@@ -13,8 +13,8 @@ export interface IGoalProgress {
   totalPlusCompletion: number;
   totalEliteCompletion: number;
   workStreak: { current: number; total: number };
-  skippedDays?: number;
-  todosDeadlines?: { missed: number; met: number };
+  skippedDays: number;
+  todosDeadlines: { missed: number; met: number };
   analytics: {
     consistency: { percent?: number; level: IRequirementLevel };
     deepFocus: { percent?: number; level: IRequirementLevel };
