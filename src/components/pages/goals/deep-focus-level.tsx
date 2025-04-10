@@ -7,50 +7,46 @@ import { Flex, Text } from "@chakra-ui/react";
 import { Gem } from "lucide-react";
 import { Bar, BarChart, LabelList, LabelProps, XAxis, YAxis } from "recharts";
 
-const ConsistencyLevel = ({
-  goalProgress,
-}: {
-  goalProgress: IGoalProgress;
-}) => {
+const DeepFocusLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   // destructure necessary properties
   const {
     analytics: {
-      consistency: {
-        percent: completedConsistency,
+      deepFocus: {
+        percent: completedDeepFocus,
         level: {
-          level: consistencyLevel,
-          maxPercentage: requiredConsistency,
+          level: deepFocusLevel,
+          maxPercentage: requiredDeepFocus,
           rewardPointsPerDay,
         },
       },
     },
   } = goalProgress;
 
-  // incomplete consistency
-  const incompleteConsistency = requiredConsistency - completedConsistency;
+  // incomplete deep focus
+  const incompleteDeepFocus = requiredDeepFocus - completedDeepFocus;
 
   const chart = useChart({
     data: [
       {
-        name: "consistency",
-        completedConsistency,
-        incompleteConsistency,
+        name: "deepFocus",
+        completedDeepFocus,
+        incompleteDeepFocus,
       },
     ],
     series: [
-      { name: "completedConsistency", color: "green.400", stackId: "a" },
-      { name: "incompleteConsistency", color: "gray.200", stackId: "a" },
+      { name: "completedDeepFocus", color: "green.400", stackId: "a" },
+      { name: "incompleteDeepFocus", color: "gray.200", stackId: "a" },
     ],
   });
 
-  const completedConsistencyPercentage = getPercentage(
-    completedConsistency,
-    requiredConsistency
+  const completedDeepFocusPercentage = getPercentage(
+    completedDeepFocus,
+    requiredDeepFocus
   );
 
-  const incompleteConsistencyPercentage = getPercentage(
-    incompleteConsistency,
-    requiredConsistency
+  const incompleteDeepFocusPercentage = getPercentage(
+    incompleteDeepFocus,
+    requiredDeepFocus
   );
 
   const renderCustomizedLabel = (props: LabelProps) => {
@@ -65,22 +61,22 @@ const ConsistencyLevel = ({
         fontSize={fontSize}
         fontWeight="bold"
       >
-        {`${completedConsistencyPercentage}% completed`}
+        {`${completedDeepFocusPercentage}% completed`}
       </text>
     );
   };
 
   return (
     <Flex direction="column">
-      <Text>Consistency Level : {consistencyLevel}</Text>
+      <Text>Deep Focus Level : {deepFocusLevel}</Text>
       <Flex alignItems="center" spaceX="2">
         <Chart.Root maxH="40px" chart={chart}>
           <BarChart layout="vertical" data={chart.data}>
             <XAxis
               type="number"
-              axisLine={false}
+              axisLine={true}
               tickLine={false}
-              domain={[0, requiredConsistency]}
+              domain={[0, requiredDeepFocus]}
               hide
             />
             <YAxis
@@ -102,16 +98,16 @@ const ConsistencyLevel = ({
                 radius={10}
                 stackId={item.stackId}
               >
-                {completedConsistencyPercentage > 50 &&
-                  item.name === "completedConsistency" && (
+                {completedDeepFocusPercentage > 50 &&
+                  item.name === "completedDeepFocus" && (
                     <LabelList
                       dataKey={chart.key(item.name)}
                       fill="black"
                       content={renderCustomizedLabel}
                     />
                   )}
-                {incompleteConsistencyPercentage > 50 &&
-                  item.name === "incompleteConsistency" && (
+                {incompleteDeepFocusPercentage > 50 &&
+                  item.name === "incompleteDeepFocus" && (
                     <LabelList
                       dataKey={chart.key(item.name)}
                       fill="black"
@@ -127,13 +123,11 @@ const ConsistencyLevel = ({
             {rewardPointsPerDay}
           </Text>
           <Gem size="15px" color="#4F8CF7" />
-          <Text fontSize="sm" fontWeight="medium">
-            /day
-          </Text>
+          <Text fontSize="sm" fontWeight="medium">/day</Text>
         </Flex>
       </Flex>
     </Flex>
   );
 };
 
-export default ConsistencyLevel;
+export default DeepFocusLevel;

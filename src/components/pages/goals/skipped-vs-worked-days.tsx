@@ -7,9 +7,9 @@ import { Box, Text, VStack } from "@chakra-ui/react";
 import {
   Bar,
   BarChart,
+  Cell,
   LabelList,
   LabelProps,
-  Legend,
   XAxis,
   YAxis,
 } from "recharts";
@@ -26,17 +26,23 @@ const SkippedVsWorkedDays = ({
 
   const totalDays = workedDays + skippedDays;
 
+  const workedDaysPercentage =
+    totalDays === 0 ? 50 : getPercentage(workedDays, totalDays);
+  const skippedDaysPercentage =
+    totalDays === 0 ? 50 : getPercentage(skippedDays, totalDays);
+
   const chart = useChart({
     data: [
       {
-        name: "skipped_vs_worked_days",
-        worked: totalDays === 0 ? 1 : workedDays,
-        skipped: totalDays === 0 ? 1 : skippedDays,
+        name: "worked",
+        value: workedDaysPercentage,
+        color: "green.400",
       },
-    ],
-    series: [
-      { name: "worked", color: "green.400", stackId: "a" },
-      { name: "skipped", color: "yellow.400", stackId: "a" },
+      {
+        name: "skipped",
+        value: skippedDaysPercentage,
+        color: "yellow.400",
+      },
     ],
   });
 
@@ -51,9 +57,9 @@ const SkippedVsWorkedDays = ({
         fontSize={fontSize}
         fontWeight="bold"
       >
-        {Number(value) === 0
-          ? null
-          : `${getPercentage(Number(value), totalDays || 2)} days`}
+        {totalDays === 0
+          ? "50% days"
+          : `${getPercentage(Number(value), totalDays)}% days`}
       </text>
     );
   };
@@ -77,34 +83,34 @@ const SkippedVsWorkedDays = ({
           Skipped: {skippedDays} days
         </Text>
       </VStack>
-      <Chart.Root maxH="100px" chart={chart}>
+      <Chart.Root maxH="150px" chart={chart}>
         <BarChart layout="vertical" data={chart.data}>
-          <XAxis type="number" axisLine={false} tickLine={false} hide />
+          <XAxis
+            type="number"
+            axisLine={true}
+            tickLine={true}
+            domain={[0, 100]}
+            tickFormatter={(value) => `${value}%`}
+          />
           <YAxis
             type="category"
-            axisLine={false}
-            tickLine={false}
+            axisLine={true}
+            tickLine={true}
             dataKey={chart.key("name")}
-            hide
           />
-          <Legend content={<Chart.Legend />} />
-          {chart.series.map((item) => (
-            <Bar
-              barSize={30}
-              isAnimationActive={false}
-              key={item.name}
-              dataKey={chart.key(item.name)}
-              fill={chart.color(item.color)}
-              stroke={chart.color(item.color)}
-              stackId={item.stackId}
-            >
-              <LabelList
-                dataKey={chart.key(item.name)}
-                fill="white"
-                content={renderCustomizedLabel}
-              />
-            </Bar>
-          ))}
+          <Bar
+            barSize={30}
+            isAnimationActive={true}
+            dataKey={chart.key("value")}
+          >
+            {chart.data.map((item) => (
+              <Cell key={item.name} fill={chart.color(item.color)} />
+            ))}
+            <LabelList
+              dataKey={chart.key("value")}
+              content={renderCustomizedLabel}
+            />
+          </Bar>
         </BarChart>
       </Chart.Root>
     </Box>

@@ -7,50 +7,46 @@ import { Flex, Text } from "@chakra-ui/react";
 import { Gem } from "lucide-react";
 import { Bar, BarChart, LabelList, LabelProps, XAxis, YAxis } from "recharts";
 
-const ConsistencyLevel = ({
-  goalProgress,
-}: {
-  goalProgress: IGoalProgress;
-}) => {
+const CommitmentLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   // destructure necessary properties
   const {
     analytics: {
-      consistency: {
-        percent: completedConsistency,
+      commitment: {
+        percent: completedCommitment,
         level: {
-          level: consistencyLevel,
-          maxPercentage: requiredConsistency,
+          level: commitmentLevel,
+          maxPercentage: requiredCommitment,
           rewardPointsPerDay,
         },
       },
     },
   } = goalProgress;
 
-  // incomplete consistency
-  const incompleteConsistency = requiredConsistency - completedConsistency;
+  // incomplete commitment
+  const incompleteCommitment = requiredCommitment - completedCommitment;
 
   const chart = useChart({
     data: [
       {
-        name: "consistency",
-        completedConsistency,
-        incompleteConsistency,
+        name: "deepFocus",
+        completedCommitment,
+        incompleteCommitment,
       },
     ],
     series: [
-      { name: "completedConsistency", color: "green.400", stackId: "a" },
-      { name: "incompleteConsistency", color: "gray.200", stackId: "a" },
+      { name: "completedCommitment", color: "green.400", stackId: "a" },
+      { name: "incompleteCommitment", color: "gray.200", stackId: "a" },
     ],
   });
 
-  const completedConsistencyPercentage = getPercentage(
-    completedConsistency,
-    requiredConsistency
+  const completedCommitmentPercentage = getPercentage(
+    completedCommitment,
+    requiredCommitment
   );
 
-  const incompleteConsistencyPercentage = getPercentage(
-    incompleteConsistency,
-    requiredConsistency
+  const incompleteCommitmentPercentage = getPercentage(
+    incompleteCommitment,
+    requiredCommitment
   );
 
   const renderCustomizedLabel = (props: LabelProps) => {
@@ -65,22 +61,22 @@ const ConsistencyLevel = ({
         fontSize={fontSize}
         fontWeight="bold"
       >
-        {`${completedConsistencyPercentage}% completed`}
+        {`${completedCommitmentPercentage}% completed`}
       </text>
     );
   };
 
   return (
     <Flex direction="column">
-      <Text>Consistency Level : {consistencyLevel}</Text>
+      <Text>Commitment Level : {commitmentLevel}</Text>
       <Flex alignItems="center" spaceX="2">
         <Chart.Root maxH="40px" chart={chart}>
           <BarChart layout="vertical" data={chart.data}>
             <XAxis
               type="number"
-              axisLine={false}
+              axisLine={true}
               tickLine={false}
-              domain={[0, requiredConsistency]}
+              domain={[0, requiredCommitment]}
               hide
             />
             <YAxis
@@ -102,16 +98,16 @@ const ConsistencyLevel = ({
                 radius={10}
                 stackId={item.stackId}
               >
-                {completedConsistencyPercentage > 50 &&
-                  item.name === "completedConsistency" && (
+                {completedCommitmentPercentage > 50 &&
+                  item.name === "completedCommitment" && (
                     <LabelList
                       dataKey={chart.key(item.name)}
                       fill="black"
                       content={renderCustomizedLabel}
                     />
                   )}
-                {incompleteConsistencyPercentage > 50 &&
-                  item.name === "incompleteConsistency" && (
+                {incompleteCommitmentPercentage > 50 &&
+                  item.name === "incompleteCommitment" && (
                     <LabelList
                       dataKey={chart.key(item.name)}
                       fill="black"
@@ -127,13 +123,11 @@ const ConsistencyLevel = ({
             {rewardPointsPerDay}
           </Text>
           <Gem size="15px" color="#4F8CF7" />
-          <Text fontSize="sm" fontWeight="medium">
-            /day
-          </Text>
+          <Text fontSize="sm" fontWeight="medium">/day</Text>
         </Flex>
       </Flex>
     </Flex>
   );
 };
 
-export default ConsistencyLevel;
+export default CommitmentLevel;

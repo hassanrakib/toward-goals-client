@@ -5,7 +5,7 @@ import { IGoalProgress } from "@/types/progress";
 import { getPercentage } from "@/utils/global";
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Flex, Text } from "@chakra-ui/react";
-import { Gem } from "lucide-react";
+import { ArrowUp, Gem } from "lucide-react";
 import { Bar, BarChart, LabelList, LabelProps, XAxis, YAxis } from "recharts";
 
 const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
@@ -96,12 +96,18 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   };
 
   return (
-    <Flex direction="column">
-      <Text>Goal Level : {mainLevel}</Text>
-      <Flex alignItems="center">
-        <Chart.Root maxH="40px" chart={chart}>
+    <Flex direction="column" justifyContent="center">
+      <Text fontSize="lg" fontWeight="medium">Goal Level : {mainLevel}</Text>
+      <Flex alignItems="center" spaceX="2">
+        <Chart.Root maxH="70px" chart={chart}>
           <BarChart layout="vertical" data={chart.data}>
-            <XAxis type="number" axisLine={false} tickLine={false} hide />
+            <XAxis
+              type="number"
+              axisLine={false}
+              tickLine={false}
+              domain={[0, totalRequirement]}
+              hide
+            />
             <YAxis
               type="category"
               axisLine={false}
@@ -112,7 +118,7 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
             />
             {chart.series.map((item) => (
               <Bar
-                barSize={30}
+                barSize={40}
                 isAnimationActive={false}
                 key={item.name}
                 dataKey={chart.key(item.name)}
@@ -142,7 +148,10 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
           </BarChart>
         </Chart.Root>
         <Flex alignItems="center" spaceX="0.5">
-          <Text fontSize="sm" fontWeight="medium">{levelUpPoint}</Text>
+          <ArrowUp size="20px" />
+          <Text fontSize="md" fontWeight="medium">
+            {levelUpPoint}
+          </Text>
           <Gem size="20px" color="#4F8CF7" />
         </Flex>
       </Flex>

@@ -7,35 +7,37 @@ import { Box, Text, VStack } from "@chakra-ui/react";
 import {
   Bar,
   BarChart,
+  Cell,
   LabelList,
   LabelProps,
-  Legend,
   XAxis,
   YAxis,
 } from "recharts";
 
-const TodosDeadlines = ({
-  goalProgress,
-}: {
-  goalProgress: IGoalProgress;
-}) => {
+const TodosDeadlines = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   const {
-    todosDeadlines: {met: metDeadlines, missed: missedDeadlines}
+    todosDeadlines: {missed: missedDeadlines, met: metDeadlines}
   } = goalProgress;
 
-  const totalDeadlines = metDeadlines + missedDeadlines;
+  const totalDeadlines = missedDeadlines + metDeadlines;
+
+  const metDeadlinesPercentage =
+    totalDeadlines === 0 ? 50 : getPercentage(metDeadlines, totalDeadlines);
+  const missedDeadlinesPercentage =
+    totalDeadlines === 0 ? 50 : getPercentage(missedDeadlines, totalDeadlines);
 
   const chart = useChart({
     data: [
       {
-        name: "todos_deadlines",
-        met: totalDeadlines === 0 ? 1 : metDeadlines,
-        missed: totalDeadlines === 0 ? 1 : missedDeadlines,
+        name: "met",
+        value: metDeadlinesPercentage,
+        color: "green.400",
       },
-    ],
-    series: [
-      { name: "met", color: "green.400", stackId: "a" },
-      { name: "missed", color: "yellow.400", stackId: "a" },
+      {
+        name: "missed",
+        value: missedDeadlinesPercentage,
+        color: "yellow.400",
+      },
     ],
   });
 
@@ -50,9 +52,9 @@ const TodosDeadlines = ({
         fontSize={fontSize}
         fontWeight="bold"
       >
-        {Number(value) === 0
-          ? null
-          : `${getPercentage(Number(value), totalDeadlines || 2)} deadlines`}
+        {totalDeadlines === 0
+          ? "50% deadlines"
+          : `${getPercentage(Number(value), totalDeadlines)}% deadlines`}
       </text>
     );
   };
@@ -65,7 +67,7 @@ const TodosDeadlines = ({
       borderRadius="xl"
       p={6}
       shadow="md"
-    //   maxW="sm"
+      // maxW="sm"
       position="relative"
     >
       <VStack gap={1} alignItems="flex-start">
@@ -76,34 +78,34 @@ const TodosDeadlines = ({
           Missed: {missedDeadlines} deadlines
         </Text>
       </VStack>
-      <Chart.Root maxH="100px" chart={chart}>
+      <Chart.Root maxH="150px" chart={chart}>
         <BarChart layout="vertical" data={chart.data}>
-          <XAxis type="number" axisLine={false} tickLine={false} hide />
+          <XAxis
+            type="number"
+            axisLine={true}
+            tickLine={true}
+            domain={[0, 100]}
+            tickFormatter={(value) => `${value}%`}
+          />
           <YAxis
             type="category"
-            axisLine={false}
-            tickLine={false}
+            axisLine={true}
+            tickLine={true}
             dataKey={chart.key("name")}
-            hide
           />
-          <Legend content={<Chart.Legend />} />
-          {chart.series.map((item) => (
-            <Bar
-              barSize={30}
-              isAnimationActive={false}
-              key={item.name}
-              dataKey={chart.key(item.name)}
-              fill={chart.color(item.color)}
-              stroke={chart.color(item.color)}
-              stackId={item.stackId}
-            >
-              <LabelList
-                dataKey={chart.key(item.name)}
-                fill="white"
-                content={renderCustomizedLabel}
-              />
-            </Bar>
-          ))}
+          <Bar
+            barSize={30}
+            isAnimationActive={true}
+            dataKey={chart.key("value")}
+          >
+            {chart.data.map((item) => (
+              <Cell key={item.name} fill={chart.color(item.color)} />
+            ))}
+            <LabelList
+              dataKey={chart.key("value")}
+              content={renderCustomizedLabel}
+            />
+          </Bar>
         </BarChart>
       </Chart.Root>
     </Box>
