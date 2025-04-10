@@ -46,7 +46,7 @@ const HabitCompletionsChart = ({
       borderRadius="xl"
       p={6}
       shadow="md"
-      maxW="sm"
+      // maxW="sm"
       position="relative"
     >
       <Badge

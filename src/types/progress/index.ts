@@ -8,7 +8,7 @@ export interface IGoalProgress {
   user: string;
   goal: IGoal;
   level: ILevel;
-  points?: number;
+  points: number;
   totalMiniCompletion: number;
   totalPlusCompletion: number;
   totalEliteCompletion: number;
@@ -16,11 +16,11 @@ export interface IGoalProgress {
   skippedDays: number;
   todosDeadlines: { missed: number; met: number };
   analytics: {
-    consistency: { percent?: number; level: IRequirementLevel };
-    deepFocus: { percent?: number; level: IRequirementLevel };
-    commitment: { percent?: number; level: IRequirementLevel };
+    consistency: { percent: number; level: IRequirementLevel };
+    deepFocus: { percent: number; level: IRequirementLevel };
+    commitment: { percent: number; level: IRequirementLevel };
   };
-  isCompleted?: boolean;
+  isCompleted: boolean;
 }
 
 export type GoalProgressCreationData = { goal: string };

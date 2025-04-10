@@ -7,6 +7,7 @@ import HabitCompletionsChart from "./habit-completions-chart";
 import CurrentWorkStreak from "./current-work-streak";
 import SkippedVsWorkedDays from "./skipped-vs-worked-days";
 import TodosDeadlines from "./todos-deadlines";
+import Analytics from "./analytics";
 
 const GoalProgress = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   // destructuring properties from the goal progress
@@ -87,6 +88,7 @@ const GoalProgress = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       </Box>
       {/* showing goal progress visually */}
       <Grid templateColumns="repeat(2, 1fr)" gap={4} px="6" py="4">
+        <Analytics goalProgress={goalProgress} />
         <HabitCompletionsChart goalProgress={goalProgress} />
         <CurrentWorkStreak days={workStreak.current} />
         <SkippedVsWorkedDays goalProgress={goalProgress} />

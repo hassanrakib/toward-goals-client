@@ -17,6 +17,7 @@ export interface ILevel {
   badgeImage: string;
   levelUpPoint: number;
   requirements: {
+    _id: string;
     consistency: IRequirementLevel;
     deepFocus: IRequirementLevel;
     commitment: IRequirementLevel;

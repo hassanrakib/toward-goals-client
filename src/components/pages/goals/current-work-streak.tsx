@@ -11,8 +11,11 @@ export default function CurrentWorkStreak({ days }: { days: number }) {
       p={6}
       shadow="md"
       textAlign="center"
-      maxW="sm"
+      // maxW="sm"
       position="relative"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
     >
       <Badge
         colorScheme="orange"

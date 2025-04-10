@@ -1,7 +1,7 @@
 "use client";
 
 import { IGoalProgress } from "@/types/progress";
-import { getPercentageLabel } from "@/utils/global";
+import { getPercentage } from "@/utils/global";
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Box, Text, VStack } from "@chakra-ui/react";
 import {
@@ -53,7 +53,7 @@ const SkippedVsWorkedDays = ({
       >
         {Number(value) === 0
           ? null
-          : `${getPercentageLabel(Number(value), totalDays || 2)} days`}
+          : `${getPercentage(Number(value), totalDays || 2)} days`}
       </text>
     );
   };
@@ -66,7 +66,7 @@ const SkippedVsWorkedDays = ({
       borderRadius="xl"
       p={6}
       shadow="md"
-      maxW="sm"
+      // maxW="sm"
       position="relative"
     >
       <VStack gap={1} alignItems="flex-start">

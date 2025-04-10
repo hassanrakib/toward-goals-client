@@ -16,8 +16,8 @@ export default function debounce<T extends (...args: any[]) => any>(
   };
 }
 
-// get percentage label string
-export function getPercentageLabel(part: number, total: number): string {
+// get percentage
+export function getPercentage(part: number, total: number): number {
   const percentage = (part / total) * 100;
-  return `${Math.round(percentage)}%`;
+  return Math.round(percentage);
 }
