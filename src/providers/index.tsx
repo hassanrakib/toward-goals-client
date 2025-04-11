@@ -1,4 +1,5 @@
 import { Provider as ChakraUIProvider } from "@/components/ui/provider";
+import { Toaster } from "@/components/ui/toaster";
 import { Provider as ReduxStoreProvider } from "@/redux/provider";
 import { decrypt } from "@/services/auth";
 import { cookies } from "next/headers";
@@ -16,6 +17,7 @@ export default async function Providers({
     // don't use system preference use "light" theme by default
     <ChakraUIProvider enableSystem={false}>
       <ReduxStoreProvider session={session}>{children}</ReduxStoreProvider>
+      <Toaster />
     </ChakraUIProvider>
   );
 }
