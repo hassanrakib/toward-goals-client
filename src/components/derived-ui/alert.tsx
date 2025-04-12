@@ -1,15 +1,19 @@
-import { Alert as ChakraAlert } from "@chakra-ui/react";
+import { Alert as ChakraAlert, Spinner } from "@chakra-ui/react";
 import { forwardRef } from "react";
 
-export interface AlertProps extends ChakraAlert.RootProps {}
+export interface AlertProps extends ChakraAlert.RootProps {
+  showSpinner?: boolean;
+}
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(
   function Alert(props, ref) {
-    const { children, ...rest } = props;
+    const { showSpinner, children, ...rest } = props;
 
     return (
       <ChakraAlert.Root ref={ref} variant="outline" size="sm" {...rest}>
-        <ChakraAlert.Indicator />
+        <ChakraAlert.Indicator>
+          {showSpinner && <Spinner size="sm" />}
+        </ChakraAlert.Indicator>
         <ChakraAlert.Title>{children}</ChakraAlert.Title>
       </ChakraAlert.Root>
     );
