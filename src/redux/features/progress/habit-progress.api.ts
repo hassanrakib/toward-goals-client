@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/baseApi";
-import { IResponse } from "@/types/global";
+import { IResponse, QueryParams } from "@/types/global";
 import { HabitProgressCreationData, IHabitProgress } from "@/types/progress";
 
 const habitProgressApi = baseApi.injectEndpoints({
@@ -14,7 +14,15 @@ const habitProgressApi = baseApi.injectEndpoints({
         body: habitProgressCreationData,
       }),
     }),
+    getHabitsProgress: build.query<IResponse<IHabitProgress[]>, QueryParams>({
+      query: (params) => ({
+        url: "/progress/my-habits-progress",
+        method: "GET",
+        params,
+      }),
+    }),
   }),
 });
 
-export const { useCreateHabitProgressMutation } = habitProgressApi;
+export const { useCreateHabitProgressMutation, useGetHabitsProgressQuery } =
+  habitProgressApi;

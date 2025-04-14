@@ -1,30 +1,53 @@
 "use client";
 
+import Alert from "@/components/derived-ui/alert";
+import DateInput from "@/components/derived-ui/date-input";
 import Form from "@/components/derived-ui/form";
+import StyledInput from "@/components/derived-ui/styled-input";
 import StyledSelect from "@/components/derived-ui/styled-select";
 import SubmitButton from "@/components/derived-ui/submit-button";
+import SelectHabit from "@/components/pages/tasks/create-task/select-habit";
 import SelectSubgoal from "@/components/pages/tasks/create-task/select-subgoal";
+import { toaster } from "@/components/ui/toaster";
 import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
+import { useGetHabitsProgressQuery } from "@/redux/features/progress/habit-progress.api";
 import { useGetSubgoalsProgressQuery } from "@/redux/features/progress/subgoal-progress.api";
+import { useCreateTaskMutation } from "@/redux/features/task/task.api";
+import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { createTaskSchema } from "@/schemas/task";
 import { generateAvailableGoalsCollection } from "@/utils/progress";
 import { Card, Flex } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { endOfToday } from "date-fns";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { UseFormReset } from "react-hook-form";
 
 interface IFormValues {
   goalId: string[];
-  subgoalId: string[];
+  subgoalId: string;
   habitId: string;
   title: string;
-  deadline: string;
+  deadline: Date;
 }
 
 const CreateTask = () => {
-  // know the current
+  // form default values
+  const defaultValues: IFormValues = {
+    goalId: [],
+    subgoalId: "",
+    habitId: "",
+    title: "",
+    deadline: endOfToday(),
+  };
+
+  // next js router
+  const router = useRouter();
+
+  // know the current selected goal id
   const [selectedGoalId, setSelectedGoalId] = useState("");
 
+  // get started goals by the user
   const {
     data: goalsProgress,
     isLoading: isGettingGoalsProgress,
@@ -37,36 +60,62 @@ const CreateTask = () => {
   });
 
   // get the started subgoals for the goal
-  const { data: subgoalsProgress, isLoading: isGettingSubgoalsProgress } =
-    useGetSubgoalsProgressQuery(
-      {
-        fields: "subgoal",
-        goal: selectedGoalId,
-        isCompleted: false,
-      },
-      { skip: !selectedGoalId }
-    );
+  const {
+    data: subgoalsProgress,
+    isLoading: isGettingSubgoalsProgress,
+    error: getSubgoalsProgressError,
+  } = useGetSubgoalsProgressQuery(
+    {
+      fields: "subgoal",
+      goal: selectedGoalId,
+      isCompleted: false,
+    },
+    { skip: !selectedGoalId }
+  );
 
-  // default selected subgoal
-  const defaultSelectedSubgoal = subgoalsProgress?.data?.[0]
-    ? subgoalsProgress.data[0].subgoal._id
-    : undefined;
+  // get the enrolled habits for the goal
+  const {
+    data: habitsProgress,
+    isLoading: isGettingHabitsProgress,
+    error: getHabitsProgressError,
+  } = useGetHabitsProgressQuery(
+    {
+      fields: "habit",
+      goal: selectedGoalId,
+    },
+    { skip: !selectedGoalId }
+  );
 
-  // form default values
-  const defaultValues: IFormValues = {
-    goalId: [],
-    subgoalId: [defaultSelectedSubgoal || ""],
-    habitId: "",
-    title: "",
-    deadline: "",
-  };
+  // create task mutation
+  const [createTask, { isLoading: isCreatingTask, error: createTaskError }] =
+    useCreateTaskMutation();
 
   // form submit handler
   const onSubmit = async (
     data: IFormValues,
     reset: UseFormReset<IFormValues>
   ) => {
-    console.log(data);
+    try {
+      const result = await createTask({
+        ...data,
+        goal: data.goalId[0],
+        subgoal: data.subgoalId,
+        habit: data.habitId,
+        deadline: data.deadline.toISOString(),
+      }).unwrap();
+
+      // reset the form
+      reset(defaultValues);
+
+      // after successfully creating task
+      toaster.create({
+        title: result.message,
+        type: "success",
+      });
+      router.push("/tasks");
+    } catch (error: unknown) {
+      console.log(error);
+    }
   };
 
   return (
@@ -83,6 +132,12 @@ const CreateTask = () => {
           }}
         >
           <Card.Body gap={3}>
+            <StyledInput
+              type="text"
+              name="title"
+              label="Title"
+              placeholder="Got something to get done?"
+            />
             <StyledSelect
               name="goalId"
               placeholder="Select goal"
@@ -94,34 +149,37 @@ const CreateTask = () => {
             />
             <SelectSubgoal
               selectedGoalId={selectedGoalId}
-              defaultSelectedSubgoal={defaultSelectedSubgoal}
               subgoalsProgress={subgoalsProgress}
               isGettingSubgoalsProgress={isGettingSubgoalsProgress}
             />
+            <SelectHabit
+              selectedGoalId={selectedGoalId}
+              habitsProgress={habitsProgress}
+              isGettingHabitsProgress={isGettingHabitsProgress}
+            />
+            <DateInput
+              name="deadline"
+              label="Task Deadline"
+              placeholder="Select deadline of the task"
+            />
           </Card.Body>
           <Card.Footer flexDir="column">
-            {/* {!isCreatingSubgoal && createSubgoalError ? (
+            {!isCreatingTask && createTaskError && (
               <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createSubgoalError)
-                  ? createSubgoalError.data.message
+                {isFetchBaseQueryErrorWithData(createTaskError)
+                  ? createTaskError.data.message
                   : "There was an error processing your request"}
               </Alert>
-            ) : !isCreatingSubgoalProgress && createSubgoalProgressError ? (
-              <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createSubgoalProgressError)
-                  ? createSubgoalProgressError.data.message
-                  : "There was an error processing your request"}
-              </Alert>
-            ) : null} */}
+            )}
             <SubmitButton
-              isServerActionLoading={false}
-              // isServerActionLoading={
-              //   isCreatingSubgoal || isCreatingSubgoalProgress
-              // }
-              // loadingText="Creating subgoal..."
-              // disabled={
-              //   isGettingGoalsProgress || Boolean(getGoalsProgressError)
-              // }
+              isServerActionLoading={isCreatingTask}
+              loadingText="Creating task..."
+              disabled={
+                Boolean(isGettingGoalsProgress) ||
+                Boolean(getGoalsProgressError) ||
+                Boolean(getSubgoalsProgressError) ||
+                Boolean(getHabitsProgressError)
+              }
             >
               Create Task
             </SubmitButton>

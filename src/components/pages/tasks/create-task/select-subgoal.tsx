@@ -1,6 +1,6 @@
 import Alert from "@/components/derived-ui/alert";
-import CheckboxCards from "@/components/derived-ui/checkbox-cards";
-import { CheckboxCard } from "@/components/ui/checkbox-card";
+import RadioCards from "@/components/derived-ui/radio-cards";
+import { RadioCardItem } from "@/components/ui/radio-card";
 import { IResponse } from "@/types/global";
 import { ISubgoalProgress } from "@/types/progress";
 import { Link as ChakraLink } from "@chakra-ui/react";
@@ -9,23 +9,23 @@ import NextLink from "next/link";
 interface SelectSubgoalProps {
   selectedGoalId: string;
   subgoalsProgress: IResponse<ISubgoalProgress[]> | undefined;
-  defaultSelectedSubgoal: string | undefined;
   isGettingSubgoalsProgress: boolean;
 }
 
 const SelectSubgoal = ({
   selectedGoalId,
   subgoalsProgress,
-  defaultSelectedSubgoal,
   isGettingSubgoalsProgress,
 }: SelectSubgoalProps) => {
+
+  // select a subgoal by default
+  const defaultValue = subgoalsProgress?.data?.[0]?.subgoal._id;
+
   return (
-    <CheckboxCards
+    <RadioCards
       name="subgoalId"
       label="Select subgoal"
-      defaultSelectedValue={
-        defaultSelectedSubgoal ? [defaultSelectedSubgoal] : undefined
-      }
+      defaultValue={defaultValue}
     >
       {/* if no goal selected show a message */}
       {!selectedGoalId && (
@@ -45,9 +45,13 @@ const SelectSubgoal = ({
         </Alert>
       )}
       {subgoalsProgress?.data?.map(({ subgoal }) => (
-        <CheckboxCard key={subgoal._id} label={subgoal.title} />
+        <RadioCardItem
+          key={subgoal._id}
+          label={subgoal.title}
+          value={subgoal._id}
+        />
       ))}
-    </CheckboxCards>
+    </RadioCards>
   );
 };
 
