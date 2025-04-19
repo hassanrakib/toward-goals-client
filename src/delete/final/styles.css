@@ -1,0 +1,24 @@
+/* create task input */
+.create-task-input {
+  flex-basis: 120px;
+  overflow-y: auto;
+}
+
+.create-task-input .tiptap {
+  height: 100%;
+}
+.create-task-input .tiptap:focus {
+  outline: none;
+}
+
+/* mention extension */
+.mention {
+  background-color: #fef3c7;
+  color: #b45309;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 400;
+  font-size: 0.95em;
+  line-height: 1.4;
+  white-space: nowrap;
+}
