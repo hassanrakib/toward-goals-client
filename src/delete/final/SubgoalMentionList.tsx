@@ -67,9 +67,13 @@ export const SubgoalMentionList = ({
           rounded="xl"
           p={1}
           _hover={{ bg: "gray.100", cursor: "pointer" }}
-          onClick={() =>
-            command({ id: subgoal._id, label: `subgoal ${subgoal.title}` })
-          }
+          onClick={() => {
+            // update the storage for the SubgoalMentionExtension
+            editor.storage.subgoalMention.subgoalId = subgoal._id;
+
+            // insert this mention node to the doc
+            command({ id: subgoal._id, label: `subgoal ${subgoal.title}` });
+          }}
         >
           {subgoal.title}
         </Box>

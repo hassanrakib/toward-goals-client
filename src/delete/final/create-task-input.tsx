@@ -1,14 +1,18 @@
 "use client";
 
 import { EditorContent, useEditor } from "@tiptap/react";
-import Document from "@tiptap/extension-document";
+import Heading from "@tiptap/extension-heading";
 import Paragraph from "@tiptap/extension-paragraph";
 import TextExtension from "@tiptap/extension-text";
+import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import { Box, Flex, Icon, Text } from "@chakra-ui/react";
 import "./styles.css";
 import {
+  CustomDocument,
+  DeadlineMentionExtension,
   GoalMentionExtension,
+  HabitMentionExtension,
   SubgoalMentionExtension,
 } from "./make-mention-extension";
 import { getMentionsFromDoc } from "./utils";
@@ -21,14 +25,45 @@ const CreateTaskInput = () => {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      Document,
-      Paragraph,
+      // custom document extension to force strict structure of 'heading paragraph',
+      // heading means heading node and paragraph means paragraph node
+      CustomDocument,
+      Heading.configure({
+        HTMLAttributes: {
+          class: "task-title",
+        },
+        levels: [2],
+      }),
+      Paragraph.configure({
+        HTMLAttributes: {
+          class: "task-details",
+        },
+      }),
       TextExtension,
+      Placeholder.configure({
+        placeholder: ({ node }) => {
+          // for the heading show this placeholder
+          if (node.type.name === "heading") {
+            return "What’s the title?";
+          }
+
+          // if node is not heading then it is a paragraph
+          // show this placeholder for the paragraph
+          return "Description...";
+        },
+        includeChildren: true,
+        showOnlyCurrent: false,
+        showOnlyWhenEditable: true,
+      }),
       CharacterCount.configure({
         limit: characterLimit,
       }),
+      // these extensions are custom made
+      // GoalMentionExtension works with inserting goalMention type node in the doc
       GoalMentionExtension,
       SubgoalMentionExtension,
+      HabitMentionExtension,
+      DeadlineMentionExtension,
     ],
     // this runs whenever the content of the editor changes
     onUpdate({ editor }) {
@@ -38,6 +73,10 @@ const CreateTaskInput = () => {
         editor.storage.goalMention.goalId;
       const subgoalIdInExtensionStorage: string =
         editor.storage.subgoalMention.subgoalId;
+      const habitIdInExtensionStorage: string =
+        editor.storage.habitMention.habitId;
+      const deadlineInExtensionStorage: string =
+        editor.storage.deadlineMention.deadline;
 
       // get all the mentions within the doc
       const mentionsInDoc = getMentionsFromDoc(editor.state.doc);
@@ -46,15 +85,15 @@ const CreateTaskInput = () => {
       if (!mentionsInDoc.goalMention && goalIdInExtensionStorage) {
         // clear the goalId because editor doesn't have goalMention node
         editor.storage.goalMention.goalId = "";
+        // same logic as before
       } else if (!mentionsInDoc.subgoalMention && subgoalIdInExtensionStorage) {
         editor.storage.subgoalMention.subgoalId = "";
+      } else if (!mentionsInDoc.habitMention && habitIdInExtensionStorage) {
+        editor.storage.habitMention.habitId = "";
+      } else if (!mentionsInDoc.deadlineMention && deadlineInExtensionStorage) {
+        editor.storage.deadlineMention.deadline = "";
       }
     },
-    content: `
-      <p>
-        Got something to get done?
-      </p>
-    `,
   });
 
   // character usage percentage
@@ -80,6 +119,7 @@ const CreateTaskInput = () => {
         height="140px"
         overflow="hidden"
       >
+        {/* editor where the user will write */}
         <EditorContent editor={editor} className="create-task-input" />
         {/* shows character count against character limit */}
         {editor && (
