@@ -7,15 +7,14 @@ import TextExtension from "@tiptap/extension-text";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import { Box, Flex, Icon, Text } from "@chakra-ui/react";
-import "./styles.css";
+import { getMentionsFromDoc } from "@/utils/tiptap";
 import {
   CustomDocument,
   DeadlineMentionExtension,
   GoalMentionExtension,
   HabitMentionExtension,
   SubgoalMentionExtension,
-} from "./make-mention-extension";
-import { getMentionsFromDoc } from "./utils";
+} from "@/lib/tiptap-extensions";
 
 const CreateTaskInput = () => {
   // character limit for the input
@@ -44,12 +43,12 @@ const CreateTaskInput = () => {
         placeholder: ({ node }) => {
           // for the heading show this placeholder
           if (node.type.name === "heading") {
-            return "What’s the title?";
+            return "# Write your task title here";
           }
 
           // if node is not heading then it is a paragraph
           // show this placeholder for the paragraph
-          return "Description...";
+          return "Type @goal, @subgoal, @habit & @deadline to select every one of these to create the task";
         },
         includeChildren: true,
         showOnlyCurrent: false,
@@ -104,66 +103,61 @@ const CreateTaskInput = () => {
     : 0;
 
   return (
-    <Box bgColor="bg" maxW="xl" p="3" rounded="2xl">
-      <Text fontSize="md" mb="2" fontWeight="medium">
-        Create Task
-      </Text>
-      <Box
-        display="flex"
-        flexDirection="column"
-        borderStyle="solid"
-        borderWidth="thin"
-        borderColor="bg.emphasized"
-        p="2"
-        rounded="xl"
-        height="140px"
-        overflow="hidden"
-      >
-        {/* editor where the user will write */}
-        <EditorContent editor={editor} className="create-task-input" />
-        {/* shows character count against character limit */}
-        {editor && (
-          <Flex
-            alignItems="center"
-            spaceX="1"
-            fontSize="sm"
+    <Box
+      display="flex"
+      flexDirection="column"
+      borderStyle="solid"
+      borderWidth="thin"
+      borderColor="bg.emphasized"
+      p="3"
+      rounded="xl"
+      height="150px"
+      overflow="hidden"
+    >
+      {/* editor where the user will write */}
+      <EditorContent editor={editor} className="create-task-input" />
+      {/* shows character count against character limit */}
+      {editor && (
+        <Flex
+          alignItems="center"
+          spaceX="1"
+          fontSize="sm"
+          color={
+            editor.storage.characterCount.characters() === characterLimit
+              ? "orange.400"
+              : "gray.600"
+          }
+        >
+          <Icon
+            size="sm"
             color={
               editor.storage.characterCount.characters() === characterLimit
                 ? "orange.400"
-                : "gray.600"
+                : "purple.600"
             }
+            asChild
           >
-            <Icon
-              size="sm"
-              color={
-                editor.storage.characterCount.characters() === characterLimit
-                  ? "orange.400"
-                  : "purple.600"
-              }
-              asChild
-            >
-              <svg viewBox="0 0 20 20">
-                <circle r="10" cx="10" cy="10" fill="#e9ecef" />
-                <circle
-                  r="5"
-                  cx="10"
-                  cy="10"
-                  fill="transparent"
-                  stroke="currentColor"
-                  strokeWidth="10"
-                  strokeDasharray={`calc(${characterUsagePercentage} * 31.4 / 100) 31.4`}
-                  transform="rotate(-90) translate(-20)"
-                />
-                <circle r="6" cx="10" cy="10" fill="white" />
-              </svg>
-            </Icon>
-            <Text>
-              {editor.storage.characterCount.characters()} / {characterLimit}{" "}
-              characters
-            </Text>
-          </Flex>
-        )}
-      </Box>
+            <svg viewBox="0 0 20 20">
+              <circle r="10" cx="10" cy="10" fill="#e9ecef" />
+              <circle
+                r="5"
+                cx="10"
+                cy="10"
+                fill="transparent"
+                stroke="currentColor"
+                strokeWidth="10"
+                strokeDasharray={`calc(${characterUsagePercentage} * 31.4 / 100) 31.4`}
+                transform="rotate(-90) translate(-20)"
+              />
+              <circle r="6" cx="10" cy="10" fill="white" />
+            </svg>
+          </Icon>
+          <Text>
+            {editor.storage.characterCount.characters()} / {characterLimit}{" "}
+            characters
+          </Text>
+        </Flex>
+      )}
     </Box>
   );
 };

@@ -1,6 +1,6 @@
 /* basic editor styles */
 .create-task-input {
-  flex-basis: 120px;
+  flex-basis: 140px;
   overflow-y: auto;
 }
 
@@ -9,6 +9,21 @@
 }
 .create-task-input .tiptap:focus {
   outline: none;
+}
+
+/* Display a Placeholder for empty nodes inside editor */
+.create-task-input .is-empty::before {
+  content: attr(data-placeholder);
+  color: #999;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.create-task-input .task-title {
+  border-bottom: 1px dashed #ccc;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 /* all the mentions style */
@@ -35,14 +50,4 @@
   color: #666;
   margin-right: 0.25rem;
   font-weight: normal;
-}
-
-
-/* Display a Placeholder for empty node */
-.create-task-input .is-empty::before {
-  content: attr(data-placeholder);
-  color: #999;
-  float: left;
-  height: 0;
-  pointer-events: none;
 }

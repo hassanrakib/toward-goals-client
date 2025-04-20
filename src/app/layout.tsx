@@ -1,6 +1,7 @@
 import { sora } from "@/config/fonts";
 import Providers from "@/providers";
 import type { Metadata } from "next";
+import "./global.css";
 
 export const metadata: Metadata = {
   title: "Toward Goals",

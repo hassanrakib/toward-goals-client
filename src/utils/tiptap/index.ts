@@ -1,15 +1,12 @@
-import { ReactRenderer } from "@tiptap/react";
-import tippy, { Instance } from "tippy.js";
+import { Node } from "@tiptap/pm/model";
 import { Mention } from "@tiptap/extension-mention";
-import { PluginKey } from "@tiptap/pm/state";
 import { SuggestionProps } from "@tiptap/suggestion";
 import { ComponentType } from "react";
-import { GoalMentionList } from "./GoalMentionList";
-import { SubgoalMentionList } from "./SubgoalMentionList";
-import { HabitMentionList } from "./habit-mention-list";
-import { DeadlineMention } from "./deadline-mention";
+import { PluginKey } from "@tiptap/pm/state";
+import { ReactRenderer } from "@tiptap/react";
+import tippy, { Instance } from "tippy.js";
 
-function makeMentionExtension({
+export function makeMentionExtension({
   name,
   initialStorage,
   Component,
@@ -116,38 +113,29 @@ function makeMentionExtension({
   });
 }
 
-// mention extensions to show different suggestion component
-export const GoalMentionExtension = makeMentionExtension({
-  name: "goalMention",
-  initialStorage: { goalId: "" },
-  Component: GoalMentionList,
-});
+export function getMentionsFromDoc(doc: Node) {
+  // put the mentions id attribute here from the doc
+  const mentions = {
+    goalMention: "",
+    subgoalMention: "",
+    habitMention: "",
+    deadlineMention: "",
+  };
 
-export const SubgoalMentionExtension = makeMentionExtension({
-  name: "subgoalMention",
-  initialStorage: { subgoalId: "" },
-  Component: SubgoalMentionList,
-});
+  // go through all the nodes of the doc and if any type of mention node is found
+  // add the mention nodes id in the mentions
+  doc.descendants((node) => {
+    if (node.type.name === "goalMention") {
+      mentions.goalMention = node.attrs.id;
+    } else if (node.type.name === "subgoalMention") {
+      mentions.subgoalMention = node.attrs.id;
+    } else if (node.type.name === "habitMention") {
+      mentions.habitMention = node.attrs.id;
+    } else if (node.type.name === "deadlineMention") {
+      mentions.deadlineMention = node.attrs.id;
+    }
+  });
 
-export const HabitMentionExtension = makeMentionExtension({
-  name: "habitMention",
-  initialStorage: { habitId: "" },
-  Component: HabitMentionList,
-});
-
-export const DeadlineMentionExtension = makeMentionExtension({
-  name: "deadlineMention",
-  initialStorage: { deadline: "" },
-  Component: DeadlineMention,
-});
-
-// lib/tiptap/extensions/CustomDocument.ts
-import { Node } from "@tiptap/core";
-
-export const CustomDocument = Node.create({
-  name: "doc",
-  topNode: true,
-
-  // This enforces the exact content structure
-  content: "heading paragraph",
-});
+  // return mentions
+  return mentions;
+}
