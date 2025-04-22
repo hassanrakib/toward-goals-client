@@ -8,20 +8,14 @@ import tippy, { Instance } from "tippy.js";
 
 export function makeMentionExtension({
   name,
-  initialStorage,
   Component,
 }: {
   name: string;
-  initialStorage: Record<string, string>;
   Component: ComponentType<SuggestionProps>;
 }) {
   return Mention.extend({
     // name of the extension
     name,
-    // extension storage
-    addStorage() {
-      return initialStorage;
-    },
   }).configure({
     // class attribute will be added to the inserted node by this extension
     HTMLAttributes: { class: `mention ${name}` },
@@ -73,7 +67,7 @@ export function makeMentionExtension({
               placement: "bottom-start",
             });
           },
-          // Called when the suggestion data or cursor position updates
+          // Called when the suggestion data (query, items, etc) or cursor position updates
           onUpdate(props) {
             reactRenderer.updateProps(props);
             // if no cursor position found or popup is already destroyed
@@ -102,6 +96,7 @@ export function makeMentionExtension({
               // insert a custom node such "goalMention"
               type: name,
               // pass the selected suggestion data as attributes
+              // props are sent by command at the time of selection
               attrs: props,
             },
             // add a space after the inserted mention node
@@ -113,29 +108,33 @@ export function makeMentionExtension({
   });
 }
 
-export function getMentionsFromDoc(doc: Node) {
-  // put the mentions id attribute here from the doc
-  const mentions = {
-    goalMention: "",
-    subgoalMention: "",
-    habitMention: "",
-    deadlineMention: "",
+export function extractDataFromDoc(doc: Node) {
+  // put the mention nodes id attribute here from the doc
+  // and title text from the heading node
+  const extracted = {
+    title: "",
+    goalId: "",
+    subgoalId: "",
+    habitId: "",
+    deadline: "",
   };
 
   // go through all the nodes of the doc and if any type of mention node is found
   // add the mention nodes id in the mentions
   doc.descendants((node) => {
     if (node.type.name === "goalMention") {
-      mentions.goalMention = node.attrs.id;
+      extracted.goalId = node.attrs.id;
     } else if (node.type.name === "subgoalMention") {
-      mentions.subgoalMention = node.attrs.id;
+      extracted.subgoalId = node.attrs.id;
     } else if (node.type.name === "habitMention") {
-      mentions.habitMention = node.attrs.id;
+      extracted.habitId = node.attrs.id;
     } else if (node.type.name === "deadlineMention") {
-      mentions.deadlineMention = node.attrs.id;
+      extracted.deadline = node.attrs.id;
+    } else if (node.type.name === "heading") {
+      extracted.title = node.textContent;
     }
   });
 
-  // return mentions
-  return mentions;
+  // return extracted data
+  return extracted;
 }

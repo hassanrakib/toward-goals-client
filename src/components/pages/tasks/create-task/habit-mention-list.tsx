@@ -1,28 +1,27 @@
 import { useGetHabitsProgressQuery } from "@/redux/features/progress/habit-progress.api";
 import { Box, Spinner } from "@chakra-ui/react";
 import { SuggestionProps } from "@tiptap/suggestion";
+import { useWatch } from "react-hook-form";
 
 export const HabitMentionList = ({
   query,
-  editor,
   command,
 }: {
   query: string;
-  editor: SuggestionProps["editor"];
   command: SuggestionProps["command"];
 }) => {
-  // get the goal id from the goalMention extension storage
-  const selectedGoalId = editor.storage.goalMention.goalId;
+  // get the goal id from the hook form
+  const mentionedGoalId = useWatch({ name: "extracted.goalId" });
 
-  // get the habit id from habitMention extension storage
-  const habitIdInExtensionStorage = editor.storage.habitMention.habitId;
+  // get the habit id from the hook form
+  const mentionedHabitId = useWatch({ name: "extracted.habitId" });
 
   // get the started habits for the goal
   const { data: habitsProgress, isLoading: isGettingHabitsProgress } =
     useGetHabitsProgressQuery(
       {
         fields: "habit",
-        goal: selectedGoalId,
+        goal: mentionedGoalId,
       },
       // skip data fetching
       // if goal is not mentioned already
@@ -30,9 +29,7 @@ export const HabitMentionList = ({
       // or if habit is already mentioned
       {
         skip:
-          !selectedGoalId ||
-          !query.startsWith("habit") ||
-          habitIdInExtensionStorage,
+          !mentionedGoalId || !query.startsWith("habit") || mentionedHabitId,
       }
     );
 
@@ -40,11 +37,7 @@ export const HabitMentionList = ({
   // or if goal is not mentioned already
   // or if habit is already mentioned
   // we are not going to render this component
-  if (
-    !query.startsWith("habit") ||
-    !selectedGoalId ||
-    habitIdInExtensionStorage
-  ) {
+  if (!query.startsWith("habit") || !mentionedGoalId || mentionedHabitId) {
     return null;
   }
 
@@ -83,9 +76,8 @@ export const HabitMentionList = ({
             p={1}
             _hover={{ bg: "gray.100", cursor: "pointer" }}
             onClick={() => {
-              // update the storage for the HabitMentionExtension
-              editor.storage.habitMention.habitId = habit._id;
-              // add habitMention node to the doc
+              // send the command to insert habitMention node
+              // command goes to the HabitMentionExtension which is rendering this component
               command({
                 id: habit._id,
                 label: `habit ${habit.title}`,

@@ -9,9 +9,8 @@ export interface ITask {
   goal: IGoal;
   subgoal: ISubgoal;
   habit: IHabit;
-  title: string;
+  description: unknown;
   completedUnits: number;
-  milestones: string[];
   images?: string[];
   deadline: Date;
   isCompleted: boolean;
@@ -24,5 +23,6 @@ export type TaskCreationData = {
   subgoal: string;
   habit: string;
   title: string;
+  description: unknown;
   deadline: string;
 };
