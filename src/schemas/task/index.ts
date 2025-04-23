@@ -2,7 +2,7 @@ import { isFuture, isToday } from "date-fns";
 import { z } from "zod";
 
 export const createTaskSchema = z.object({
-  json: z.unknown(),
+  html: z.string(),
   extracted: z.object({
     title: z
       .string()

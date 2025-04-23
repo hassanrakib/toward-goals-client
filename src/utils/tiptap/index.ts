@@ -28,6 +28,8 @@ export function makeMentionExtension({
       startOfLine: false,
       // allow spaces in the query
       allowSpaces: true,
+      //allow any prefix character before suggestion char "@"
+      allowedPrefixes: null,
       // items to show in the suggestion popup
       // we are fetching data using rtk query in the popup component
       items: () => [],
@@ -81,8 +83,11 @@ export function makeMentionExtension({
           },
           // Called when the suggestion should be closed
           onExit() {
-            popup.destroy();
             reactRenderer.destroy();
+            if (popup.state.isDestroyed) {
+              return;
+            }
+            popup.destroy();
           },
         };
       },

@@ -22,9 +22,9 @@ const CreateTaskInput = () => {
   // character limit for the input
   const characterLimit = 280;
 
-  // json field will hold json data of tiptap editor
-  const { field: json } = useController({
-    name: "json",
+  // html field will hold html string data of tiptap editor
+  const { field: html } = useController({
+    name: "html",
   });
 
   // extracted field will hold extracted data from editor content
@@ -40,7 +40,7 @@ const CreateTaskInput = () => {
   // editor config
   const editor = useEditor({
     // initial content at the time of mounting the editor
-    content: json.value,
+    content: html.value,
     immediatelyRender: false,
     extensions: [
       // custom document extension to force strict structure of 'heading paragraph',
@@ -88,11 +88,11 @@ const CreateTaskInput = () => {
       // extract data from the editor top node => doc node
       const extractedData = extractDataFromDoc(editor.state.doc);
 
-      // tiptap editor content in json format
-      const jsonData = editor.getJSON();
+      // tiptap editor content in html string format
+      const htmlString = editor.getHTML();
 
-      // update the hook form json & extracted field
-      json.onChange(jsonData);
+      // update the hook form html & extracted field
+      html.onChange(htmlString);
       extracted.onChange(extractedData);
     },
   });

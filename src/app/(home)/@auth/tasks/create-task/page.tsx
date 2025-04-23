@@ -14,8 +14,8 @@ import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
 
 export interface ICreateTaskFormValues {
-  // tiptap editor's data in json format
-  json: unknown;
+  // tiptap editor's data in html string format
+  html: string;
   // extracted from the tiptap editor's data
   extracted: {
     // keeep the task title
@@ -32,20 +32,7 @@ export interface ICreateTaskFormValues {
 const CreateTask = () => {
   // form default values
   const defaultValues: ICreateTaskFormValues = {
-    // CustomDocument extension enforcing "heading paragraph" structure
-    // so top node is doc. heading & paragraph node is also given but no content inside
-    json: {
-      type: "doc",
-      content: [
-        {
-          type: "heading",
-          attrs: { level: 1 },
-        },
-        {
-          type: "paragraph",
-        },
-      ],
-    },
+    html: '',
     extracted: {
       title: "",
       goalId: "",
@@ -70,7 +57,7 @@ const CreateTask = () => {
     try {
       const result = await createTask({
         title: data.extracted.title,
-        description: data.json,
+        description: data.html,
         goal: data.extracted.goalId,
         subgoal: data.extracted.subgoalId,
         habit: data.extracted.habitId,
