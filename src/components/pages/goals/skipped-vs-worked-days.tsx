@@ -57,9 +57,7 @@ const SkippedVsWorkedDays = ({
         fontSize={fontSize}
         fontWeight="bold"
       >
-        {totalDays === 0
-          ? "50% days"
-          : `${getPercentage(Number(value), totalDays)}% days`}
+        {`${value}% days`}
       </text>
     );
   };

@@ -16,7 +16,7 @@ import {
 
 const TodosDeadlines = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   const {
-    todosDeadlines: {missed: missedDeadlines, met: metDeadlines}
+    todosDeadlines: { missed: missedDeadlines, met: metDeadlines },
   } = goalProgress;
 
   const totalDeadlines = missedDeadlines + metDeadlines;
@@ -52,9 +52,7 @@ const TodosDeadlines = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
         fontSize={fontSize}
         fontWeight="bold"
       >
-        {totalDeadlines === 0
-          ? "50% deadlines"
-          : `${getPercentage(Number(value), totalDeadlines)}% deadlines`}
+        {`${value}% deadlines`}
       </text>
     );
   };
