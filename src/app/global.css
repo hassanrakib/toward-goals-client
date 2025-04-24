@@ -7,6 +7,7 @@
 .create-task-input .tiptap {
   height: 100%;
 }
+
 .create-task-input .tiptap:focus {
   outline: none;
 }
@@ -20,34 +21,39 @@
   pointer-events: none;
 }
 
+/* task title style within editor */
 .create-task-input .task-title {
   border-bottom: 1px dashed #ccc;
   padding-bottom: 8px;
-  margin-bottom: 8px;
 }
 
-/* all the mentions style */
+/* all the mentions style => within editor + without editor */
 .mention {
   background-color: #fef3c7;
   color: #b45309;
   padding: 2px 6px;
   border-radius: 6px;
   font-weight: 400;
-  font-size: 0.95em;
-  line-height: 1.4;
-  white-space: nowrap;
+  line-height: 1.7;
 }
 
-/* all the tasks title style */
+/* all the tasks title style => within editor + without editor */
 .task-title {
   font-size: 18px;
   font-weight: bold;
+  margin-bottom: 8px;
 }
 
-/* Show # before the title */
+/* Show # before the title => within editor + without editor */
 .task-title::before {
-  content: "# ";
+  content: "#";
   color: #666;
   margin-right: 0.25rem;
   font-weight: normal;
+}
+
+/* style without editor */
+.task {
+  font-size: 15px;
+  font-weight: 300;
 }

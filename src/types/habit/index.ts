@@ -35,6 +35,7 @@ export interface IHabit {
   difficulties: IHabitDifficulties;
 }
 
-export type HabitCreationData = Omit<IHabit, "_id" | "usageCount"> & {
+export type HabitCreationData = Omit<IHabit, "_id" | "unit" |"usageCount"> & {
   goalId: string;
+  unit: string;
 };

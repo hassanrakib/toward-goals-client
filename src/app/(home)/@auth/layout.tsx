@@ -15,7 +15,7 @@ import SidebarItems from "@/components/layout/auth/sidebar-items";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <Container bgColor="bg.subtle" p={0}>
+    <Container position="relative" bgColor="bg.subtle" p={0}>
       {/* Sidebar (Fixed) */}
       <Box
         as="aside"
@@ -46,7 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Grid Layout for Navbar + Main Content */}
       <Grid
         templateRows="50px 1fr"
-        height="100vh"
+        minH="100dvh"
         gap={4}
         p={4}
         // Offsets content so that it doesn't go under the sidebar
@@ -76,7 +76,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </GridItem>
 
         {/* Main Content */}
-        <GridItem as="main">{children}</GridItem>
+        <GridItem as="main">
+          {children}
+        </GridItem>
       </Grid>
     </Container>
   );
