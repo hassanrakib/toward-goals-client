@@ -33,3 +33,11 @@ export const createTaskSchema = z.object({
       }),
   }),
 });
+
+export const recordCustomUnitSchema = z.object({
+  newCompletedUnits: z
+    .number()
+    .int("Completed units must be an integer.")
+    .min(0, "Completed units cannot be less than 0.")
+    .optional(),
+});

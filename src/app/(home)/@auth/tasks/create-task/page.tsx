@@ -1,6 +1,6 @@
 "use client";
 
-import Alert from "@/components/derived-ui/alert";
+import { Alert } from "@/components/ui/alert";
 import Form from "@/components/derived-ui/form";
 import SubmitButton from "@/components/derived-ui/submit-button";
 import CreateTaskInput from "@/components/pages/tasks/create-task/create-task-input";
@@ -32,7 +32,7 @@ export interface ICreateTaskFormValues {
 const CreateTask = () => {
   // form default values
   const defaultValues: ICreateTaskFormValues = {
-    html: '',
+    html: "",
     extracted: {
       title: "",
       goalId: "",
@@ -95,13 +95,16 @@ const CreateTask = () => {
             {/* tiptap editor */}
             <CreateTaskInput />
           </Card.Body>
-          <Card.Footer flexDir="column">
+          <Card.Footer flexDir="column" alignItems="stretch">
             {!isCreatingTask && createTaskError && (
-              <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createTaskError)
-                  ? createTaskError.data.message
-                  : "There was an error processing your request"}
-              </Alert>
+              <Alert size="sm" variant="outline"
+                status="error"
+                title={
+                  isFetchBaseQueryErrorWithData(createTaskError)
+                    ? createTaskError.data.message
+                    : "There was an error processing your request"
+                }
+              />
             )}
             <SubmitButton
               isServerActionLoading={isCreatingTask}

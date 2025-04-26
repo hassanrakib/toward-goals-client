@@ -1,6 +1,6 @@
 "use client";
 
-import Alert from "@/components/derived-ui/alert";
+import { Alert } from "@/components/ui/alert";
 import Form from "@/components/derived-ui/form";
 import StyledInput from "@/components/derived-ui/styled-input";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
@@ -243,26 +243,35 @@ const CreateHabit = () => {
               </Stack>
             </Box>
           </Card.Body>
-          <Card.Footer flexDir="column">
+          <Card.Footer flexDir="column" alignItems="stretch">
             {/* errors */}
             {!isCreatingHabitUnit && createHabitUnitError ? (
-              <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createHabitUnitError)
-                  ? createHabitUnitError.data.message
-                  : "There was an error processing your request"}
-              </Alert>
+              <Alert size="sm" variant="outline"
+                status="error"
+                title={
+                  isFetchBaseQueryErrorWithData(createHabitUnitError)
+                    ? createHabitUnitError.data.message
+                    : "There was an error processing your request"
+                }
+              />
             ) : !isCreatingHabit && createHabitError ? (
-              <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createHabitError)
-                  ? createHabitError.data.message
-                  : "There was an error processing your request"}
-              </Alert>
+              <Alert size="sm" variant="outline"
+                status="error"
+                title={
+                  isFetchBaseQueryErrorWithData(createHabitError)
+                    ? createHabitError.data.message
+                    : "There was an error processing your request"
+                }
+              />
             ) : !isCreatingHabitProgress && createHabitProgressError ? (
-              <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createHabitProgressError)
-                  ? createHabitProgressError.data.message
-                  : "There was an error processing your request"}
-              </Alert>
+              <Alert size="sm" variant="outline"
+                status="error"
+                title={
+                  isFetchBaseQueryErrorWithData(createHabitProgressError)
+                    ? createHabitProgressError.data.message
+                    : "There was an error processing your request"
+                }
+              />
             ) : null}
             <SubmitButton
               isServerActionLoading={

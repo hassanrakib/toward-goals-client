@@ -2,7 +2,7 @@
 
 import Form from "@/components/derived-ui/form";
 import StyledInput from "@/components/derived-ui/styled-input";
-import Alert from "@/components/derived-ui/alert";
+import { Alert } from "@/components/ui/alert";
 import { useCreateUserMutation } from "@/redux/features/user/user.api";
 import { createUserSchema } from "@/schemas/user";
 import { IUser } from "@/types/user";
@@ -88,9 +88,10 @@ const SignUp = () => {
           </Card.Body>
           <Card.Footer flexDir="column">
             {!isCreatingUser && createUserError ? (
-              <Alert status="error">
-                There was an error processing your request
-              </Alert>
+              <Alert size="sm" variant="outline"
+                status="error"
+                title="There was an error processing your request"
+              />
             ) : null}
             <SubmitButton
               isServerActionLoading={isCreatingUser}

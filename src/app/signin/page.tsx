@@ -1,7 +1,7 @@
 "use client";
 
 import Form from "@/components/derived-ui/form";
-import Alert from "@/components/derived-ui/alert";
+import { Alert } from "@/components/ui/alert";
 import { useSignInMutation } from "@/redux/features/auth/auth.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { signInCredentialsSchema } from "@/schemas/auth";
@@ -93,11 +93,14 @@ const SignIn = () => {
           </Card.Body>
           <Card.Footer flexDir="column">
             {!isSigningIn && signInError ? (
-              <Alert status="error">
-                {isFetchBaseQueryErrorWithData(signInError)
-                  ? signInError.data.message
-                  : "There was an error processing your request"}
-              </Alert>
+              <Alert size="sm" variant="outline"
+                status="error"
+                title={
+                  isFetchBaseQueryErrorWithData(signInError)
+                    ? signInError.data.message
+                    : "There was an error processing your request"
+                }
+              />
             ) : null}
             <SubmitButton
               isServerActionLoading={isSigningIn}

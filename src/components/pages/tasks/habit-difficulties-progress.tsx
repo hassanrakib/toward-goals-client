@@ -8,8 +8,9 @@ import { getPercentage } from "@/utils/global";
 import { HStack, VStack } from "@chakra-ui/react";
 import RecordCustomUnit from "./record-custom-unit";
 import { ITask } from "@/types/task";
+import RecordTimeUnit from "./record-time-unit";
 
-const TaskProgress = ({ task }: { task: ITask }) => {
+const HabitDifficultiesProgress = ({ task }: { task: ITask }) => {
   // destructure difficulties, habit unit & completedUnits
   const {
     habit: { difficulties, unit },
@@ -53,7 +54,7 @@ const TaskProgress = ({ task }: { task: ITask }) => {
   delete difficultiesClone._id;
 
   return (
-    <VStack align="stretch" gap="2" mt="3">
+    <VStack align="stretch" gap="2">
       {Object.keys(difficultiesClone).map((difficulty) => {
         // difficulty requirement
         const difficultyRequirement =
@@ -82,7 +83,7 @@ const TaskProgress = ({ task }: { task: ITask }) => {
               variant="outline"
               position="relative"
               colorPalette={getDifficultyColorPalette(difficulty)}
-              size="md"
+              size="lg"
               flexGrow="1"
               shape="full"
               striped
@@ -95,6 +96,7 @@ const TaskProgress = ({ task }: { task: ITask }) => {
                 zIndex="1"
                 lineHeight="1"
                 fontSize="12px"
+                fontWeight="300"
                 px="2"
                 // width can become 0% also it can become greater than 100%
                 // because completedUnits can be 0 or greater than the difficulty level
@@ -107,7 +109,7 @@ const TaskProgress = ({ task }: { task: ITask }) => {
                 // align the text to the end of the progress bar (filled part)
                 justifyContent="flex-end"
               >
-                {`${difficulty} ${completedUnits > Number(difficultyRequirement) ? difficultyRequirement : completedUnits} ${unit.name} / ${difficultyRequirement} ${unit.name}`}
+                {`${difficulty} ${completedUnits > Number(difficultyRequirement) ? difficultyRequirement : completedUnits}/${difficultyRequirement} ${unit.name}`}
               </ProgressLabel>
               <ProgressBar />
             </ProgressRoot>
@@ -116,10 +118,13 @@ const TaskProgress = ({ task }: { task: ITask }) => {
               unit.type === HabitUnitType.Custom ? (
                 <RecordCustomUnit
                   task={task}
-                  iconColor={getDifficultyColorPalette(difficulty)}
+                  difficultyColorPalette={getDifficultyColorPalette(difficulty)}
                 />
               ) : (
-                <p>T</p>
+                <RecordTimeUnit
+                  task={task}
+                  difficultyColorPalette={getDifficultyColorPalette(difficulty)}
+                />
               )
             ) : null}
           </HStack>
@@ -129,4 +134,4 @@ const TaskProgress = ({ task }: { task: ITask }) => {
   );
 };
 
-export default TaskProgress;
+export default HabitDifficultiesProgress;

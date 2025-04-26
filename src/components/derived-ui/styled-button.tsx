@@ -16,7 +16,6 @@ const StyledButton = forwardRef<HTMLButtonElement, ButtonProps>(
         bg="gray.600"
         color="white"
         _hover={{ bg: "gray.700" }}
-        w="100%"
         borderRadius="2xl"
         {...rest}
       >

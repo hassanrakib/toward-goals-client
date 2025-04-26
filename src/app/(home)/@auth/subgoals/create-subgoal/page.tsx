@@ -1,6 +1,6 @@
 "use client";
 
-import Alert from "@/components/derived-ui/alert";
+import { Alert } from "@/components/ui/alert";
 import Form from "@/components/derived-ui/form";
 import StyledInput from "@/components/derived-ui/styled-input";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
@@ -118,19 +118,25 @@ const CreateSubgoal = () => {
               max={365}
             />
           </Card.Body>
-          <Card.Footer flexDir="column">
+          <Card.Footer flexDir="column" alignItems="stretch">
             {!isCreatingSubgoal && createSubgoalError ? (
-              <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createSubgoalError)
-                  ? createSubgoalError.data.message
-                  : "There was an error processing your request"}
-              </Alert>
+              <Alert size="sm" variant="outline"
+                status="error"
+                title={
+                  isFetchBaseQueryErrorWithData(createSubgoalError)
+                    ? createSubgoalError.data.message
+                    : "There was an error processing your request"
+                }
+              />
             ) : !isCreatingSubgoalProgress && createSubgoalProgressError ? (
-              <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createSubgoalProgressError)
-                  ? createSubgoalProgressError.data.message
-                  : "There was an error processing your request"}
-              </Alert>
+              <Alert size="sm" variant="outline"
+                status="error"
+                title={
+                  isFetchBaseQueryErrorWithData(createSubgoalProgressError)
+                    ? createSubgoalProgressError.data.message
+                    : "There was an error processing your request"
+                }
+              />
             ) : null}
             <SubmitButton
               isServerActionLoading={

@@ -1,11 +1,11 @@
 "use client";
 
-import Alert from "@/components/derived-ui/alert";
 import DateInput from "@/components/derived-ui/date-input";
 import Form from "@/components/derived-ui/form";
 import StyledInput from "@/components/derived-ui/styled-input";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
 import SubmitButton from "@/components/derived-ui/submit-button";
+import { Alert } from "@/components/ui/alert";
 import { useCreateGoalMutation } from "@/redux/features/goal/goal.api";
 import { useCreateGoalProgressMutation } from "@/redux/features/progress/goal-progress.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
@@ -124,19 +124,25 @@ const CreateGoal = () => {
             </Grid>
           </Card.Body>
           {/* errors */}
-          <Card.Footer flexDir="column">
+          <Card.Footer flexDir="column" alignItems="stretch">
             {!isCreatingGoal && createGoalError ? (
-              <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createGoalError)
-                  ? createGoalError.data.message
-                  : "There was an error processing your request"}
-              </Alert>
+              <Alert size="sm" variant="outline"
+                status="error"
+                title={
+                  isFetchBaseQueryErrorWithData(createGoalError)
+                    ? createGoalError.data.message
+                    : "There was an error processing your request"
+                }
+              />
             ) : !isCreatingGoalProgress && createGoalProgressError ? (
-              <Alert status="error">
-                {isFetchBaseQueryErrorWithData(createGoalProgressError)
-                  ? createGoalProgressError.data.message
-                  : "There was an error processing your request"}
-              </Alert>
+              <Alert size="sm" variant="outline"
+                status="error"
+                title={
+                  isFetchBaseQueryErrorWithData(createGoalProgressError)
+                    ? createGoalProgressError.data.message
+                    : "There was an error processing your request"
+                }
+              />
             ) : null}
             {/* submit button */}
             <SubmitButton
