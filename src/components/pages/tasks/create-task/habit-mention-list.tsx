@@ -1,4 +1,5 @@
 import { useGetHabitsProgressQuery } from "@/redux/features/progress/habit-progress.api";
+import { HabitDifficultiesName } from "@/types/habit";
 import { Box, Spinner } from "@chakra-ui/react";
 import { SuggestionProps } from "@tiptap/suggestion";
 import { useWatch } from "react-hook-form";
@@ -59,13 +60,10 @@ export const HabitMentionList = ({
           difficulties,
           unit: { name: unitName },
         } = habit;
-        // get the difficulties of a habit ready to show
-        const difficultiesClone = { ...difficulties };
-        delete difficultiesClone._id;
-        const difficultiesString = Object.keys(difficultiesClone)
+        const difficultiesString = Object.keys(difficulties)
           .map(
             (difficulty) =>
-              `${difficulty}: ${difficultiesClone[difficulty as keyof typeof difficultiesClone]} ${unitName}`
+              `${difficulty}: ${difficulties[difficulty as HabitDifficultiesName]} ${unitName}`
           )
           .join(" | ");
 

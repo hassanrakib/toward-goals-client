@@ -1,6 +1,11 @@
 import { baseApi } from "@/redux/baseApi";
 import { IResponse, QueryParams } from "@/types/global";
-import { ITask, TaskCreationData } from "@/types/task";
+import {
+  ITask,
+  ITimeSpan,
+  TaskCreationData,
+  TimeSpanCreationData,
+} from "@/types/task";
 
 const taskApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -18,7 +23,18 @@ const taskApi = baseApi.injectEndpoints({
         params,
       }),
     }),
+    createTimeSpan: build.mutation<IResponse<ITimeSpan>, TimeSpanCreationData>({
+      query: (timeSpan) => ({
+        url: "/tasks/create-time-span",
+        method: "POST",
+        body: timeSpan,
+      }),
+    }),
   }),
 });
 
-export const { useCreateTaskMutation, useGetTasksQuery } = taskApi;
+export const {
+  useCreateTaskMutation,
+  useGetTasksQuery,
+  useCreateTimeSpanMutation,
+} = taskApi;

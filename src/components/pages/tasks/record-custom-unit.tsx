@@ -3,7 +3,7 @@
 import Form from "@/components/derived-ui/form";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
 import StyledPopover, {
-  PopoverCloseTrigger,
+  PopoverActionTrigger,
 } from "@/components/derived-ui/styled-popover";
 import SubmitButton from "@/components/derived-ui/submit-button";
 import { recordCustomUnitSchema } from "@/schemas/task";
@@ -64,11 +64,11 @@ const RecordCustomUnit = ({
             unit={unit.name}
             flexGrow="1"
           />
-          <PopoverCloseTrigger>
+          <PopoverActionTrigger>
             <SubmitButton isServerActionLoading={false} size="xs">
               <Check />
             </SubmitButton>
-          </PopoverCloseTrigger>
+          </PopoverActionTrigger>
         </HStack>
       </Form>
     </StyledPopover>

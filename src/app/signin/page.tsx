@@ -91,9 +91,11 @@ const SignIn = () => {
               startElement={<LockKeyhole size={18} />}
             />
           </Card.Body>
-          <Card.Footer flexDir="column">
+          <Card.Footer flexDir="column" alignItems="stretch">
             {!isSigningIn && signInError ? (
-              <Alert size="sm" variant="outline"
+              <Alert
+                size="sm"
+                variant="outline"
                 status="error"
                 title={
                   isFetchBaseQueryErrorWithData(signInError)

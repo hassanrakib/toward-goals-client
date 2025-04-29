@@ -18,8 +18,10 @@ const StatusLabels = ({ task }: { task: ITask }) => {
   } = task;
 
   // decide whether the deadline is met
-  // updating isCompleted is the last action
-  const isDeadlineMet = isCompleted && isBefore(updatedAt, deadline);
+  // updating isCompleted property is the last update
+  // so, checking isCompleted: true also last update before the deadline
+  // otherwise, check todays date is before the deadline
+  const isDeadlineMet = isCompleted && isBefore(updatedAt, deadline) || isBefore(new Date(), deadline);
 
   // calculate extra unit worked after max difficulty requirement
   const extraUnit =

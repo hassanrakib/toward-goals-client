@@ -1,4 +1,3 @@
-import { IGoal } from "../goal";
 import { IHabit } from "../habit";
 import { ISubgoal } from "../subgoal";
 import { IUser } from "../user";
@@ -10,10 +9,16 @@ export interface ITimeSpan {
   endTime: Date;
 }
 
+export type TimeSpanCreationData = {
+  task: string;
+  startTime: string;
+  endTime: string;
+};
+
 export interface ITask {
   _id: string;
   user: IUser;
-  goal: IGoal;
+  goal: string;
   subgoal: ISubgoal;
   habit: IHabit;
   description: string;
