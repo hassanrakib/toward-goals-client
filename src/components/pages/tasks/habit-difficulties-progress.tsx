@@ -49,10 +49,7 @@ const HabitDifficultiesProgress = ({ task }: { task: ITask }) => {
             {/* action button */}
             {difficulty === activeDifficulty.name ? (
               unit.type === HabitUnitType.Custom ? (
-                <RecordCustomUnit
-                  task={task}
-                  difficultyColorPalette={getDifficultyColorPalette(difficulty)}
-                />
+                <RecordCustomUnit task={task} />
               ) : (
                 <RecordTimeUnit task={task} />
               )

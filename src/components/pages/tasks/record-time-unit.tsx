@@ -113,7 +113,7 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
   return (
     <StyledDialog
       triggerElement={
-        // trigger the popover
+        // trigger the dialog
         <Box cursor="pointer">
           <Timer size="18px" color={activeDifficultyColorPalette} />
         </Box>

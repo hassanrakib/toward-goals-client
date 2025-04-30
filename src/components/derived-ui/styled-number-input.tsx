@@ -15,6 +15,7 @@ export interface StyledNumberInputProps extends NumberInputProps {
   placeholder: string;
   label?: string;
   unit: string;
+  onNumberInputChange?: (value: number) => void;
 }
 
 const StyledNumberInput = (props: StyledNumberInputProps) => {
@@ -22,7 +23,8 @@ const StyledNumberInput = (props: StyledNumberInputProps) => {
     formState: { errors },
   } = useFormContext();
 
-  const { name, placeholder, label, unit, ...rest } = props;
+  const { name, placeholder, label, unit, onNumberInputChange, ...rest } =
+    props;
   return (
     <Field
       label={label}
@@ -39,6 +41,7 @@ const StyledNumberInput = (props: StyledNumberInputProps) => {
             value={field.value}
             onValueChange={({ value }) => {
               field.onChange(Number(value));
+              if (onNumberInputChange) onNumberInputChange(Number(value));
             }}
             {...rest}
           >

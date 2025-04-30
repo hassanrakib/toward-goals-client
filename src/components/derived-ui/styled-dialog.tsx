@@ -30,7 +30,7 @@ const StyledDialog = (props: StyledDialogProps) => {
   } = props;
 
   return (
-    <DialogRoot {...rest} closeOnInteractOutside={false}>
+    <DialogRoot closeOnInteractOutside={false} trapFocus={false} {...rest}>
       <DialogTrigger asChild>{triggerElement}</DialogTrigger>
       <DialogContent
         portalled={portalled}
