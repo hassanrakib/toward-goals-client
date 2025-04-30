@@ -11,7 +11,6 @@ interface StyledDialogProps extends Dialog.RootProps {
   triggerElement: ReactNode;
   children: ReactNode;
   showCloseTrigger?: boolean;
-  onCloseTrigger?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   portalled?: boolean;
   portalRef?: React.RefObject<HTMLElement>;
   backdrop?: boolean;
@@ -22,7 +21,6 @@ const StyledDialog = (props: StyledDialogProps) => {
     triggerElement,
     children,
     showCloseTrigger = true,
-    onCloseTrigger,
     portalled,
     portalRef,
     backdrop,
@@ -30,7 +28,12 @@ const StyledDialog = (props: StyledDialogProps) => {
   } = props;
 
   return (
-    <DialogRoot closeOnInteractOutside={false} trapFocus={false} {...rest}>
+    <DialogRoot
+      closeOnInteractOutside={false}
+      trapFocus={false}
+      placement="center"
+      {...rest}
+    >
       <DialogTrigger asChild>{triggerElement}</DialogTrigger>
       <DialogContent
         portalled={portalled}
@@ -40,7 +43,7 @@ const StyledDialog = (props: StyledDialogProps) => {
         <DialogBody pt={showCloseTrigger ? "60px" : "24px"}>
           {children}
         </DialogBody>
-        {showCloseTrigger && <DialogCloseTrigger onClick={onCloseTrigger} />}
+        {showCloseTrigger && <DialogCloseTrigger />}
       </DialogContent>
     </DialogRoot>
   );

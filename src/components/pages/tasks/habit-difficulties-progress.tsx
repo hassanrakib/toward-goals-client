@@ -12,6 +12,7 @@ const HabitDifficultiesProgress = ({ task }: { task: ITask }) => {
   const {
     habit: { difficulties, unit },
     completedUnits,
+    isCompleted,
   } = task;
 
   const activeDifficulty = getActiveDifficulty(difficulties, completedUnits);
@@ -47,7 +48,7 @@ const HabitDifficultiesProgress = ({ task }: { task: ITask }) => {
               flex="1"
             />
             {/* action button */}
-            {difficulty === activeDifficulty.name ? (
+            {difficulty === activeDifficulty.name && !isCompleted ? (
               unit.type === HabitUnitType.Custom ? (
                 <RecordCustomUnit task={task} />
               ) : (

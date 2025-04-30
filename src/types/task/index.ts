@@ -38,3 +38,8 @@ export type TaskCreationData = {
   description: string;
   deadline: string;
 };
+
+export type TaskUpdateData = Pick<
+  Partial<ITask>,
+  "completedUnits" | "isCompleted"
+> & { taskId: string };

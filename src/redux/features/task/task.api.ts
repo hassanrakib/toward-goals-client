@@ -1,9 +1,10 @@
 import { baseApi } from "@/redux/baseApi";
-import { IResponse, QueryParams } from "@/types/global";
+import { IResponse } from "@/types/global";
 import {
   ITask,
   ITimeSpan,
   TaskCreationData,
+  TaskUpdateData,
   TimeSpanCreationData,
 } from "@/types/task";
 
@@ -16,13 +17,6 @@ const taskApi = baseApi.injectEndpoints({
         body: task,
       }),
     }),
-    getTasks: build.query<IResponse<ITask[]>, QueryParams>({
-      query: (params) => ({
-        url: "/tasks/my-tasks",
-        method: "GET",
-        params,
-      }),
-    }),
     createTimeSpan: build.mutation<IResponse<ITimeSpan>, TimeSpanCreationData>({
       query: (timeSpan) => ({
         url: "/tasks/create-time-span",
@@ -30,11 +24,18 @@ const taskApi = baseApi.injectEndpoints({
         body: timeSpan,
       }),
     }),
+    updateTask: build.mutation<IResponse<ITask>, TaskUpdateData>({
+      query: ({ taskId, ...updateData }) => ({
+        url: `/tasks/${taskId}`,
+        method: "PATCH",
+        body: updateData,
+      }),
+    }),
   }),
 });
 
 export const {
   useCreateTaskMutation,
-  useGetTasksQuery,
   useCreateTimeSpanMutation,
+  useUpdateTaskMutation,
 } = taskApi;
