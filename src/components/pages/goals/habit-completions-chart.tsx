@@ -1,6 +1,7 @@
 "use client";
 
 import { IGoalProgress } from "@/types/progress";
+import { getPercentage } from "@/utils/global";
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Badge, Box } from "@chakra-ui/react";
 import { Cell, Label, Pie, PieChart } from "recharts";
@@ -27,12 +28,12 @@ const HabitCompletionsChart = ({
       },
       {
         name: "Plus",
-        value: totalHabitCompletion === 0 ? 1 : totalMiniCompletion,
+        value: totalHabitCompletion === 0 ? 1 : totalPlusCompletion,
         color: "yellow.400",
       },
       {
         name: "Elite",
-        value: totalHabitCompletion === 0 ? 1 : totalMiniCompletion,
+        value: totalHabitCompletion === 0 ? 1 : totalEliteCompletion,
         color: "red.400",
       },
     ],
@@ -61,7 +62,7 @@ const HabitCompletionsChart = ({
       <Chart.Root w="full" h="full" chart={chart}>
         <PieChart>
           <Pie
-            isAnimationActive={true}
+            isAnimationActive={false}
             data={chart.data}
             dataKey={chart.key("value")}
             outerRadius={80}
@@ -70,8 +71,11 @@ const HabitCompletionsChart = ({
             // customized label
             label={({ name, index }) => {
               const { value } = chart.data[index ?? -1];
-              const percent = value / (totalHabitCompletion || 3);
-              return `${name}: ${(percent * 100).toFixed(1)}%`;
+              // if value for a habit difficulty completion is 0, don't show the label
+              // as there will be 0% of that difficulty completion within the chart
+              if (!value) return undefined;
+              const percent = getPercentage(value, totalHabitCompletion || 3);
+              return `${name}: ${percent}%`;
             }}
           >
             <Label

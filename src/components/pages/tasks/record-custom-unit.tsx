@@ -62,7 +62,7 @@ const RecordCustomUnit = ({ task }: { task: ITask }) => {
   ) => {
     const res = await updateTask({
       taskId,
-      completedUnits: totalCompletedUnit,
+      newCompletedUnits: newCompletedUnits,
     });
 
     if (res.data?.data) {

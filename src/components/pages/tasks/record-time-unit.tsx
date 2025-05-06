@@ -119,7 +119,7 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
         // update completedUnits property
         const updatedTask = await updateTask({
           taskId,
-          completedUnits: totalCompletedDurationInMin,
+          newCompletedUnits: newCompletedDurationInMin,
         });
 
         // if successfully updated completedUnits
@@ -143,9 +143,9 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
       onExitComplete={() => {
         // stop the timer before the dialog closes
         setStartTime(null);
+        // clear the states
         setNewCompletedDurationInSec(0);
         // refresh the current route
-        // so that server component refetch updated data
         if (isTaskUpdateSuccessful) {
           setIsTaskUpdateSuccessful(false);
           router.refresh();

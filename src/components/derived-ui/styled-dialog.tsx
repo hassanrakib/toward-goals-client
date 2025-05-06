@@ -1,11 +1,7 @@
 import { Dialog, DialogTrigger } from "@chakra-ui/react";
-import {
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogRoot,
-} from "../ui/dialog";
+import { DialogBody, DialogContent, DialogRoot } from "../ui/dialog";
 import React, { ReactNode } from "react";
+import { CloseButton } from "../ui/close-button";
 
 interface StyledDialogProps extends Dialog.RootProps {
   triggerElement: ReactNode;
@@ -40,10 +36,21 @@ const StyledDialog = (props: StyledDialogProps) => {
         portalRef={portalRef}
         backdrop={backdrop}
       >
-        <DialogBody pt={showCloseTrigger ? "60px" : "24px"}>
+        <DialogBody pt="6">
           {children}
         </DialogBody>
-        {showCloseTrigger && <DialogCloseTrigger />}
+        {showCloseTrigger && (
+          <Dialog.CloseTrigger
+            bg="gray.300"
+            rounded="full"
+            position="absolute"
+            top="0"
+            insetEnd="-12"
+            asChild
+          >
+            <CloseButton size="sm" />
+          </Dialog.CloseTrigger>
+        )}
       </DialogContent>
     </DialogRoot>
   );

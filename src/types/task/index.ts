@@ -39,7 +39,8 @@ export type TaskCreationData = {
   deadline: string;
 };
 
-export type TaskUpdateData = Pick<
-  Partial<ITask>,
-  "completedUnits" | "isCompleted"
-> & { taskId: string };
+export type TaskUpdateData = {
+  taskId: string;
+  newCompletedUnits?: number;
+  isCompleted?: true;
+};
