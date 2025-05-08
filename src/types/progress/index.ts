@@ -12,8 +12,8 @@ export interface IGoalProgress {
   totalMiniCompletion: number;
   totalPlusCompletion: number;
   totalEliteCompletion: number;
-  workStreak: { current: number; total: number };
-  skippedDays: number;
+  workStreak: { current: number; lastStreakDate: Date };
+  dayStats: { skippedDays: number; workedDays: number };
   todosDeadlines: { missed: number; met: number };
   analytics: {
     consistency: { percent: number; level: IRequirementLevel };

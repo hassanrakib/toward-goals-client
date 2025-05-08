@@ -60,6 +60,12 @@ const RecordCustomUnit = ({ task }: { task: ITask }) => {
     data: IFormValues,
     reset: UseFormReset<IFormValues>
   ) => {
+    // if new completed units less than 1, just return don't do anything
+    if (newCompletedUnits < 1) {
+      return;
+    }
+
+    // update the task
     const res = await updateTask({
       taskId,
       newCompletedUnits: newCompletedUnits,
