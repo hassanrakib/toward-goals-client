@@ -26,7 +26,7 @@ export const getMyGoalsProgress = async (): Promise<
 
 export const getMyGoalProgressLevel = async (
   goalId: string
-): Promise<IResponse<{level: string}>> => {
+): Promise<IResponse<{ level: string }>> => {
   // send cookies explicitly
   // as it is running in server not on the browser
   const cookieStore = (await cookies()).toString();

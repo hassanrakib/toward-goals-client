@@ -20,7 +20,7 @@ const SkippedVsWorkedDays = ({
   goalProgress: IGoalProgress;
 }) => {
   const {
-    dayStats: {workedDays, skippedDays}
+    dayStats: { workedDays, skippedDays },
   } = goalProgress;
 
   const totalDays = workedDays + skippedDays;

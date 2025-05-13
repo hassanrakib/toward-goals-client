@@ -2,7 +2,7 @@ import { IGoalProgress } from "@/types/progress";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import NextImage from "next/image";
 import { Gem } from "lucide-react";
-import { differenceInDays, format, isAfter, startOfToday } from "date-fns";
+import { differenceInDays, format, isAfter, startOfDay } from "date-fns";
 import HabitCompletionsChart from "./habit-completions-chart";
 import CurrentWorkStreak from "./current-work-streak";
 import SkippedVsWorkedDays from "./skipped-vs-worked-days";
@@ -11,7 +11,7 @@ import Analytics from "./analytics";
 
 const GoalProgress = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   // destructuring properties from the goal progress
-  const { goal, level, workStreak } = goalProgress;
+  const { goal, level } = goalProgress;
 
   return (
     <Box
@@ -79,8 +79,8 @@ const GoalProgress = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
               {goal.title}
             </Text>
             <Text fontSize="sm" color="white" fontWeight="medium">
-              {isAfter(startOfToday(), goal.startDate)
-                ? `Remaining ${goal.duration - differenceInDays(startOfToday(), goal.startDate)} days`
+              {isAfter(new Date(), goal.startDate)
+                ? `Remaining ${goal.duration - differenceInDays(startOfDay(new Date()), startOfDay(goal.startDate))} days`
                 : `Starting on ${format(goal.startDate, "PPP")}`}
             </Text>
           </Box>
@@ -90,7 +90,7 @@ const GoalProgress = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       <Grid templateColumns="repeat(2, 1fr)" gap={4} px="6" py="4">
         <Analytics goalProgress={goalProgress} />
         <HabitCompletionsChart goalProgress={goalProgress} />
-        <CurrentWorkStreak days={workStreak.current} />
+        <CurrentWorkStreak goalProgress={goalProgress} />
         <SkippedVsWorkedDays goalProgress={goalProgress} />
         <TodosDeadlines goalProgress={goalProgress} />
       </Grid>

@@ -13,7 +13,11 @@ import { Avatar } from "@/components/ui/avatar";
 import { BellIcon, CircleFadingArrowUp } from "lucide-react";
 import SidebarItems from "@/components/layout/auth/sidebar-items";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <Container position="relative" bgColor="bg.subtle" p={0}>
       {/* Sidebar (Fixed) */}
@@ -76,9 +80,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </GridItem>
 
         {/* Main Content */}
-        <GridItem as="main">
-          {children}
-        </GridItem>
+        <GridItem as="main">{children}</GridItem>
       </Grid>
     </Container>
   );
