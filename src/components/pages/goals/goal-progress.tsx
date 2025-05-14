@@ -2,7 +2,13 @@ import { IGoalProgress } from "@/types/progress";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import NextImage from "next/image";
 import { Gem } from "lucide-react";
-import { differenceInDays, format, isAfter, startOfDay } from "date-fns";
+import {
+  differenceInDays,
+  format,
+  isAfter,
+  startOfDay,
+  startOfToday,
+} from "date-fns";
 import HabitCompletionsChart from "./habit-completions-chart";
 import CurrentWorkStreak from "./current-work-streak";
 import SkippedVsWorkedDays from "./skipped-vs-worked-days";
@@ -80,7 +86,7 @@ const GoalProgress = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
             </Text>
             <Text fontSize="sm" color="white" fontWeight="medium">
               {isAfter(new Date(), goal.startDate)
-                ? `Remaining ${goal.duration - differenceInDays(startOfDay(new Date()), startOfDay(goal.startDate))} days`
+                ? `Remaining ${goal.duration - differenceInDays(startOfToday(), startOfDay(goal.startDate))} days`
                 : `Starting on ${format(goal.startDate, "PPP")}`}
             </Text>
           </Box>

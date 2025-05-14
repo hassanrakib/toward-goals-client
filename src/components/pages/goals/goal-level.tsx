@@ -1,6 +1,5 @@
 "use client";
 
-import { IRequirementLevel } from "@/types/level";
 import { IGoalProgress } from "@/types/progress";
 import { getPercentage } from "@/utils/global";
 import { Chart, useChart } from "@chakra-ui/charts";
@@ -16,9 +15,9 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       level: mainLevel,
       requirements: mainLevelRequirements,
       requirements: {
-        consistency: requiredConsistency,
-        deepFocus: requiredDeepFocus,
-        commitment: requiredCommitment,
+        consistency: { _id: requiredConsistency },
+        deepFocus: { _id: requiredDeepFocus },
+        commitment: { _id: requiredCommitment },
       },
     },
     analytics: acquiredRequirements,
@@ -37,17 +36,16 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
     const acquiredRequirement =
       acquiredRequirements[key as keyof typeof acquiredRequirements];
 
-    const mainLevelRequirement = mainLevelRequirements[
-      key as keyof typeof mainLevelRequirements
-    ] as IRequirementLevel;
+    const mainLevelRequirement =
+      mainLevelRequirements[key as keyof typeof mainLevelRequirements];
 
     // if acquiredRequirement level is greater, add requirements maxPercentage
     // because acquiredRequirement.percent will cross the requirements maxPercentage
-    if (acquiredRequirement.level.level > mainLevelRequirement.level) {
-      totalCompletedRequirement += mainLevelRequirement.maxPercentage;
+    if (acquiredRequirement.level.level > mainLevelRequirement._id.level) {
+      totalCompletedRequirement += mainLevelRequirement._id.maxPercentage;
     }
 
-    if (acquiredRequirement.level.level === mainLevelRequirement.level) {
+    if (acquiredRequirement.level.level === mainLevelRequirement._id.level) {
       totalCompletedRequirement += acquiredRequirement.percent;
     }
   });
@@ -97,7 +95,9 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
 
   return (
     <Flex direction="column" justifyContent="center">
-      <Text fontSize="lg" fontWeight="medium">Goal Level : {mainLevel}</Text>
+      <Text fontSize="lg" fontWeight="medium">
+        Goal Level : {mainLevel}
+      </Text>
       <Flex alignItems="center" spaceX="2">
         <Chart.Root maxH="70px" chart={chart}>
           <BarChart layout="vertical" data={chart.data}>
