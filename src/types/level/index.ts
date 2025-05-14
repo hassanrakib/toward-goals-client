@@ -5,6 +5,7 @@ export enum RequirementsName {
 }
 
 export interface IRequirementLevel {
+  _id: string;
   name: RequirementsName;
   level: number;
   rewardPointsPerDay: number;
@@ -17,17 +18,8 @@ export interface ILevel {
   badgeImage: string;
   levelUpPoint: number;
   requirements: {
-    consistency: {
-      _id: IRequirementLevel;
-      minPercentage: number;
-    };
-    deepFocus: {
-      _id: IRequirementLevel;
-      minPercentage: number;
-    };
-    commitment: {
-      _id: IRequirementLevel;
-      minPercentage: number;
-    };
+    consistency: IRequirementLevel;
+    deepFocus: IRequirementLevel;
+    commitment: IRequirementLevel;
   };
 }

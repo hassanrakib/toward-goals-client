@@ -15,9 +15,9 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       level: mainLevel,
       requirements: mainLevelRequirements,
       requirements: {
-        consistency: { _id: requiredConsistency },
-        deepFocus: { _id: requiredDeepFocus },
-        commitment: { _id: requiredCommitment },
+        consistency: requiredConsistency,
+        deepFocus: requiredDeepFocus,
+        commitment: requiredCommitment,
       },
     },
     analytics: acquiredRequirements,
@@ -41,11 +41,11 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
 
     // if acquiredRequirement level is greater, add requirements maxPercentage
     // because acquiredRequirement.percent will cross the requirements maxPercentage
-    if (acquiredRequirement.level.level > mainLevelRequirement._id.level) {
-      totalCompletedRequirement += mainLevelRequirement._id.maxPercentage;
+    if (acquiredRequirement.level.level > mainLevelRequirement.level) {
+      totalCompletedRequirement += mainLevelRequirement.maxPercentage;
     }
 
-    if (acquiredRequirement.level.level === mainLevelRequirement._id.level) {
+    if (acquiredRequirement.level.level === mainLevelRequirement.level) {
       totalCompletedRequirement += acquiredRequirement.percent;
     }
   });
