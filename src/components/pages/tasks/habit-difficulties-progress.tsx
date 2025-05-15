@@ -4,7 +4,7 @@ import { HStack, VStack } from "@chakra-ui/react";
 import RecordCustomUnit from "./record-custom-unit";
 import { ITask } from "@/types/task";
 import RecordTimeUnit from "./record-time-unit";
-import { getActiveDifficulty, getDifficultyColorPalette } from "@/utils/task";
+import { getActiveDifficulty, getDifficultyColorPalette } from "@/utils/habit";
 import StyledProgressBar from "@/components/derived-ui/styled-progress";
 
 const HabitDifficultiesProgress = ({ task }: { task: ITask }) => {

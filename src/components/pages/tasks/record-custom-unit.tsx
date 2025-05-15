@@ -8,7 +8,7 @@ import SubmitButton from "@/components/derived-ui/submit-button";
 import { useUpdateTaskMutation } from "@/redux/features/task/task.api";
 import { ITask } from "@/types/task";
 import { getPercentage } from "@/utils/global";
-import { getActiveDifficulty, getDifficultyColorPalette } from "@/utils/task";
+import { getActiveDifficulty, getDifficultyColorPalette } from "@/utils/habit";
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { Check, CirclePlus } from "lucide-react";
 import { useRouter } from "next/navigation";

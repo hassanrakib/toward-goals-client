@@ -1,29 +1,24 @@
-import { HabitDifficultiesName, IHabitDifficulties } from "@/types/habit";
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  differenceInYears,
+} from "date-fns";
 
-export const getActiveDifficulty = (
-  difficulties: IHabitDifficulties,
-  totalCompletedUnit: number
-) => {
-  const activeDifficultyName =
-    (Object.keys(difficulties) as Array<HabitDifficultiesName>).find(
-      (difficulty) => totalCompletedUnit < difficulties[difficulty]
-    ) || "elite";
+export const getTimeAgo = (time: Date) => {
+  const timeNow = new Date();
 
-  return {
-    name: activeDifficultyName,
-    requirement: difficulties[activeDifficultyName],
-  };
+  const years = differenceInYears(timeNow, time);
+  if (years > 0) return `${years}y ago`;
+
+  const days = differenceInDays(timeNow, time);
+  if (days > 0) return `${days}d ago`;
+
+  const hours = differenceInHours(timeNow, time);
+  if (hours > 0) return `${hours}h ago`;
+
+  const minutes = differenceInMinutes(timeNow, time);
+  if (minutes > 0) return `${minutes}m ago`;
+
+  return "just now";
 };
-
-export function getDifficultyColorPalette(difficulty: HabitDifficultiesName) {
-  switch (difficulty) {
-    case "mini":
-      return "green";
-    case "plus":
-      return "purple";
-    case "elite":
-      return "red";
-    default:
-      return "gray";
-  }
-}

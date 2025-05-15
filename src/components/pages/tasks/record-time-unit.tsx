@@ -13,7 +13,7 @@ import {
 } from "@/redux/features/task/task.api";
 import { ITask, TimeSpanCreationData } from "@/types/task";
 import { getPercentage } from "@/utils/global";
-import { getActiveDifficulty, getDifficultyColorPalette } from "@/utils/task";
+import { getActiveDifficulty, getDifficultyColorPalette } from "@/utils/habit";
 import { Badge, Box, Stack, Text, VStack } from "@chakra-ui/react";
 import { format, secondsToMinutes } from "date-fns";
 import { Check, Plus, Timer } from "lucide-react";

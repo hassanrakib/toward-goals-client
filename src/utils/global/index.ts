@@ -18,6 +18,8 @@ export default function debounce<T extends (...args: any[]) => any>(
 
 // get percentage
 export function getPercentage(part: number, total: number): number {
+  // if total is 0 avoid part to be devided by 0
+  if (total === 0) return 0;
   const percentage = (part / total) * 100;
   return Math.round(percentage);
 }

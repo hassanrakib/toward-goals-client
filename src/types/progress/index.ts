@@ -38,13 +38,14 @@ export interface ISubgoalProgress {
 export type SubgoalProgressCreationData = { goal: string; subgoal: string };
 
 export interface IHabitProgress {
+  _id: string;
   user: string;
   goal: string;
   habit: IHabit;
-  totalUnitCompleted?: number;
-  miniCompletion?: number;
-  plusCompletion?: number;
-  eliteCompletion?: number;
+  totalUnitCompleted: number;
+  miniCompletion: number;
+  plusCompletion: number;
+  eliteCompletion: number;
 }
 
 export type HabitProgressCreationData = { goal: string; habit: string };

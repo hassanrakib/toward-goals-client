@@ -1,6 +1,6 @@
 import { Avatar } from "@/components/ui/avatar";
 import { ITask } from "@/types/task";
-import { getTimeAgo } from "@/utils/task/getTimeAgo";
+import { getTimeAgo } from "@/utils/task";
 import {
   Box,
   Card,
