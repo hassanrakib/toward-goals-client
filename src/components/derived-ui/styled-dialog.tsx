@@ -4,7 +4,7 @@ import React, { ReactNode } from "react";
 import { CloseButton } from "../ui/close-button";
 
 interface StyledDialogProps extends Dialog.RootProps {
-  triggerElement: ReactNode;
+  triggerElement?: ReactNode;
   children: ReactNode;
   showCloseTrigger?: boolean;
   portalled?: boolean;
@@ -30,15 +30,16 @@ const StyledDialog = (props: StyledDialogProps) => {
       placement="center"
       {...rest}
     >
-      <DialogTrigger asChild>{triggerElement}</DialogTrigger>
+      {/* show trigger element when needed */}
+      {triggerElement && (
+        <DialogTrigger asChild>{triggerElement}</DialogTrigger>
+      )}
       <DialogContent
         portalled={portalled}
         portalRef={portalRef}
         backdrop={backdrop}
       >
-        <DialogBody pt="6">
-          {children}
-        </DialogBody>
+        <DialogBody pt="6">{children}</DialogBody>
         {showCloseTrigger && (
           <Dialog.CloseTrigger
             bg="gray.300"

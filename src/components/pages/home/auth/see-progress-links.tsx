@@ -1,3 +1,4 @@
+import { PopoverActionTrigger } from "@/components/derived-ui/styled-popover";
 import { List, Text, VStack } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import { ChartNoAxesColumnDecreasing } from "lucide-react";
@@ -31,11 +32,13 @@ export default function SeeProgressLinks({ goalId }: { goalId: string }) {
             <List.Indicator asChild>
               <ChartNoAxesColumnDecreasing size="12" />
             </List.Indicator>
-            <ChakraLink color="blue.400" asChild>
-              <NextLink href={`${link.href}?goalId=${goalId}`}>
-                {link.label}
-              </NextLink>
-            </ChakraLink>
+            <PopoverActionTrigger>
+              <ChakraLink color="blue.400" asChild>
+                <NextLink href={`${link.href}?goalId=${goalId}`}>
+                  {link.label}
+                </NextLink>
+              </ChakraLink>
+            </PopoverActionTrigger>
           </List.Item>
         ))}
       </List.Root>

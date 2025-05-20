@@ -15,7 +15,6 @@ export interface StyledSelectProps<T> extends Select.RootProps {
   label?: string;
   placeholder: string;
   collection: ListCollection<T>;
-  onChange?: (data: string[]) => void;
 }
 
 export default function StyledSelect<
@@ -25,7 +24,7 @@ export default function StyledSelect<
     formState: { errors },
   } = useFormContext();
 
-  const { name, label, placeholder, collection, onChange, ...rest } = props;
+  const { name, label, placeholder, collection, ...rest } = props;
 
   return (
     <Field
@@ -41,7 +40,6 @@ export default function StyledSelect<
             value={field.value}
             onValueChange={({ value }) => {
               field.onChange(value);
-              if (onChange) onChange(value);
             }}
             onInteractOutside={() => field.onBlur()}
             collection={collection}

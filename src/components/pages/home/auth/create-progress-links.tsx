@@ -2,6 +2,7 @@ import { List, Text, VStack } from "@chakra-ui/react";
 import { Link as ChakraLink } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { Plus } from "lucide-react";
+import { PopoverActionTrigger } from "@/components/derived-ui/styled-popover";
 
 const progressLinks = [
   {
@@ -28,9 +29,11 @@ export default function CreateProgressLinks() {
             <List.Indicator asChild>
               <Plus size="12" />
             </List.Indicator>
-            <ChakraLink color="blue.400" asChild>
-              <NextLink href={`${link.href}`}>{link.label}</NextLink>
-            </ChakraLink>
+            <PopoverActionTrigger>
+              <ChakraLink color="blue.400" asChild>
+                <NextLink href={`${link.href}`}>{link.label}</NextLink>
+              </ChakraLink>
+            </PopoverActionTrigger>
           </List.Item>
         ))}
       </List.Root>
