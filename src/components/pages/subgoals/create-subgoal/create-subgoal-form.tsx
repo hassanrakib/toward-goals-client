@@ -24,7 +24,11 @@ interface IFormValues {
   duration: number;
 }
 
-const CreateSubgoalForm = () => {
+const CreateSubgoalForm = ({
+  selectPortalRef,
+}: {
+  selectPortalRef?: React.RefObject<HTMLElement>;
+}) => {
   // router from next/navigation
   const router = useRouter();
 
@@ -102,6 +106,7 @@ const CreateSubgoalForm = () => {
               placeholder="Select goal"
               label="Which goal do you want to create a subgoal for?"
               collection={generateAvailableGoalsCollection(goalsProgress)}
+              portalRef={selectPortalRef}
             />
             <StyledInput
               type="text"

@@ -12,50 +12,53 @@ interface StyledDialogProps extends Dialog.RootProps {
   backdrop?: boolean;
 }
 
-const StyledDialog = (props: StyledDialogProps) => {
-  const {
-    triggerElement,
-    children,
-    showCloseTrigger = true,
-    portalled,
-    portalRef,
-    backdrop,
-    ...rest
-  } = props;
+const StyledDialog = React.forwardRef<HTMLDivElement, StyledDialogProps>(
+  function StyledDialog(props, ref) {
+    const {
+      triggerElement,
+      children,
+      showCloseTrigger = true,
+      portalled,
+      portalRef,
+      backdrop,
+      ...rest
+    } = props;
 
-  return (
-    <DialogRoot
-      closeOnInteractOutside={false}
-      trapFocus={false}
-      placement="center"
-      {...rest}
-    >
-      {/* show trigger element when needed */}
-      {triggerElement && (
-        <DialogTrigger asChild>{triggerElement}</DialogTrigger>
-      )}
-      <DialogContent
-        portalled={portalled}
-        portalRef={portalRef}
-        backdrop={backdrop}
+    return (
+      <DialogRoot
+        closeOnInteractOutside={false}
+        trapFocus={false}
+        placement="center"
+        {...rest}
       >
-        <DialogBody pt="6">{children}</DialogBody>
-        {showCloseTrigger && (
-          <Dialog.CloseTrigger
-            bg="gray.300"
-            rounded="full"
-            position="absolute"
-            top="0"
-            insetEnd="-12"
-            asChild
-          >
-            <CloseButton size="sm" />
-          </Dialog.CloseTrigger>
+        {/* show trigger element when needed */}
+        {triggerElement && (
+          <DialogTrigger asChild>{triggerElement}</DialogTrigger>
         )}
-      </DialogContent>
-    </DialogRoot>
-  );
-};
+        <DialogContent
+          portalled={portalled}
+          portalRef={portalRef}
+          backdrop={backdrop}
+          ref={ref}
+        >
+          <DialogBody pt="6">{children}</DialogBody>
+          {showCloseTrigger && (
+            <Dialog.CloseTrigger
+              bg="gray.300"
+              rounded="full"
+              position="absolute"
+              top="0"
+              insetEnd="-12"
+              asChild
+            >
+              <CloseButton size="sm" />
+            </Dialog.CloseTrigger>
+          )}
+        </DialogContent>
+      </DialogRoot>
+    );
+  }
+);
 
 // execute action also close the dialog
 export const DialogActionTrigger = React.forwardRef<

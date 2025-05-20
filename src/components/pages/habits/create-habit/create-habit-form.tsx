@@ -46,7 +46,11 @@ interface IFormValues {
   difficulties: IHabitDifficulties;
 }
 
-const CreateHabitForm = () => {
+const CreateHabitForm = ({
+  selectPortalRef,
+}: {
+  selectPortalRef?: React.RefObject<HTMLElement>;
+}) => {
   const [unit, setUnit] = useState("");
 
   const router = useRouter();
@@ -158,6 +162,7 @@ const CreateHabitForm = () => {
               placeholder="Select goal"
               label="Which goal do you want to create a habit for?"
               collection={generateAvailableGoalsCollection(goalsProgress)}
+              portalRef={selectPortalRef}
             />
             <StyledInput
               type="text"

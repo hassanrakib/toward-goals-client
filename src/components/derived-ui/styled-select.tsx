@@ -15,6 +15,7 @@ export interface StyledSelectProps<T> extends Select.RootProps {
   label?: string;
   placeholder: string;
   collection: ListCollection<T>;
+  portalRef?: React.RefObject<HTMLElement>;
 }
 
 export default function StyledSelect<
@@ -24,7 +25,7 @@ export default function StyledSelect<
     formState: { errors },
   } = useFormContext();
 
-  const { name, label, placeholder, collection, ...rest } = props;
+  const { name, label, placeholder, collection, portalRef, ...rest } = props;
 
   return (
     <Field
@@ -48,7 +49,7 @@ export default function StyledSelect<
             <SelectTrigger>
               <SelectValueText placeholder={placeholder} />
             </SelectTrigger>
-            <SelectContent rounded="2xl">
+            <SelectContent rounded="2xl" portalRef={portalRef}>
               {collection.items.map((item) => (
                 <SelectItem item={item} key={item.value} rounded="2xl">
                   {item.label}
