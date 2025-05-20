@@ -29,7 +29,7 @@ export type QueryParams =
       limit?: string;
       page?: string;
       fields?: string;
-      [key: string]: unknown;
+      [key: string]: string | undefined;
     }
   | undefined;
 

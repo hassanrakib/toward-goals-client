@@ -1,5 +1,3 @@
-"use server";
-
 import { ISessionPayload } from "@/types/auth";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";

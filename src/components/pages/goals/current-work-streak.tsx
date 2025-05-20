@@ -1,6 +1,6 @@
 import { IGoalProgress } from "@/types/progress";
 import { Box, Text, Badge, VStack } from "@chakra-ui/react";
-import { format, isToday } from "date-fns";
+import { format, isToday, isYesterday } from "date-fns";
 import { Flame } from "lucide-react";
 
 export default function CurrentWorkStreak({
@@ -50,7 +50,7 @@ export default function CurrentWorkStreak({
         </Text>
         <Text color="gray.600" fontSize="md">
           {streakDays > 0
-            ? `Last worked on ${isToday(streakDates[streakDates.length - 1]) ? "Today" : "Yesterday"} ${format(streakDates[streakDates.length - 1], "h:mm a")} 💪`
+            ? `Last worked on ${isToday(streakDates[streakDates.length - 1]) ? "Today" : isYesterday(streakDates[streakDates.length - 1]) ? "Yesterday" : format(streakDates[streakDates.length - 1], "PP")} ${format(streakDates[streakDates.length - 1], "h:mm a")} 💪`
             : "Stop thinking, start doing!"}
         </Text>
       </VStack>

@@ -10,22 +10,29 @@ import React, { ReactNode } from "react";
 
 interface StyledPopoverProps extends PopoverRootProps {
   triggerElement: ReactNode;
+  maxW?: string;
   children: ReactNode;
   portalled?: boolean;
   portalRef?: React.RefObject<HTMLElement>;
 }
 
 const StyledPopover = (props: StyledPopoverProps) => {
-  const { triggerElement, children, portalled, portalRef, ...rest } = props;
+  const {
+    triggerElement,
+    maxW,
+    children,
+    portalled,
+    portalRef,
+    ...rest
+  } = props;
   return (
-    <PopoverRoot
-      size="xs"
-      positioning={{ placement: "top-end" }}
-      unmountOnExit
-      {...rest}
-    >
+    <PopoverRoot size="xs" autoFocus={false} unmountOnExit {...rest}>
       <PopoverTrigger asChild>{triggerElement}</PopoverTrigger>
-      <PopoverContent portalled={portalled} portalRef={portalRef}>
+      <PopoverContent
+        portalled={portalled}
+        portalRef={portalRef}
+        maxW={maxW}
+      >
         <PopoverArrow />
         <PopoverBody>{children}</PopoverBody>
       </PopoverContent>
