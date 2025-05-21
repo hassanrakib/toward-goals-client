@@ -2,7 +2,7 @@ import StyledButton from "@/components/derived-ui/styled-button";
 import { toaster } from "@/components/ui/toaster";
 import { useCreateGoalProgressMutation } from "@/redux/features/progress/goal-progress.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
-import { TGoalSearchResult } from "@/types/goal";
+import { TransformedGoalSearchResult } from "@/types/goal";
 import { Badge, Box, Card, Text, VStack } from "@chakra-ui/react";
 import { Hit } from "algoliasearch/lite";
 import { format } from "date-fns";
@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 const GoalSearchResult = ({
   goalSearchResult,
 }: {
-  goalSearchResult: Hit<Hit<TGoalSearchResult>>;
+  goalSearchResult: Hit<TransformedGoalSearchResult>;
 }) => {
   // nextjs router
   const router = useRouter();
@@ -69,6 +69,7 @@ const GoalSearchResult = ({
           onClick={async () =>
             await handleCreateGoalProgress(goalSearchResult.objectID)
           }
+          disabled={goalSearchResult.joined}
           loading={isCreatingGoalProgress}
           loadingText="Joining..."
         >

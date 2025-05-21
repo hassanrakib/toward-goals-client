@@ -4,12 +4,7 @@ import { Field } from "@/components/ui/field";
 import { Input, InputProps } from "@chakra-ui/react";
 import { RegisterOptions, useFormContext, useWatch } from "react-hook-form";
 import { InputGroup } from "@/components/ui/input-group";
-import {
-  forwardRef,
-  InputHTMLAttributes,
-  ReactNode,
-  useEffect,
-} from "react";
+import { forwardRef, InputHTMLAttributes, ReactNode, useEffect } from "react";
 import { getHookFormError } from "@/utils/form";
 import { useSearchBox } from "react-instantsearch";
 
@@ -47,10 +42,8 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     const { refine } = useSearchBox();
 
     useEffect(() => {
-      // if there is searchTerm found, search
-      if (searchTerm) {
-        refine(searchTerm);
-      }
+      // if there is searchTerm change
+      refine(searchTerm);
     }, [refine, searchTerm]);
 
     return (

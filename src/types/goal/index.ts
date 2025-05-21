@@ -15,10 +15,11 @@ export type GoalCreationData = Pick<
   "title" | "userLimit" | "duration"
 > & { startDate: string };
 
-export type TGoalSearchResult = Omit<
-  IGoal,
-  "_id" | "creator" | "admins" | "users"
-> & {
-  userCount: string;
-  objectID: string;
+type GoalSearchResult = Omit<IGoal, "_id" | "creator" | "admins" | "users"> & {
+  userCount: number;
+  startDate: number;
 };
+
+export interface TransformedGoalSearchResult extends GoalSearchResult {
+  joined: boolean;
+}

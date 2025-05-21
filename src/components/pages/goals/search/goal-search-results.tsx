@@ -1,18 +1,45 @@
 "use client";
 
-import { TGoalSearchResult } from "@/types/goal";
+import { TransformedGoalSearchResult } from "@/types/goal";
 import { Box, VStack } from "@chakra-ui/react";
-import { Hit } from "algoliasearch/lite";
-import { useEffect, useRef } from "react";
-import { useInfiniteHits } from "react-instantsearch";
+import { useCallback, useEffect, useRef } from "react";
+import { useInfiniteHits, UseInfiniteHitsProps } from "react-instantsearch";
+import { IGoalProgress } from "@/types/progress";
 import GoalSearchResult from "./goal-search-result";
 
-const GoalSearchResults = () => {
+const GoalSearchResults = ({
+  joinedGoals,
+}: {
+  joinedGoals: IGoalProgress[];
+}) => {
+  // transform the items returned by useInfiniteHits()
+  const transformItemsCallback: UseInfiniteHitsProps<TransformedGoalSearchResult>["transformItems"] =
+    (items) => {
+      return items.map((item) => ({
+        // copy the original item
+        ...item,
+        // add a new property
+        // for every item in the search result
+        //  we will check the item.objectId with the goal _id of joinedGoals
+        joined: joinedGoals.some(
+          (joinedGoal) => joinedGoal.goal._id === item.objectID
+        ),
+      }));
+    };
+
+  // use useCallback to prevent rendering endlessly because of passing different
+  // function reference to the useInfiniteHits() hook
+  const cachedTransformItemsCallback = useCallback(transformItemsCallback, [
+    joinedGoals,
+  ]);
+
   const {
     items: goals,
     isLastPage,
     showMore,
-  } = useInfiniteHits<Hit<TGoalSearchResult>>();
+  } = useInfiniteHits({ transformItems: cachedTransformItemsCallback });
+
+  // dom node at the bottom after all the goal search result
   const sentinelRef = useRef(null);
 
   useEffect(() => {
