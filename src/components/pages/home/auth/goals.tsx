@@ -8,7 +8,7 @@ export default async function Goals() {
   return (
     <VStack align="stretch">
       <Heading size="xl">Goals You’re Chasing</Heading>
-      <Flex>
+      <Flex gap="3.5">
         {goalsProgress.data?.map((goalProgress) => (
           <Goal key={goalProgress._id} goalProgress={goalProgress} />
         ))}

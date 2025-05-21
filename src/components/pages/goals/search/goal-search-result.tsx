@@ -73,7 +73,7 @@ const GoalSearchResult = ({
           loading={isCreatingGoalProgress}
           loadingText="Joining..."
         >
-          Join Goal
+          {!goalSearchResult.joined ? "Join Goal" : "Joined"}
         </StyledButton>
       </Card.Footer>
     </Card.Root>

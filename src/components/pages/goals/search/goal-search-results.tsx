@@ -3,9 +3,14 @@
 import { TransformedGoalSearchResult } from "@/types/goal";
 import { Box, VStack } from "@chakra-ui/react";
 import { useCallback, useEffect, useRef } from "react";
-import { useInfiniteHits, UseInfiniteHitsProps } from "react-instantsearch";
+import {
+  useInfiniteHits,
+  UseInfiniteHitsProps,
+  useInstantSearch,
+} from "react-instantsearch";
 import { IGoalProgress } from "@/types/progress";
 import GoalSearchResult from "./goal-search-result";
+import { Alert } from "@/components/ui/alert";
 
 const GoalSearchResults = ({
   joinedGoals,
@@ -39,6 +44,8 @@ const GoalSearchResults = ({
     showMore,
   } = useInfiniteHits({ transformItems: cachedTransformItemsCallback });
 
+  const { status: searchStatus } = useInstantSearch();
+
   // dom node at the bottom after all the goal search result
   const sentinelRef = useRef(null);
 
@@ -67,6 +74,18 @@ const GoalSearchResults = ({
 
   return (
     <Box overflow="auto" p="4" bgColor="bg" borderRadius="md">
+      {/* if searchStatus loading */}
+      {searchStatus === "loading" && (
+        <Alert status="neutral" variant="surface">
+          Loading...
+        </Alert>
+      )}
+      {/* if no goals found for the search */}
+      {searchStatus === "stalled" && !goals.length && (
+        <Alert status="neutral" variant="surface">
+          No goals found!
+        </Alert>
+      )}
       <VStack align="stretch">
         {goals.map((goal) => (
           <GoalSearchResult key={goal.objectID} goalSearchResult={goal} />
