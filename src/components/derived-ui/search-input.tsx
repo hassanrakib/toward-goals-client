@@ -5,11 +5,9 @@ import { Input, InputProps } from "@chakra-ui/react";
 import { RegisterOptions, useFormContext, useWatch } from "react-hook-form";
 import { InputGroup } from "@/components/ui/input-group";
 import {
-  Dispatch,
   forwardRef,
   InputHTMLAttributes,
   ReactNode,
-  SetStateAction,
   useEffect,
 } from "react";
 import { getHookFormError } from "@/utils/form";
@@ -22,7 +20,6 @@ export interface SearchInputProps extends InputProps {
   type: InputHTMLAttributes<HTMLInputElement>["type"];
   startElement?: ReactNode;
   registerOptions?: RegisterOptions;
-  setHasQuery: Dispatch<SetStateAction<boolean>>;
 }
 
 const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
@@ -35,9 +32,6 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
       type,
       startElement,
       registerOptions,
-      // setHasQuery is a state setter to let the Hits component about the query state
-      // so that based on the state Hits can show or not show its content
-      setHasQuery,
       ...rest
     } = props;
 
@@ -53,14 +47,11 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     const { refine } = useSearchBox();
 
     useEffect(() => {
-      // if there is searchTerm found, search and set hasQuery
+      // if there is searchTerm found, search
       if (searchTerm) {
         refine(searchTerm);
-        setHasQuery(true);
-      } else {
-        setHasQuery(false);
       }
-    }, [refine, searchTerm, setHasQuery]);
+    }, [refine, searchTerm]);
 
     return (
       <Field
