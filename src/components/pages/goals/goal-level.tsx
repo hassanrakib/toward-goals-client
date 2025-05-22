@@ -2,6 +2,7 @@
 
 import { IGoalProgress } from "@/types/progress";
 import { getPercentage } from "@/utils/global";
+import { getRadiusForABarInAProgressBarChart } from "@/utils/progress";
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Flex, Text } from "@chakra-ui/react";
 import { ArrowUp, Gem } from "lucide-react";
@@ -12,7 +13,6 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   const {
     level: {
       levelUpPoint,
-      level: mainLevel,
       requirements: mainLevelRequirements,
       requirements: {
         consistency: requiredConsistency,
@@ -71,8 +71,8 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       },
     ],
     series: [
-      { name: "totalCompletedRequirement", color: "green.400", stackId: "a" },
-      { name: "incompleteRequirement", color: "gray.200", stackId: "a" },
+      { name: "totalCompletedRequirement", color: "yellow.100", stackId: "a" },
+      { name: "incompleteRequirement", color: "white", stackId: "a" },
     ],
   });
 
@@ -94,66 +94,65 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   };
 
   return (
-    <Flex direction="column" justifyContent="center">
-      <Text fontSize="lg" fontWeight="medium">
-        Goal Level : {mainLevel}
-      </Text>
-      <Flex alignItems="center" spaceX="2">
-        <Chart.Root maxH="70px" chart={chart}>
-          <BarChart layout="vertical" data={chart.data}>
-            <XAxis
-              type="number"
-              axisLine={false}
-              tickLine={false}
-              domain={[0, totalRequirement]}
-              hide
-            />
-            <YAxis
-              type="category"
-              axisLine={false}
-              tickLine={false}
-              orientation="left"
-              dataKey={chart.key("name")}
-              hide
-            />
-            {chart.series.map((item) => (
-              <Bar
-                barSize={40}
-                isAnimationActive={false}
-                key={item.name}
-                dataKey={chart.key(item.name)}
-                fill={chart.color(item.color)}
-                stroke={chart.color(item.color)}
-                radius={10}
-                stackId={item.stackId}
-              >
-                {completedRequirementPercentage > 50 &&
-                  item.name === "totalCompletedRequirement" && (
-                    <LabelList
-                      dataKey={chart.key(item.name)}
-                      fill="black"
-                      content={renderCustomizedLabel}
-                    />
-                  )}
-                {incompleteRequirementPercentage > 50 &&
-                  item.name === "incompleteRequirement" && (
-                    <LabelList
-                      dataKey={chart.key(item.name)}
-                      fill="black"
-                      content={renderCustomizedLabel}
-                    />
-                  )}
-              </Bar>
-            ))}
-          </BarChart>
-        </Chart.Root>
-        <Flex alignItems="center" spaceX="0.5">
-          <ArrowUp size="20px" />
-          <Text fontSize="md" fontWeight="medium">
-            {levelUpPoint}
-          </Text>
-          <Gem size="20px" color="#4F8CF7" />
-        </Flex>
+    <Flex flexGrow="1" alignItems="center" spaceX="2">
+      <Chart.Root maxH="70px" chart={chart}>
+        <BarChart layout="vertical" data={chart.data}>
+          <XAxis
+            type="number"
+            axisLine={false}
+            tickLine={false}
+            domain={[0, totalRequirement]}
+            hide
+          />
+          <YAxis
+            type="category"
+            axisLine={false}
+            tickLine={false}
+            orientation="left"
+            dataKey={chart.key("name")}
+            hide
+          />
+          {chart.series.map((item, index) => (
+            <Bar
+              barSize={30}
+              isAnimationActive={false}
+              key={item.name}
+              dataKey={chart.key(item.name)}
+              fill={chart.color(item.color)}
+              stroke={chart.color(item.color)}
+              radius={getRadiusForABarInAProgressBarChart(
+                index,
+                completedRequirementPercentage,
+                incompleteRequirementPercentage
+              )}
+              stackId={item.stackId}
+            >
+              {completedRequirementPercentage > 50 &&
+                item.name === "totalCompletedRequirement" && (
+                  <LabelList
+                    dataKey={chart.key(item.name)}
+                    fill="black"
+                    content={renderCustomizedLabel}
+                  />
+                )}
+              {incompleteRequirementPercentage > 50 &&
+                item.name === "incompleteRequirement" && (
+                  <LabelList
+                    dataKey={chart.key(item.name)}
+                    fill="black"
+                    content={renderCustomizedLabel}
+                  />
+                )}
+            </Bar>
+          ))}
+        </BarChart>
+      </Chart.Root>
+      <Flex color="white" alignItems="center" spaceX="0.5">
+        <ArrowUp size="20px" />
+        <Text fontSize="md" fontWeight="medium">
+          {levelUpPoint}
+        </Text>
+        <Gem size="20px" />
       </Flex>
     </Flex>
   );

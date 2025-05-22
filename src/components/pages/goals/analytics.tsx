@@ -1,29 +1,32 @@
-import { Card, GridItem, VStack } from "@chakra-ui/react";
-import GoalLevel from "./goal-level";
+import { Badge, Card, VStack } from "@chakra-ui/react";
 import { IGoalProgress } from "@/types/progress";
 import ConsistencyLevel from "./consistency-level";
 import DeepFocusLevel from "./deep-focus-level";
 import CommitmentLevel from "./commitment-level";
+import { ChartNoAxesCombined } from "lucide-react";
 
 const Analytics = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   return (
-    <GridItem colSpan={2}>
-      <Card.Root variant="subtle" rounded="xl">
-        <Card.Body
-          position="relative"
-          display="grid"
-          gridTemplateColumns="repeat(2, 1fr)"
-          gap={6}
+    <Card.Root variant="subtle" rounded="xl">
+      <Card.Body position="relative">
+        <Badge
+          fontSize="sm"
+          position="absolute"
+          top="1rem"
+          right="1rem"
+          variant="surface"
+          colorPalette="white"
+          rounded="full"
         >
-          <GoalLevel goalProgress={goalProgress} />
-          <VStack alignItems="stretch" p={6}>
-            <ConsistencyLevel goalProgress={goalProgress} />
-            <DeepFocusLevel goalProgress={goalProgress} />
-            <CommitmentLevel goalProgress={goalProgress} />
-          </VStack>
-        </Card.Body>
-      </Card.Root>
-    </GridItem>
+          <ChartNoAxesCombined size="16" /> Analytics
+        </Badge>
+        <VStack alignItems="stretch" p={6}>
+          <ConsistencyLevel goalProgress={goalProgress} />
+          <DeepFocusLevel goalProgress={goalProgress} />
+          <CommitmentLevel goalProgress={goalProgress} />
+        </VStack>
+      </Card.Body>
+    </Card.Root>
   );
 };
 

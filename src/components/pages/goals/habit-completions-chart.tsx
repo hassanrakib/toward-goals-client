@@ -4,6 +4,7 @@ import { IGoalProgress } from "@/types/progress";
 import { getPercentage } from "@/utils/global";
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Badge, Card } from "@chakra-ui/react";
+import { FerrisWheel } from "lucide-react";
 import { Cell, Label, Pie, PieChart } from "recharts";
 
 const HabitCompletionsChart = ({
@@ -24,17 +25,17 @@ const HabitCompletionsChart = ({
       {
         name: "Mini",
         value: totalHabitCompletion === 0 ? 1 : totalMiniCompletion,
-        color: "green.400",
+        color: "yellow.100",
       },
       {
         name: "Plus",
         value: totalHabitCompletion === 0 ? 1 : totalPlusCompletion,
-        color: "yellow.400",
+        color: "orange.500",
       },
       {
         name: "Elite",
         value: totalHabitCompletion === 0 ? 1 : totalEliteCompletion,
-        color: "red.400",
+        color: "yellow.950",
       },
     ],
   });
@@ -47,8 +48,11 @@ const HabitCompletionsChart = ({
           position="absolute"
           top="1rem"
           right="1rem"
+          variant="surface"
+          colorPalette="white"
+          rounded="full"
         >
-          🔥 Habit
+          <FerrisWheel size="16" /> Habit
         </Badge>
         <Chart.Root w="full" h="full" chart={chart}>
           <PieChart>

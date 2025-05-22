@@ -3,7 +3,8 @@
 import { IGoalProgress } from "@/types/progress";
 import { getPercentage } from "@/utils/global";
 import { Chart, useChart } from "@chakra-ui/charts";
-import { Card, Text, VStack } from "@chakra-ui/react";
+import { Badge, Card, Text, VStack } from "@chakra-ui/react";
+import { AlarmClockPlus } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -31,12 +32,12 @@ const TodosDeadlines = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       {
         name: "met",
         value: metDeadlinesPercentage,
-        color: "green.400",
+        color: "yellow.100",
       },
       {
         name: "missed",
         value: missedDeadlinesPercentage,
-        color: "yellow.400",
+        color: "white",
       },
     ],
   });
@@ -60,6 +61,17 @@ const TodosDeadlines = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   return (
     <Card.Root variant="subtle" rounded="xl">
       <Card.Body position="relative">
+        <Badge
+          fontSize="sm"
+          position="absolute"
+          top="1rem"
+          right="1rem"
+          variant="surface"
+          colorPalette="white"
+          rounded="full"
+        >
+          <AlarmClockPlus size="16" /> Deadlines
+        </Badge>
         <VStack gap={1} alignItems="flex-start">
           <Text fontSize="sm" fontWeight="light">
             Met: {metDeadlines} deadlines
@@ -85,6 +97,7 @@ const TodosDeadlines = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
             />
             <Bar
               barSize={30}
+              radius={[0, 12, 12, 0]}
               isAnimationActive={true}
               dataKey={chart.key("value")}
             >

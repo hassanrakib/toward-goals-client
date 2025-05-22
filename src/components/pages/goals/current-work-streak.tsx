@@ -1,7 +1,7 @@
 import { IGoalProgress } from "@/types/progress";
 import { Text, Badge, VStack, Card } from "@chakra-ui/react";
 import { format, isToday, isYesterday } from "date-fns";
-import { Flame } from "lucide-react";
+import { Flame, Tally5 } from "lucide-react";
 
 export default function CurrentWorkStreak({
   goalProgress,
@@ -19,10 +19,17 @@ export default function CurrentWorkStreak({
         justifyContent="center"
         alignItems="center"
       >
-        <Badge fontSize="sm" position="absolute" top="1rem" right="1rem">
-          🔥 Streak
+        <Badge
+          fontSize="sm"
+          position="absolute"
+          top="1rem"
+          right="1rem"
+          variant="surface"
+          colorPalette="white"
+          rounded="full"
+        >
+          <Tally5 size="16" /> Streak
         </Badge>
-
         <VStack gap={3}>
           <Flame color="orange" size={40} />
           <Text

@@ -2,6 +2,7 @@
 
 import { IGoalProgress } from "@/types/progress";
 import { getPercentage } from "@/utils/global";
+import { getRadiusForABarInAProgressBarChart } from "@/utils/progress";
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Flex, Text } from "@chakra-ui/react";
 import { Gem } from "lucide-react";
@@ -34,8 +35,8 @@ const DeepFocusLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       },
     ],
     series: [
-      { name: "completedDeepFocus", color: "green.400", stackId: "a" },
-      { name: "incompleteDeepFocus", color: "gray.200", stackId: "a" },
+      { name: "completedDeepFocus", color: "yellow.100", stackId: "a" },
+      { name: "incompleteDeepFocus", color: "white", stackId: "a" },
     ],
   });
 
@@ -87,7 +88,7 @@ const DeepFocusLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
               dataKey={chart.key("name")}
               hide
             />
-            {chart.series.map((item) => (
+            {chart.series.map((item, index) => (
               <Bar
                 barSize={30}
                 isAnimationActive={false}
@@ -95,7 +96,11 @@ const DeepFocusLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
                 dataKey={chart.key(item.name)}
                 fill={chart.color(item.color)}
                 stroke={chart.color(item.color)}
-                radius={10}
+                radius={getRadiusForABarInAProgressBarChart(
+                  index,
+                  completedDeepFocusPercentage,
+                  incompleteDeepFocusPercentage
+                )}
                 stackId={item.stackId}
               >
                 {completedDeepFocusPercentage > 50 &&
@@ -118,12 +123,21 @@ const DeepFocusLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
             ))}
           </BarChart>
         </Chart.Root>
-        <Flex alignItems="center" spaceX="0.5">
-          <Text fontSize="sm" fontWeight="medium">
+        <Flex
+          alignItems="center"
+          spaceX="0.5"
+          color="yellow.400"
+          shadow="xs"
+          rounded="full"
+          padding="1"
+        >
+          <Text fontSize="xs" fontWeight="medium">
             {rewardPointsPerDay}
           </Text>
-          <Gem size="15px" color="#4F8CF7" />
-          <Text fontSize="sm" fontWeight="medium">/day</Text>
+          <Gem size="12" />
+          <Text fontSize="xs" fontWeight="medium">
+            /day
+          </Text>
         </Flex>
       </Flex>
     </Flex>

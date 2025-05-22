@@ -2,6 +2,7 @@
 
 import { IGoalProgress } from "@/types/progress";
 import { getPercentage } from "@/utils/global";
+import { getRadiusForABarInAProgressBarChart } from "@/utils/progress";
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Flex, Text } from "@chakra-ui/react";
 import { Gem } from "lucide-react";
@@ -38,8 +39,8 @@ const ConsistencyLevel = ({
       },
     ],
     series: [
-      { name: "completedConsistency", color: "green.400", stackId: "a" },
-      { name: "incompleteConsistency", color: "gray.200", stackId: "a" },
+      { name: "completedConsistency", color: "yellow.100", stackId: "a" },
+      { name: "incompleteConsistency", color: "white", stackId: "a" },
     ],
   });
 
@@ -91,7 +92,7 @@ const ConsistencyLevel = ({
               dataKey={chart.key("name")}
               hide
             />
-            {chart.series.map((item) => (
+            {chart.series.map((item, index) => (
               <Bar
                 barSize={30}
                 isAnimationActive={false}
@@ -99,7 +100,11 @@ const ConsistencyLevel = ({
                 dataKey={chart.key(item.name)}
                 fill={chart.color(item.color)}
                 stroke={chart.color(item.color)}
-                radius={10}
+                radius={getRadiusForABarInAProgressBarChart(
+                  index,
+                  completedConsistencyPercentage,
+                  incompleteConsistencyPercentage
+                )}
                 stackId={item.stackId}
               >
                 {completedConsistencyPercentage > 50 &&
@@ -122,12 +127,19 @@ const ConsistencyLevel = ({
             ))}
           </BarChart>
         </Chart.Root>
-        <Flex alignItems="center" spaceX="0.5">
-          <Text fontSize="sm" fontWeight="medium">
+        <Flex
+          alignItems="center"
+          spaceX="0.5"
+          color="yellow.400"
+          shadow="xs"
+          rounded="full"
+          padding="1"
+        >
+          <Text fontSize="xs" fontWeight="medium">
             {rewardPointsPerDay}
           </Text>
-          <Gem size="15px" color="#4F8CF7" />
-          <Text fontSize="sm" fontWeight="medium">
+          <Gem size="12" />
+          <Text fontSize="xs" fontWeight="medium">
             /day
           </Text>
         </Flex>

@@ -61,7 +61,7 @@ export default function Goal({
         right="4"
         p="4"
         borderRadius="3xl"
-        bg="rgba(255, 255, 255, 1)"
+        bg="rgba(255, 255, 255, 0.5)"
         backdropFilter="blur(12px)"
         fontWeight="bold"
         textAlign="center"
