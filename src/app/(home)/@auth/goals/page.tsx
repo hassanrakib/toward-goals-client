@@ -13,7 +13,7 @@ const Goals = async ({
   const goalsProgress = await getMyGoalsProgress({ goal: goalId });
 
   return (
-    <VStack alignItems="stretch">
+    <VStack maxW="900px" mx="auto" gap="3.5">
       {goalsProgress.data?.map((goalProgress) => (
         <GoalProgress key={goalProgress._id} goalProgress={goalProgress} />
       ))}

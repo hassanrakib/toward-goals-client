@@ -20,9 +20,9 @@ export default function Goal({
       h="300px"
       borderRadius="xl"
       overflow="hidden"
-      bgImg={`url(${goal.image ? goal.image : "https://placehold.co/600x400"})`}
+      bgImg={`url(${goal.image ? goal.image : "/images/goal-card-background.png"})`}
       backgroundSize="cover"
-      backgroundPosition="center"
+      backgroundPosition="top"
       boxShadow="lg"
     >
       {/* Top Right Icons */}
@@ -61,12 +61,14 @@ export default function Goal({
         right="4"
         p="4"
         borderRadius="3xl"
-        bg="rgba(255, 255, 255, 0.3)"
-        backdropFilter="blur(8px)"
+        bg="rgba(255, 255, 255, 1)"
+        backdropFilter="blur(12px)"
         fontWeight="bold"
         textAlign="center"
       >
-        <Text fontSize="lg">{goal.title}</Text>
+        <Text fontSize="lg" fontWeight="semibold">
+          {goal.title}
+        </Text>
       </Box>
     </Box>
   );

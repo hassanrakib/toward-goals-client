@@ -75,13 +75,13 @@ const GoalSearchResults = ({
   return (
     <Box overflow="auto" p="4" bgColor="bg" borderRadius="md">
       {/* if searchStatus loading */}
-      {searchStatus === "loading" && (
+      {(searchStatus === "loading" || searchStatus === "stalled") && (
         <Alert status="neutral" variant="surface">
           Loading...
         </Alert>
       )}
       {/* if no goals found for the search */}
-      {searchStatus === "stalled" && !goals.length && (
+      {searchStatus === "idle" && !goals.length && (
         <Alert status="neutral" variant="surface">
           No goals found!
         </Alert>

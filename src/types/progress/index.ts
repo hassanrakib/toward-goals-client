@@ -2,10 +2,11 @@ import { IGoal } from "../goal";
 import { IHabit } from "../habit";
 import { ILevel, IRequirementLevel } from "../level";
 import { ISubgoal } from "../subgoal";
+import { IUser } from "../user";
 
 export interface IGoalProgress {
   _id: string;
-  user: string;
+  user: IUser;
   goal: IGoal;
   level: ILevel;
   points: number;

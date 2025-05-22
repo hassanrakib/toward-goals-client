@@ -11,6 +11,7 @@ import StyledButton from "@/components/derived-ui/styled-button";
 import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
 import { IGoalProgress } from "@/types/progress";
 import { Configure } from "react-instantsearch";
+import { Alert } from "@/components/ui/alert";
 
 interface IFormValues {
   goalName: string;
@@ -59,6 +60,11 @@ const GoalSearchForm = () => {
             />
           </Box>
           {/* show goal search results */}
+          {isJoinedGoalsLoading && (
+            <Alert status="neutral" variant="surface">
+              Loading...
+            </Alert>
+          )}
           {!isJoinedGoalsLoading && !isErrorGettingJoinedGoals && (
             <GoalSearchResults
               joinedGoals={joinedGoals!.data as IGoalProgress[]}

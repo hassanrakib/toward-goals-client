@@ -3,7 +3,7 @@
 import { IGoalProgress } from "@/types/progress";
 import { getPercentage } from "@/utils/global";
 import { Chart, useChart } from "@chakra-ui/charts";
-import { Box, Text, VStack } from "@chakra-ui/react";
+import { Card, Text, VStack } from "@chakra-ui/react";
 import {
   Bar,
   BarChart,
@@ -62,55 +62,48 @@ const SkippedVsWorkedDays = ({
   };
 
   return (
-    <Box
-      bgGradient="to-r"
-      gradientFrom="orange.100"
-      gradientTo="orange.50"
-      borderRadius="xl"
-      p={6}
-      shadow="md"
-      // maxW="sm"
-      position="relative"
-    >
-      <VStack gap={1} alignItems="flex-start">
-        <Text fontSize="sm" fontWeight="light">
-          Worked: {workedDays} days
-        </Text>
-        <Text fontSize="sm" fontWeight="light">
-          Skipped: {skippedDays} days
-        </Text>
-      </VStack>
-      <Chart.Root maxH="150px" chart={chart}>
-        <BarChart layout="vertical" data={chart.data}>
-          <XAxis
-            type="number"
-            axisLine={true}
-            tickLine={true}
-            domain={[0, 100]}
-            tickFormatter={(value) => `${value}%`}
-          />
-          <YAxis
-            type="category"
-            axisLine={true}
-            tickLine={true}
-            dataKey={chart.key("name")}
-          />
-          <Bar
-            barSize={30}
-            isAnimationActive={true}
-            dataKey={chart.key("value")}
-          >
-            {chart.data.map((item) => (
-              <Cell key={item.name} fill={chart.color(item.color)} />
-            ))}
-            <LabelList
-              dataKey={chart.key("value")}
-              content={renderCustomizedLabel}
+    <Card.Root variant="subtle" rounded="xl">
+      <Card.Body position="relative">
+        <VStack gap={1} alignItems="flex-start">
+          <Text fontSize="sm" fontWeight="light">
+            Worked: {workedDays} days
+          </Text>
+          <Text fontSize="sm" fontWeight="light">
+            Skipped: {skippedDays} days
+          </Text>
+        </VStack>
+        <Chart.Root maxH="150px" chart={chart}>
+          <BarChart layout="vertical" data={chart.data}>
+            <XAxis
+              type="number"
+              axisLine={true}
+              tickLine={true}
+              domain={[0, 100]}
+              tickFormatter={(value) => `${value}%`}
             />
-          </Bar>
-        </BarChart>
-      </Chart.Root>
-    </Box>
+            <YAxis
+              type="category"
+              axisLine={true}
+              tickLine={true}
+              dataKey={chart.key("name")}
+            />
+            <Bar
+              barSize={30}
+              isAnimationActive={true}
+              dataKey={chart.key("value")}
+            >
+              {chart.data.map((item) => (
+                <Cell key={item.name} fill={chart.color(item.color)} />
+              ))}
+              <LabelList
+                dataKey={chart.key("value")}
+                content={renderCustomizedLabel}
+              />
+            </Bar>
+          </BarChart>
+        </Chart.Root>
+      </Card.Body>
+    </Card.Root>
   );
 };
 export default SkippedVsWorkedDays;
