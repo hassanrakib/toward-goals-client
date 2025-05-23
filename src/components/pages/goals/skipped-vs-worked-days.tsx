@@ -3,7 +3,7 @@
 import { IGoalProgress } from "@/types/progress";
 import { getPercentage } from "@/utils/global";
 import { Chart, useChart } from "@chakra-ui/charts";
-import { Badge, Card, Text, VStack } from "@chakra-ui/react";
+import { Badge, Card } from "@chakra-ui/react";
 import { TentTree } from "lucide-react";
 import {
   Bar,
@@ -11,6 +11,7 @@ import {
   Cell,
   LabelList,
   LabelProps,
+  Legend,
   XAxis,
   YAxis,
 } from "recharts";
@@ -36,12 +37,12 @@ const SkippedVsWorkedDays = ({
       {
         name: "worked",
         value: workedDaysPercentage,
-        color: "yellow.100",
+        color: "teal.200",
       },
       {
         name: "skipped",
         value: skippedDaysPercentage,
-        color: "white",
+        color: "yellow.200",
       },
     ],
   });
@@ -76,15 +77,7 @@ const SkippedVsWorkedDays = ({
         >
           <TentTree size="16" /> Day Stats
         </Badge>
-        <VStack gap={1} alignItems="flex-start">
-          <Text fontSize="sm" fontWeight="light">
-            Worked: {workedDays} days
-          </Text>
-          <Text fontSize="sm" fontWeight="light">
-            Skipped: {skippedDays} days
-          </Text>
-        </VStack>
-        <Chart.Root maxH="150px" chart={chart}>
+        <Chart.Root maxH="200px" mt="4" chart={chart}>
           <BarChart layout="vertical" data={chart.data}>
             <XAxis
               type="number"
@@ -98,6 +91,18 @@ const SkippedVsWorkedDays = ({
               axisLine={true}
               tickLine={true}
               dataKey={chart.key("name")}
+            />
+            <Legend
+              payload={chart.data.map((item) => ({
+                value:
+                  item.name === "worked"
+                    ? `Worked ${workedDays} days`
+                    : `Skipped ${skippedDays} days`,
+                color: item.name === "worked" ? "#81E6D9" : "#ECC94B",
+                type: "circle",
+                id: item.name,
+              }))}
+              wrapperStyle={{ paddingTop: 30 }}
             />
             <Bar
               barSize={30}

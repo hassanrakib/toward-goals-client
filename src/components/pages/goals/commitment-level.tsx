@@ -35,7 +35,7 @@ const CommitmentLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       },
     ],
     series: [
-      { name: "completedCommitment", color: "yellow.100", stackId: "a" },
+      { name: "completedCommitment", color: "teal.200", stackId: "a" },
       { name: "incompleteCommitment", color: "white", stackId: "a" },
     ],
   });
@@ -127,9 +127,9 @@ const CommitmentLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
           alignItems="center"
           spaceX="0.5"
           color="yellow.400"
-          shadow="xs"
           rounded="full"
           padding="1"
+          bgColor="bg"
         >
           <Text fontSize="xs" fontWeight="medium">
             {rewardPointsPerDay}

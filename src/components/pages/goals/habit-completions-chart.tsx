@@ -25,17 +25,17 @@ const HabitCompletionsChart = ({
       {
         name: "Mini",
         value: totalHabitCompletion === 0 ? 1 : totalMiniCompletion,
-        color: "yellow.100",
+        color: "teal.200",
       },
       {
         name: "Plus",
         value: totalHabitCompletion === 0 ? 1 : totalPlusCompletion,
-        color: "orange.500",
+        color: "yellow.200",
       },
       {
         name: "Elite",
         value: totalHabitCompletion === 0 ? 1 : totalEliteCompletion,
-        color: "yellow.950",
+        color: "red.200",
       },
     ],
   });

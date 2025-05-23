@@ -39,7 +39,7 @@ const ConsistencyLevel = ({
       },
     ],
     series: [
-      { name: "completedConsistency", color: "yellow.100", stackId: "a" },
+      { name: "completedConsistency", color: "teal.200", stackId: "a" },
       { name: "incompleteConsistency", color: "white", stackId: "a" },
     ],
   });
@@ -131,9 +131,9 @@ const ConsistencyLevel = ({
           alignItems="center"
           spaceX="0.5"
           color="yellow.400"
-          shadow="xs"
           rounded="full"
           padding="1"
+          bgColor="bg"
         >
           <Text fontSize="xs" fontWeight="medium">
             {rewardPointsPerDay}

@@ -4,15 +4,13 @@ import {
   Box,
   Flex,
   IconButton,
-  Icon,
-  Text,
   VStack,
   Container,
 } from "@chakra-ui/react";
 import { Avatar } from "@/components/ui/avatar";
-import { BellIcon, CircleFadingArrowUp } from "lucide-react";
+import { BellIcon } from "lucide-react";
 import SidebarItems from "@/components/layout/auth/sidebar-items";
-import Link from "next/link";
+import TowardGoalsLogo from "@/components/shared/toward-goals-logo";
 
 export default async function Layout({
   children,
@@ -37,14 +35,7 @@ export default async function Layout({
       >
         <VStack gap={8} align="stretch">
           {/* Toward Goals Logo */}
-          <Link href="/">
-            <Flex align="baseline" justify="center" gap={1} cursor="pointer">
-              <Text fontSize="lg">Toward Goals</Text>
-              <Icon boxSize={7}>
-                <CircleFadingArrowUp />
-              </Icon>
-            </Flex>
-          </Link>
+          <TowardGoalsLogo />
           {/* Sidebar Items */}
           <SidebarItems />
         </VStack>
