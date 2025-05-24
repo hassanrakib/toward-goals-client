@@ -16,7 +16,7 @@ import {
   SubgoalMentionExtension,
 } from "@/lib/tiptap-extensions";
 import { useController, useFormContext } from "react-hook-form";
-import { ICreateTaskFormValues } from "@/app/(home)/@auth/tasks/create-task/page";
+import { ICreateTaskFormValues } from "./create-task-form";
 
 const CreateTaskInput = () => {
   // character limit for the input

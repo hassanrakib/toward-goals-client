@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function LandingPage() {
   return (
     <Center minH="100vh" bgColor="bg.subtle">
-      <Card.Root variant="elevated" w="full" maxW="xs">
+      <Card.Root variant="elevated" w="full" maxW="xs" rounded="xl">
         <Card.Body>
           {/* Logo */}
           <Center mb={8}>

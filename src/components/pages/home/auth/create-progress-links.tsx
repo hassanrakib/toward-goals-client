@@ -19,7 +19,7 @@ const progressLinks = [
   },
 ];
 
-export default function CreateProgressLinks() {
+export default function CreateProgressLinks({ goalId }: { goalId: string }) {
   return (
     <VStack align="stretch">
       <Text fontWeight="medium">Create:</Text>
@@ -31,7 +31,9 @@ export default function CreateProgressLinks() {
             </List.Indicator>
             <PopoverActionTrigger>
               <ChakraLink color="blue.400" asChild>
-                <NextLink href={`${link.href}`}>{link.label}</NextLink>
+                <NextLink href={`${link.href}?goalId=${goalId}`}>
+                  {link.label}
+                </NextLink>
               </ChakraLink>
             </PopoverActionTrigger>
           </List.Item>

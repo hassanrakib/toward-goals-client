@@ -49,7 +49,7 @@ export default function Goal({
           positioning={{ placement: "bottom-end" }}
           maxW="150px"
         >
-          <CreateProgressLinks />
+          <CreateProgressLinks goalId={goal._id} />
         </StyledPopover>
       </Flex>
 

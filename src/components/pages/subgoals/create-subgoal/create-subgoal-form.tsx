@@ -25,8 +25,10 @@ interface IFormValues {
 }
 
 const CreateSubgoalForm = ({
+  goalId,
   selectPortalRef,
 }: {
+  goalId?: string | null;
   selectPortalRef?: React.RefObject<HTMLElement>;
 }) => {
   // router from next/navigation
@@ -54,7 +56,7 @@ const CreateSubgoalForm = ({
   ] = useCreateSubgoalProgressMutation();
 
   const defaultValues: IFormValues = {
-    goalId: [],
+    goalId: goalId ? [goalId] : [],
     title: "",
     duration: 1,
   };

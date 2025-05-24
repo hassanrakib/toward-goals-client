@@ -47,8 +47,10 @@ interface IFormValues {
 }
 
 const CreateHabitForm = ({
+  goalId,
   selectPortalRef,
 }: {
+  goalId?: string | null;
   selectPortalRef?: React.RefObject<HTMLElement>;
 }) => {
   const [unit, setUnit] = useState("");
@@ -80,7 +82,7 @@ const CreateHabitForm = ({
   ] = useCreateHabitProgressMutation();
 
   const defaultValues: IFormValues = {
-    goalId: [],
+    goalId: goalId ? [goalId] : [],
     title: "",
     unit: {
       type: [],

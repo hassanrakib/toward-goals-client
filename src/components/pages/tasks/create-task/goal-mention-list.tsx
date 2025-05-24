@@ -48,6 +48,7 @@ export const GoalMentionList = ({
       bg="white"
       borderRadius="xl"
       p={2}
+      zIndex="1000"
     >
       {goalsProgress?.data?.map(({ goal }) => (
         <Box

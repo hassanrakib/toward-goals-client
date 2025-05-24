@@ -55,8 +55,6 @@ export function makeMentionExtension({
             popup = tippy(document.body, {
               // Position the popup near the cursor
               getReferenceClientRect: props.clientRect as () => DOMRect,
-              // Attach popup to the document body
-              appendTo: () => document.body,
               // Rendered React component as content
               content: reactRenderer.element,
               // Show the popup immediately
