@@ -1,7 +1,9 @@
+import { Alert } from "@/components/ui/alert";
 import { useGetHabitsProgressQuery } from "@/redux/features/progress/habit-progress.api";
 import { HabitDifficultiesName } from "@/types/habit";
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Link as ChakraLink, Spinner, Text } from "@chakra-ui/react";
 import { SuggestionProps } from "@tiptap/suggestion";
+import NextLink from "next/link";
 import { useWatch } from "react-hook-form";
 
 export const HabitMentionList = ({
@@ -35,15 +37,11 @@ export const HabitMentionList = ({
     );
 
   // if the query doesn't start with the "habit" keyword
-  // or if goal is not mentioned already
   // or if habit is already mentioned
   // we are not going to render this component
-  if (!query.startsWith("habit") || !mentionedGoalId || mentionedHabitId) {
+  if (!query.startsWith("habit") || mentionedHabitId) {
     return null;
   }
-
-  // if isGettingHabitsProgress show a spinner
-  if (isGettingHabitsProgress) return <Spinner size="sm" />;
 
   return (
     <Box
@@ -54,6 +52,38 @@ export const HabitMentionList = ({
       borderRadius="xl"
       p={2}
     >
+      {/* if loading habits progress */}
+      {isGettingHabitsProgress ? (
+        <Alert
+          size="sm"
+          status="neutral"
+          title="Loading habits..."
+          icon={<Spinner size="sm" />}
+        />
+      ) : // if habits progress not loading then check mentionedGoalId exits & no data found
+      mentionedGoalId && !habitsProgress?.data?.length ? (
+        <Alert size="sm" status="neutral">
+          <Text>
+            No habit found.{" "}
+            <ChakraLink asChild variant="underline" colorPalette="yellow">
+              <NextLink href={`/habits/create-habit?goalId=${mentionedGoalId}`}>
+                Create a habit
+              </NextLink>
+            </ChakraLink>
+          </Text>
+        </Alert>
+      ) : null}
+
+      {/* if no goal selected */}
+      {!mentionedGoalId && (
+        <Alert
+          size="sm"
+          status="neutral"
+          title="Please select a goal first writing @goal"
+        />
+      )}
+
+      {/* show list of habits to select from */}
       {habitsProgress?.data?.map(({ habit }) => {
         // destructure habit difficulties and unit name
         const {

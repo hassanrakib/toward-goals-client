@@ -26,11 +26,11 @@ export default function CreateProgressLinks({ goalId }: { goalId: string }) {
       <List.Root variant="plain" align="center">
         {progressLinks.map((link) => (
           <List.Item key={link.href}>
-            <List.Indicator asChild>
-              <Plus size="12" />
+            <List.Indicator asChild color="yellow.500">
+              <Plus size="16" />
             </List.Indicator>
             <PopoverActionTrigger>
-              <ChakraLink color="blue.400" asChild>
+              <ChakraLink colorPalette="yellow" variant="underline" asChild>
                 <NextLink href={`${link.href}?goalId=${goalId}`}>
                   {link.label}
                 </NextLink>

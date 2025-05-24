@@ -1,6 +1,8 @@
+import { Alert } from "@/components/ui/alert";
 import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Spinner, Text, Link as ChakraLink } from "@chakra-ui/react";
 import { SuggestionProps } from "@tiptap/suggestion";
+import NextLink from "next/link";
 import { useWatch } from "react-hook-form";
 
 export const GoalMentionList = ({
@@ -37,9 +39,6 @@ export const GoalMentionList = ({
     return null;
   }
 
-  // if isGettingGoalsProgress show a spinner
-  if (isGettingGoalsProgress) return <Spinner size="sm" />;
-
   return (
     <Box
       maxH="200px"
@@ -48,8 +47,28 @@ export const GoalMentionList = ({
       bg="white"
       borderRadius="xl"
       p={2}
-      zIndex="1000"
     >
+      {/* if loading goals progress */}
+      {isGettingGoalsProgress ? (
+        <Alert
+          size="sm"
+          status="neutral"
+          title="Loading goals..."
+          icon={<Spinner size="sm" />}
+        />
+      ) : // if no data found
+      !goalsProgress?.data?.length ? (
+        <Alert size="sm" status="neutral">
+          <Text>
+            No goal found.{" "}
+            <ChakraLink asChild variant="underline" colorPalette="yellow">
+              <NextLink href={`/goals/create-goal`}>Create a goal</NextLink>
+            </ChakraLink>
+          </Text>
+        </Alert>
+      ) : null}
+
+      {/* show list of goals progress to select from */}
       {goalsProgress?.data?.map(({ goal }) => (
         <Box
           key={goal._id}

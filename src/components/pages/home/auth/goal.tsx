@@ -30,7 +30,7 @@ export default function Goal({
         {/* see progress links: goal progress, subgoal progress, etc... */}
         <StyledPopover
           triggerElement={
-            <IconButton size="sm" variant="surface">
+            <IconButton size="sm" variant="subtle" colorPalette="yellow">
               <ChartNoAxesColumnDecreasing />
             </IconButton>
           }
@@ -42,7 +42,7 @@ export default function Goal({
         {/* links to create: subgoals, habits, tasks */}
         <StyledPopover
           triggerElement={
-            <IconButton size="sm" variant="surface">
+            <IconButton size="sm" variant="outline" colorPalette="yellow">
               <Plus />
             </IconButton>
           }
@@ -61,7 +61,7 @@ export default function Goal({
         right="4"
         p="4"
         borderRadius="3xl"
-        bg="rgba(255, 255, 255, 0.5)"
+        bg="rgba(255, 255, 255, 0.7)"
         backdropFilter="blur(12px)"
         fontWeight="bold"
         textAlign="center"

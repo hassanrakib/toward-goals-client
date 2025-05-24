@@ -1,7 +1,9 @@
+import { Alert } from "@/components/ui/alert";
 import { useGetSubgoalsProgressQuery } from "@/redux/features/progress/subgoal-progress.api";
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Spinner, Text, Link as ChakraLink } from "@chakra-ui/react";
 import { SuggestionProps } from "@tiptap/suggestion";
 import { useWatch } from "react-hook-form";
+import NextLink from "next/link";
 
 export const SubgoalMentionList = ({
   query,
@@ -37,15 +39,11 @@ export const SubgoalMentionList = ({
     );
 
   // if the query doesn't start with the "subgoal" keyword
-  // or if goal is not mentioned already
   // or if subgoal is already mentioned
   // we are not going to render this component
-  if (!query.startsWith("subgoal") || !mentionedGoalId || mentionedSubgoalId) {
+  if (!query.startsWith("subgoal") || mentionedSubgoalId) {
     return null;
   }
-
-  // if isGettingSubgoalsProgress show a spinner
-  if (isGettingSubgoalsProgress) return <Spinner size="sm" />;
 
   return (
     <Box
@@ -56,6 +54,40 @@ export const SubgoalMentionList = ({
       borderRadius="xl"
       p={2}
     >
+      {/* if loading subgoals progress */}
+      {isGettingSubgoalsProgress ? (
+        <Alert
+          size="sm"
+          status="neutral"
+          title="Loading subgoals..."
+          icon={<Spinner size="sm" />}
+        />
+      ) : // if subgoals progress not loading then check mentionedGoalId exits & no data found
+      mentionedGoalId && !subgoalsProgress?.data?.length ? (
+        <Alert size="sm" status="neutral">
+          <Text>
+            No subgoal found.{" "}
+            <ChakraLink asChild variant="underline" colorPalette="yellow">
+              <NextLink
+                href={`/subgoals/create-subgoal?goalId=${mentionedGoalId}`}
+              >
+                Create a subgoal
+              </NextLink>
+            </ChakraLink>
+          </Text>
+        </Alert>
+      ) : null}
+
+      {/* if no goal selected */}
+      {!mentionedGoalId && (
+        <Alert
+          size="sm"
+          status="neutral"
+          title="Please select a goal first writing @goal"
+        />
+      )}
+
+      {/* show list of subgoals to select from */}
       {subgoalsProgress?.data?.map(({ subgoal }) => (
         <Box
           key={subgoal._id}
