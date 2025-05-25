@@ -4,11 +4,11 @@ import { cookies } from "next/headers";
 export default async function Layout({
   auth,
   guest,
-  interceptors,
+  interceptor,
 }: {
   auth: React.ReactNode;
   guest: React.ReactNode;
-  interceptors: React.ReactNode;
+  interceptor: React.ReactNode;
 }) {
   // if the user is authenticated the cookie will be found
   const cookie = (await cookies()).get("session")?.value;
@@ -20,7 +20,7 @@ export default async function Layout({
   return (
     <>
       {session ? auth : guest}
-      {interceptors}
+      {interceptor}
     </>
   );
 }
