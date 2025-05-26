@@ -13,6 +13,7 @@ const habitProgressApi = baseApi.injectEndpoints({
         method: "POST",
         body: habitProgressCreationData,
       }),
+      invalidatesTags: ["habitProgress"],
     }),
     getHabitsProgress: build.query<IResponse<IHabitProgress[]>, QueryParams>({
       query: (params) => ({
@@ -20,6 +21,7 @@ const habitProgressApi = baseApi.injectEndpoints({
         method: "GET",
         params,
       }),
+      providesTags: ["habitProgress"],
     }),
   }),
 });

@@ -6,12 +6,13 @@ import InstantSearchProvider from "@/lib/instant-search-provider";
 import { SearchIndices } from "@/types/global";
 import { Search } from "lucide-react";
 import GoalSearchResults from "./goal-search-results";
-import { Box, Grid, Link, Text } from "@chakra-ui/react";
+import { Box, Grid, Link as ChakraLink, Text } from "@chakra-ui/react";
 import StyledButton from "@/components/derived-ui/styled-button";
 import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
 import { IGoalProgress } from "@/types/progress";
 import { Configure } from "react-instantsearch";
 import { Alert } from "@/components/ui/alert";
+import NextLink from "next/link";
 
 interface IFormValues {
   goalName: string;
@@ -81,11 +82,11 @@ const GoalSearchForm = () => {
             borderRadius="md"
           >
             <Text>Haven&apos;t you find your goal?</Text>
-            <Text>
-              <Link href="/goals/create-goal">
+            <ChakraLink asChild>
+              <NextLink href="/goals/create-goal">
                 <StyledButton>Create Goal</StyledButton>
-              </Link>
-            </Text>
+              </NextLink>
+            </ChakraLink>
           </Box>
         </Grid>
       </InstantSearchProvider>

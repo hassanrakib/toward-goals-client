@@ -1,12 +1,6 @@
 import AvatarWithLevel from "@/components/shared/avatar-with-level";
 import { Badge, Box, Flex, Heading, Text, VStack } from "@chakra-ui/react";
-import {
-  differenceInDays,
-  format,
-  isAfter,
-  startOfDay,
-  startOfToday,
-} from "date-fns";
+import { addDays, differenceInDays, format, isAfter } from "date-fns";
 import { Calendar, Circle, CircleCheckBig, Gem } from "lucide-react";
 import GoalLevel from "./goal-level";
 import { IGoalProgress } from "@/types/progress";
@@ -95,8 +89,8 @@ const GoalProgressTop = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
             <Calendar size="16" />
             <Text fontSize="sm" fontWeight="medium">
               {isAfter(new Date(), goal.startDate)
-                ? `Ends in ${goal.duration - differenceInDays(startOfToday(), startOfDay(goal.startDate))} days`
-                : `Starting on ${format(goal.startDate, "PPP")}`}
+                ? `Ends in ${goal.duration - differenceInDays(new Date(), goal.startDate)} days (${format(addDays(goal.startDate, goal.duration), "PPpp")})`
+                : `Starting on ${format(goal.startDate, "PPpp")}`}
             </Text>
           </Flex>
         </VStack>

@@ -196,6 +196,7 @@ const CreateHabitForm = ({
                   placeholder="Select unit type"
                   label="Type"
                   collection={habitUnitTypesCollection}
+                  portalRef={selectPortalRef}
                 />
                 <StyledInput
                   type="text"

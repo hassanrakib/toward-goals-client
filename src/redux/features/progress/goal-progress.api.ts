@@ -13,6 +13,7 @@ const goalProgressApi = baseApi.injectEndpoints({
         method: "POST",
         body: goalProgressCreationData,
       }),
+      invalidatesTags: ["goalProgress"],
     }),
     getGoalsProgress: build.query<IResponse<IGoalProgress[]>, QueryParams>({
       query: (params) => {
@@ -22,6 +23,7 @@ const goalProgressApi = baseApi.injectEndpoints({
           params,
         };
       },
+      providesTags: ["goalProgress"],
     }),
   }),
 });

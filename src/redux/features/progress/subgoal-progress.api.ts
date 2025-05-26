@@ -16,6 +16,7 @@ const subgoalProgressApi = baseApi.injectEndpoints({
         method: "POST",
         body: subgoalProgressCreationData,
       }),
+      invalidatesTags: ["subgoalProgress"],
     }),
     getSubgoalsProgress: build.query<
       IResponse<ISubgoalProgress[]>,
@@ -26,6 +27,7 @@ const subgoalProgressApi = baseApi.injectEndpoints({
         method: "GET",
         params,
       }),
+      providesTags: ["subgoalProgress"],
     }),
   }),
 });

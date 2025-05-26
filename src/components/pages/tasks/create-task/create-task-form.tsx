@@ -78,7 +78,7 @@ const CreateTaskForm = () => {
 
   return (
     <Flex justify="center" align="center">
-      <Card.Root maxW="lg" w="100%" borderRadius="2xl" boxShadow="xs" bg="bg">
+      <Card.Root maxW="xl" w="100%" borderRadius="2xl" boxShadow="xs" bg="bg">
         <Card.Header>
           <Card.Title fontSize="2xl">Create a Task</Card.Title>
         </Card.Header>

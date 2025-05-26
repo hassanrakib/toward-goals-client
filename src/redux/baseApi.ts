@@ -8,4 +8,5 @@ export const baseApi = createApi({
     credentials: "include",
   }),
   endpoints: () => ({}),
+  tagTypes: ["goalProgress", "subgoalProgress", "habitProgress"],
 });
