@@ -43,6 +43,7 @@ export async function fetchFromApi<T>(
   const cookieStore = skipCookies ? "" : (await cookies()).toString();
 
   try {
+    // get response
     const res = await fetch(`${envConfig.baseApi}${endPoint}${queryString}`, {
       headers: {
         // send cookies within headers
@@ -52,8 +53,23 @@ export async function fetchFromApi<T>(
       ...restOptions,
     });
 
-    return res.json();
+    const data: IResponse<T> = await res.json();
+
+    // if error response sent from the remote server
+    // get the error message and throw a new error
+    // error thrown from here will be caught by the catch block
+    if (!data.data) {
+      throw new Error(data.message);
+    }
+
+    // return the resolved data
+    return data;
+
+    // the catch block handles error thrown explicitly from the try block
+    // also if network issue happens promise gets rejected
   } catch (err) {
+    // throw error to let the next.js error boundary to take care of it
+    // and show a meaningful ui
     throw err;
   }
 }

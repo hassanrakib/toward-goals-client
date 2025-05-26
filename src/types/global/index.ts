@@ -36,3 +36,8 @@ export type QueryParams =
 export enum SearchIndices {
   goals = "goals",
 }
+
+export interface ErrorComponentProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
