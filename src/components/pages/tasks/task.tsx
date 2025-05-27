@@ -16,7 +16,7 @@ const Task = async ({ task }: { task: ITask }) => {
   } = task;
 
   return (
-    <Card.Root maxW="xl" mx="auto">
+    <Card.Root>
       <Card.Body>
         <HStack mb="3" gap="3">
           {/* showing avatar with task goal level */}

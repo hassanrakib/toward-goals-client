@@ -10,7 +10,7 @@ const StyledButton = forwardRef<HTMLButtonElement, ButtonProps>(
     const { children, ...rest } = props;
 
     return (
-      <Button ref={ref} colorPalette="yellow" rounded="2xl" {...rest}>
+      <Button ref={ref} colorPalette="yellow" rounded="2xl" color="yellow.800" {...rest}>
         {children}
       </Button>
     );

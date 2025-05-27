@@ -74,7 +74,10 @@ export default async function Layout({
         </GridItem>
 
         {/* Main Content */}
-        <GridItem as="main">{children}</GridItem>
+        {/* min height is set by subtracting ((16 + 16)px padding to the top & bottom + 50px header navbar + 16px gap below the navbar) */}
+        <GridItem as="main" minH="calc(100dvh - 98px)">
+          {children}
+        </GridItem>
       </Grid>
     </Container>
   );

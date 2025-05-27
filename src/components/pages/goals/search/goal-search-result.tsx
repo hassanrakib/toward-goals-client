@@ -55,7 +55,7 @@ const GoalSearchResult = ({
         <VStack alignItems="flex-start" gap="2">
           <Box display="flex" alignItems="center" spaceX="1">
             <CalendarDays />
-            <Text>Starting on {format(goalSearchResult.startDate, "PPP")}</Text>
+            <Text>Starting on {format(goalSearchResult.startDate, "PPpp")}</Text>
           </Box>
           <Box display="flex" alignItems="center" spaceX="1">
             <Hourglass />

@@ -9,8 +9,7 @@ export default function ErrorUI({ error }: { error: Error }) {
   }, [error]);
 
   return (
-    // max height is set by subtracting ((16 + 16)px padding to the top & bottom + 50px header navbar + 16px gap below the navbar)
-    <Center minH="calc(100dvh - 98px)">
+    <Center h="full">
       <Card.Root w="full" maxW="320px" rounded="xl">
         <Card.Body gap="2">
           <Frown size="30" color="gray" />

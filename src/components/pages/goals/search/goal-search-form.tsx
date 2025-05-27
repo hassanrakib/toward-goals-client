@@ -6,13 +6,12 @@ import InstantSearchProvider from "@/lib/instant-search-provider";
 import { SearchIndices } from "@/types/global";
 import { Search } from "lucide-react";
 import GoalSearchResults from "./goal-search-results";
-import { Box, Grid, Link as ChakraLink, Text } from "@chakra-ui/react";
-import StyledButton from "@/components/derived-ui/styled-button";
+import { Box, Grid } from "@chakra-ui/react";
 import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
 import { IGoalProgress } from "@/types/progress";
 import { Configure } from "react-instantsearch";
 import { Alert } from "@/components/ui/alert";
-import NextLink from "next/link";
+import CreateProgressLink from "@/components/shared/create-progress-link";
 
 interface IFormValues {
   goalName: string;
@@ -48,7 +47,7 @@ const GoalSearchForm = () => {
         <Grid
           // max height is set by subtracting ((16 + 16)px padding to the top & bottom + 50px header navbar + 16px gap below the navbar)
           maxH="calc(100dvh - 98px)"
-          templateRows="50px 1fr 50px"
+          templateRows="50px 1fr auto"
         >
           {/* show search goal input */}
           <Box>
@@ -72,22 +71,11 @@ const GoalSearchForm = () => {
             />
           )}
           {/* show create goal button */}
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-around"
-            border="solid"
-            borderWidth="thin"
-            borderColor="fg.subtle"
-            borderRadius="md"
-          >
-            <Text>Haven&apos;t you find your goal?</Text>
-            <ChakraLink asChild>
-              <NextLink href="/goals/create-goal">
-                <StyledButton>Create Goal</StyledButton>
-              </NextLink>
-            </ChakraLink>
-          </Box>
+          <CreateProgressLink
+            callToAction="Haven't you found your goal?"
+            actionLink="/goals/create-goal"
+            actionLabel="Create goal"
+          />
         </Grid>
       </InstantSearchProvider>
     </Form>
