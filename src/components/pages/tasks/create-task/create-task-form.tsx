@@ -72,7 +72,13 @@ const CreateTaskForm = () => {
       });
       router.push("/tasks");
     } catch (error: unknown) {
-      console.log(error);
+      // show a toaster if task creation fails
+      toaster.create({
+        title: isFetchBaseQueryErrorWithData(error)
+          ? error.data.message
+          : "There was an error processing your request",
+        type: "error",
+      });
     }
   };
 

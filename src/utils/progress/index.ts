@@ -1,9 +1,10 @@
 import { IResponse } from "@/types/global";
+import { MyJoinedGoal } from "@/types/goal";
 import { IGoalProgress } from "@/types/progress";
 import { createListCollection } from "@chakra-ui/react";
 
 export const generateAvailableGoalsCollection = (
-  goalsProgressResponse: IResponse<IGoalProgress[]> | undefined
+  goalsProgressResponse: IResponse<IGoalProgress[] | MyJoinedGoal[]> | undefined
 ) => {
   return createListCollection({
     items:

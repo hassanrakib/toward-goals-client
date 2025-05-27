@@ -1,3 +1,5 @@
+import { IGoalProgress } from "../progress";
+
 export interface IGoal {
   _id: string;
   title: string;
@@ -23,3 +25,5 @@ type GoalSearchResult = Omit<IGoal, "_id" | "creator" | "admins" | "users"> & {
 export interface TransformedGoalSearchResult extends GoalSearchResult {
   joined: boolean;
 }
+
+export type MyJoinedGoal = Pick<IGoalProgress, "_id" | "goal">;

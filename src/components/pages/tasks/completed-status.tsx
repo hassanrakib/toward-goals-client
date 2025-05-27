@@ -3,13 +3,13 @@
 import StyledDialog from "@/components/derived-ui/styled-dialog";
 import { Alert } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toaster } from "@/components/ui/toaster";
 import { useUpdateTaskMutation } from "@/redux/features/task/task.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { ITask } from "@/types/task";
-import { Badge } from "@chakra-ui/react";
+import { Badge, Portal, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Confetti from "react-confetti";
 
 const CompletedStaus = ({ task }: { task: ITask }) => {
   const { _id: taskId, isCompleted } = task;
@@ -21,7 +21,14 @@ const CompletedStaus = ({ task }: { task: ITask }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   // task update handler
-  const [updateTask] = useUpdateTaskMutation();
+  const [
+    updateTask,
+    {
+      isLoading: isCompletingTask,
+      isSuccess: isCompletingTaskSuccessful,
+      error: completingTaskError,
+    },
+  ] = useUpdateTaskMutation();
 
   // checkbox value change handler
   const markTaskCompleted = async () => {
@@ -30,53 +37,81 @@ const CompletedStaus = ({ task }: { task: ITask }) => {
       return;
     }
 
+    // make the dialog visible
+    setDialogOpen(true);
+
     // update task isCompleted property
     const result = await updateTask({ taskId, isCompleted: true });
 
     // if successful
     if (result.data?.data) {
-      // make the dialog visible
-      setDialogOpen(true);
       // refresh the current page in the background
       router.refresh();
-    } else {
-      // check if the error response sent from the backend
-      if (isFetchBaseQueryErrorWithData(result.error)) {
-        toaster.create({ type: "error", title: result.error.data.message });
-      }
     }
   };
 
   return (
-    <StyledDialog
-      open={dialogOpen}
-      onOpenChange={() => {
-        // if the dialog is already open, close it
-        if (dialogOpen) {
-          setDialogOpen(false);
+    <>
+      {/* show celebration when task completed */}
+      {isCompletingTaskSuccessful && dialogOpen && (
+        <Portal>
+          <Confetti />
+        </Portal>
+      )}
+      <StyledDialog
+        backdrop={false}
+        open={dialogOpen}
+        onOpenChange={() => {
+          // if the dialog is already open, close it
+          if (dialogOpen) {
+            setDialogOpen(false);
+          }
+        }}
+        triggerElement={
+          <Badge>
+            <Checkbox
+              colorPalette="green"
+              size="xs"
+              border="1px solid green"
+              shadow="sm"
+              checked={isCompleted}
+              onCheckedChange={markTaskCompleted}
+            />
+            Completed
+          </Badge>
         }
-      }}
-      triggerElement={
-        <Badge>
-          <Checkbox
-            colorPalette="green"
-            size="xs"
-            border="1px solid green"
-            shadow="sm"
-            checked={isCompleted}
-            onCheckedChange={markTaskCompleted}
+      >
+        {/* if is completing task */}
+        {isCompletingTask && (
+          <Alert
+            size="lg"
+            icon={<Spinner />}
+            status="neutral"
+            title="Completing task..."
           />
-          Completed
-        </Badge>
-      }
-    >
-      <Alert
-        size="lg"
-        variant="outline"
-        status="neutral"
-        title="Congrats! Your task is complete!!"
-      />
-    </StyledDialog>
+        )}
+        {/* if is error */}
+        {completingTaskError && (
+          <Alert
+            size="lg"
+            status="error"
+            title={
+              isFetchBaseQueryErrorWithData(completingTaskError)
+                ? completingTaskError.data.message
+                : "There was an error processing your request"
+            }
+          />
+        )}
+        {/* if is completing task successful */}
+        {isCompletingTaskSuccessful && (
+          <Alert
+            size="lg"
+            status="success"
+            title="Congrats! Your task is complete!!"
+          />
+        )}
+      </StyledDialog>
+    </>
   );
 };
 

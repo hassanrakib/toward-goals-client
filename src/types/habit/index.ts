@@ -1,3 +1,5 @@
+import { IHabitProgress } from "../progress";
+
 export enum HabitUnitType {
   "Custom" = "Custom",
   "Time" = "Time",
@@ -40,3 +42,5 @@ export type HabitCreationData = Omit<IHabit, "_id" | "unit" | "usageCount"> & {
   goalId: string;
   unit: string;
 };
+
+export type HabitOfAGoal = Pick<IHabitProgress, "_id" | "habit">;

@@ -1,7 +1,7 @@
 import { IHabitProgress } from "@/types/progress";
 import { Card, Grid, Heading } from "@chakra-ui/react";
 import HabitCompletionsChart from "./habit-completions-chart";
-import { CalendarSync } from "lucide-react";
+import { FerrisWheel } from "lucide-react";
 import HabitCompletionsTable from "./habit-completions-table";
 
 const HabitProgress = ({
@@ -17,15 +17,12 @@ const HabitProgress = ({
   return (
     <Card.Root size="sm" shadow="sm">
       <Card.Header
-        bgGradient="to-r"
-        gradientFrom="orange.100"
-        gradientTo="orange.50"
         py="7"
         flexDir="row"
         alignItems="center"
         gapX="2"
       >
-        <CalendarSync />
+        <FerrisWheel />
         {/* habit title */}
         <Heading size="2xl" fontWeight="400">
           {title}

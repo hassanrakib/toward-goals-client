@@ -1,6 +1,6 @@
 "use client";
 
-import { TransformedGoalSearchResult } from "@/types/goal";
+import { MyJoinedGoal, TransformedGoalSearchResult } from "@/types/goal";
 import { Box, VStack } from "@chakra-ui/react";
 import { useCallback, useEffect, useRef } from "react";
 import {
@@ -8,14 +8,13 @@ import {
   UseInfiniteHitsProps,
   useInstantSearch,
 } from "react-instantsearch";
-import { IGoalProgress } from "@/types/progress";
 import GoalSearchResult from "./goal-search-result";
 import { Alert } from "@/components/ui/alert";
 
 const GoalSearchResults = ({
   joinedGoals,
 }: {
-  joinedGoals: IGoalProgress[];
+  joinedGoals: MyJoinedGoal[];
 }) => {
   // transform the items returned by useInfiniteHits()
   const transformItemsCallback: UseInfiniteHitsProps<TransformedGoalSearchResult>["transformItems"] =

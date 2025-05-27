@@ -7,11 +7,11 @@ import { SearchIndices } from "@/types/global";
 import { Search } from "lucide-react";
 import GoalSearchResults from "./goal-search-results";
 import { Box, Grid } from "@chakra-ui/react";
-import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
-import { IGoalProgress } from "@/types/progress";
 import { Configure } from "react-instantsearch";
 import { Alert } from "@/components/ui/alert";
 import CreateProgressLink from "@/components/shared/create-progress-link";
+import { useGetMyJoinedGoalsQuery } from "@/redux/features/goal/goal.api";
+import { MyJoinedGoal } from "@/types/goal";
 
 interface IFormValues {
   goalName: string;
@@ -31,7 +31,7 @@ const GoalSearchForm = () => {
     data: joinedGoals,
     isLoading: isJoinedGoalsLoading,
     isError: isErrorGettingJoinedGoals,
-  } = useGetGoalsProgressQuery({ fields: "goal" });
+  } = useGetMyJoinedGoalsQuery({ isCompleted: false });
 
   // form submit handler
   const onSubmit = async (data: IFormValues) => {
@@ -67,7 +67,7 @@ const GoalSearchForm = () => {
           )}
           {!isJoinedGoalsLoading && !isErrorGettingJoinedGoals && (
             <GoalSearchResults
-              joinedGoals={joinedGoals!.data as IGoalProgress[]}
+              joinedGoals={joinedGoals!.data as MyJoinedGoal[]}
             />
           )}
           {/* show create goal button */}

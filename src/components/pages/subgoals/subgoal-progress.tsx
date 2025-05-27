@@ -41,7 +41,7 @@ const SubgoalProgress = ({
       <Card.Header gap="unset">
         <Heading size="xl">{title}</Heading>
         <Text fontSize="sm" color="fg.muted">
-          Ends on {format(addDays(createdAt, duration), "PPPP")}
+          Ends on {format(addDays(createdAt, duration), "PPpp")}
         </Text>
       </Card.Header>
       <Card.Body>

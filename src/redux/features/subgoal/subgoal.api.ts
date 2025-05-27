@@ -1,6 +1,6 @@
 import { baseApi } from "@/redux/baseApi";
 import { IResponse } from "@/types/global";
-import { ISubgoal, SubgoalCreationData } from "@/types/subgoal";
+import { ISubgoal, SubgoalCreationData, SubgoalOfAGoal } from "@/types/subgoal";
 
 const subgoalApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -11,7 +11,22 @@ const subgoalApi = baseApi.injectEndpoints({
         body: subgoal,
       }),
     }),
+    getSubgoalsOfAGoal: build.query<
+      IResponse<SubgoalOfAGoal[]>,
+      { goalId: string; isCompleted?: boolean }
+    >({
+      query: ({ goalId, ...params }) => ({
+        url: `/subgoals/${goalId}`,
+        method: "GET",
+        params,
+      }),
+      // provide different cache tags for different goalId
+      providesTags: (result, error, arg) => [
+        { type: "subgoalsOfAGoal", id: arg.goalId },
+      ],
+    }),
   }),
 });
 
-export const { useCreateSubgoalMutation } = subgoalApi;
+export const { useCreateSubgoalMutation, useGetSubgoalsOfAGoalQuery } =
+  subgoalApi;

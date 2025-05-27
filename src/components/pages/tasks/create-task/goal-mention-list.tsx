@@ -1,5 +1,5 @@
 import { Alert } from "@/components/ui/alert";
-import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
+import { useGetMyJoinedGoalsQuery } from "@/redux/features/goal/goal.api";
 import { Box, Spinner, Text, Link as ChakraLink } from "@chakra-ui/react";
 import { SuggestionProps } from "@tiptap/suggestion";
 import NextLink from "next/link";
@@ -17,10 +17,8 @@ export const GoalMentionList = ({
 
   // get => started goals by the user
   const { data: goalsProgress, isLoading: isGettingGoalsProgress } =
-    useGetGoalsProgressQuery(
+    useGetMyJoinedGoalsQuery(
       {
-        // fields selection
-        fields: "goal",
         // filter
         isCompleted: false,
       },

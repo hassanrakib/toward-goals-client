@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/baseApi";
-import { IResponse, QueryParams } from "@/types/global";
+import { IResponse } from "@/types/global";
 import { HabitProgressCreationData, IHabitProgress } from "@/types/progress";
 
 const habitProgressApi = baseApi.injectEndpoints({
@@ -13,18 +13,12 @@ const habitProgressApi = baseApi.injectEndpoints({
         method: "POST",
         body: habitProgressCreationData,
       }),
-      invalidatesTags: ["habitProgress"],
-    }),
-    getHabitsProgress: build.query<IResponse<IHabitProgress[]>, QueryParams>({
-      query: (params) => ({
-        url: "/progress/my-habits-progress",
-        method: "GET",
-        params,
-      }),
-      providesTags: ["habitProgress"],
+      invalidatesTags: (result, error, arg) => [
+        // invalidates different cache tags for different goal id
+        { type: "habitsOfAGoal", id: arg.goal },
+      ],
     }),
   }),
 });
 
-export const { useCreateHabitProgressMutation, useGetHabitsProgressQuery } =
-  habitProgressApi;
+export const { useCreateHabitProgressMutation } = habitProgressApi;

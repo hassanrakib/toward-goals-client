@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const Home = async () => {
   // get all the goals started by the user
-  const goalsProgress = await getMyGoalsProgress();
+  const goalsProgress = await getMyGoalsProgress({ fields: "goal" });
 
   return (
     <Flex

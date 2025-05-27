@@ -1,6 +1,6 @@
 import { baseApi } from "@/redux/baseApi";
 import { IResponse } from "@/types/global";
-import { GoalCreationData, IGoal } from "@/types/goal";
+import { GoalCreationData, IGoal, MyJoinedGoal } from "@/types/goal";
 
 const goalApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -11,7 +11,20 @@ const goalApi = baseApi.injectEndpoints({
         body: goal,
       }),
     }),
+    getMyJoinedGoals: build.query<
+      IResponse<MyJoinedGoal[]>,
+      { isCompleted?: boolean }
+    >({
+      query: (params) => {
+        return {
+          url: "/goals/my-joined-goals",
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["myJoinedGoal"],
+    }),
   }),
 });
 
-export const { useCreateGoalMutation } = goalApi;
+export const { useCreateGoalMutation, useGetMyJoinedGoalsQuery } = goalApi;

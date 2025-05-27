@@ -6,7 +6,6 @@ import StyledInput from "@/components/derived-ui/styled-input";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
 import StyledSelect from "@/components/derived-ui/styled-select";
 import SubmitButton from "@/components/derived-ui/submit-button";
-import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
 import { useCreateSubgoalProgressMutation } from "@/redux/features/progress/subgoal-progress.api";
 import { useCreateSubgoalMutation } from "@/redux/features/subgoal/subgoal.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
@@ -17,6 +16,7 @@ import { Card, Flex } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
+import { useGetMyJoinedGoalsQuery } from "@/redux/features/goal/goal.api";
 
 interface IFormValues {
   goalId: string[];
@@ -38,8 +38,7 @@ const CreateSubgoalForm = ({
     data: goalsProgress,
     isLoading: isGettingGoalsProgress,
     error: getGoalsProgressError,
-  } = useGetGoalsProgressQuery({
-    fields: "goal",
+  } = useGetMyJoinedGoalsQuery({
     isCompleted: false,
   });
 

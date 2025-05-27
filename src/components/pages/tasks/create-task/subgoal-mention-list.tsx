@@ -1,9 +1,9 @@
 import { Alert } from "@/components/ui/alert";
-import { useGetSubgoalsProgressQuery } from "@/redux/features/progress/subgoal-progress.api";
 import { Box, Spinner, Text, Link as ChakraLink } from "@chakra-ui/react";
 import { SuggestionProps } from "@tiptap/suggestion";
 import { useWatch } from "react-hook-form";
 import NextLink from "next/link";
+import { useGetSubgoalsOfAGoalQuery } from "@/redux/features/subgoal/subgoal.api";
 
 export const SubgoalMentionList = ({
   query,
@@ -20,10 +20,9 @@ export const SubgoalMentionList = ({
 
   // get the started subgoals for the goal
   const { data: subgoalsProgress, isLoading: isGettingSubgoalsProgress } =
-    useGetSubgoalsProgressQuery(
+    useGetSubgoalsOfAGoalQuery(
       {
-        fields: "subgoal",
-        goal: mentionedGoalId,
+        goalId: mentionedGoalId,
         isCompleted: false,
       },
       // skip data fetching

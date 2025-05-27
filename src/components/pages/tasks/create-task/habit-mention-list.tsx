@@ -1,5 +1,5 @@
 import { Alert } from "@/components/ui/alert";
-import { useGetHabitsProgressQuery } from "@/redux/features/progress/habit-progress.api";
+import { useGetHabitsOfAGoalQuery } from "@/redux/features/habit/habit.api";
 import { HabitDifficultiesName } from "@/types/habit";
 import { Box, Link as ChakraLink, Spinner, Text } from "@chakra-ui/react";
 import { SuggestionProps } from "@tiptap/suggestion";
@@ -21,10 +21,9 @@ export const HabitMentionList = ({
 
   // get the started habits for the goal
   const { data: habitsProgress, isLoading: isGettingHabitsProgress } =
-    useGetHabitsProgressQuery(
+    useGetHabitsOfAGoalQuery(
       {
-        fields: "habit",
-        goal: mentionedGoalId,
+        goalId: mentionedGoalId,
       },
       // skip data fetching
       // if goal is not mentioned already

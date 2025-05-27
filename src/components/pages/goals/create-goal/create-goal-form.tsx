@@ -62,7 +62,7 @@ const CreateGoalForm = () => {
 
       if (goalProgressCreationResult.data?.data) {
         reset(defaultValues);
-        router.push("/");
+        router.push("/goals");
       }
     }
   };

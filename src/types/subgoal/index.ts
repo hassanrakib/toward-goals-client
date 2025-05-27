@@ -1,3 +1,5 @@
+import { ISubgoalProgress } from "../progress";
+
 export interface ISubgoal {
   _id: string;
   title: string;
@@ -8,3 +10,5 @@ export interface ISubgoal {
 export type SubgoalCreationData = Omit<ISubgoal, "_id" | "usageCount"> & {
   goalId: string;
 };
+
+export type SubgoalOfAGoal = Pick<ISubgoalProgress, "_id" | "subgoal">;

@@ -2,6 +2,7 @@ import { baseApi } from "@/redux/baseApi";
 import { IResponse } from "@/types/global";
 import {
   HabitCreationData,
+  HabitOfAGoal,
   HabitUnitCreationData,
   IHabit,
   IHabitUnit,
@@ -26,7 +27,24 @@ const habitApi = baseApi.injectEndpoints({
         body: habit,
       }),
     }),
+    getHabitsOfAGoal: build.query<
+      IResponse<HabitOfAGoal[]>,
+      { goalId: string }
+    >({
+      query: (params) => ({
+        url: `/habits/${params.goalId}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, arg) => [
+        // different cache tags for different goalId
+        { type: "habitsOfAGoal", id: arg.goalId },
+      ],
+    }),
   }),
 });
 
-export const { useCreateHabitUnitMutation, useCreateHabitMutation } = habitApi;
+export const {
+  useCreateHabitUnitMutation,
+  useCreateHabitMutation,
+  useGetHabitsOfAGoalQuery,
+} = habitApi;

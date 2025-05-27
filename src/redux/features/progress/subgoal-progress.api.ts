@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/baseApi";
-import { IResponse, QueryParams } from "@/types/global";
+import { IResponse } from "@/types/global";
 import {
   ISubgoalProgress,
   SubgoalProgressCreationData,
@@ -16,21 +16,10 @@ const subgoalProgressApi = baseApi.injectEndpoints({
         method: "POST",
         body: subgoalProgressCreationData,
       }),
-      invalidatesTags: ["subgoalProgress"],
-    }),
-    getSubgoalsProgress: build.query<
-      IResponse<ISubgoalProgress[]>,
-      QueryParams
-    >({
-      query: (params) => ({
-        url: "/progress/my-subgoals-progress",
-        method: "GET",
-        params,
-      }),
-      providesTags: ["subgoalProgress"],
+      invalidatesTags: (result, error, arg) => [{type: "subgoalsOfAGoal", id: arg.goal}],
     }),
   }),
 });
 
-export const { useCreateSubgoalProgressMutation, useGetSubgoalsProgressQuery } =
+export const { useCreateSubgoalProgressMutation } =
   subgoalProgressApi;

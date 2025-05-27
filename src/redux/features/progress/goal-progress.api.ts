@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/baseApi";
-import { IResponse, QueryParams } from "@/types/global";
+import { IResponse } from "@/types/global";
 import { GoalProgressCreationData, IGoalProgress } from "@/types/progress";
 
 const goalProgressApi = baseApi.injectEndpoints({
@@ -13,20 +13,9 @@ const goalProgressApi = baseApi.injectEndpoints({
         method: "POST",
         body: goalProgressCreationData,
       }),
-      invalidatesTags: ["goalProgress"],
-    }),
-    getGoalsProgress: build.query<IResponse<IGoalProgress[]>, QueryParams>({
-      query: (params) => {
-        return {
-          url: "/progress/my-goals-progress",
-          method: "GET",
-          params,
-        };
-      },
-      providesTags: ["goalProgress"],
+      invalidatesTags: ["myJoinedGoal"],
     }),
   }),
 });
 
-export const { useCreateGoalProgressMutation, useGetGoalsProgressQuery } =
-  goalProgressApi;
+export const { useCreateGoalProgressMutation } = goalProgressApi;

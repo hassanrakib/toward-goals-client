@@ -10,7 +10,6 @@ import {
   useCreateHabitMutation,
   useCreateHabitUnitMutation,
 } from "@/redux/features/habit/habit.api";
-import { useGetGoalsProgressQuery } from "@/redux/features/progress/goal-progress.api";
 import { useCreateHabitProgressMutation } from "@/redux/features/progress/habit-progress.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { createHabitSchema } from "@/schemas/habit";
@@ -35,6 +34,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { UseFormReset } from "react-hook-form";
+import { useGetMyJoinedGoalsQuery } from "@/redux/features/goal/goal.api";
 
 interface IFormValues {
   goalId: string[];
@@ -62,8 +62,7 @@ const CreateHabitForm = ({
     data: goalsProgress,
     isLoading: isGettingGoalsProgress,
     error: getGoalsProgressError,
-  } = useGetGoalsProgressQuery({
-    fields: "goal",
+  } = useGetMyJoinedGoalsQuery({
     isCompleted: false,
   });
 
