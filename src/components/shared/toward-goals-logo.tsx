@@ -1,17 +1,27 @@
-import { Flex, Icon, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  Icon,
+  Text,
+  Link as ChakraLink,
+  LinkProps as ChakraLinkProps,
+} from "@chakra-ui/react";
 import { CircleFadingArrowUp } from "lucide-react";
-import Link from "next/link";
+import NavLink from "next/link";
 
-const TowardGoalsLogo = () => {
+const TowardGoalsLogo = (props: Omit<ChakraLinkProps, "href">) => {
   return (
-    <Link href="/">
-      <Flex align="baseline" justify="center" gap={1} cursor="pointer">
-        <Text fontSize="lg" fontWeight="bold">Toward Goals</Text>
-        <Icon boxSize={7} color="yellow.400">
-          <CircleFadingArrowUp />
-        </Icon>
-      </Flex>
-    </Link>
+    <ChakraLink asChild _hover={{textDecor: "none"}} _focus={{outline: "none"}} display="flex" justifyContent="center" {...props}>
+      <NavLink href="/">
+        <Flex alignItems="baseline" cursor="pointer">
+          <Text fontSize="lg" fontWeight="bold">
+            Toward Goals
+          </Text>
+          <Icon boxSize={7} color="yellow.400">
+            <CircleFadingArrowUp />
+          </Icon>
+        </Flex>
+      </NavLink>
+    </ChakraLink>
   );
 };
 

@@ -5,7 +5,8 @@ import { Alert } from "@/components/ui/alert";
 import { useSignInMutation } from "@/redux/features/auth/auth.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { signInCredentialsSchema } from "@/schemas/auth";
-import { Card, Flex } from "@chakra-ui/react";
+import { Card, Flex, Link as ChakraLink, Text } from "@chakra-ui/react";
+import NavLink from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, LockKeyhole } from "lucide-react";
 import { UseFormReset } from "react-hook-form";
@@ -14,6 +15,7 @@ import SubmitButton from "@/components/derived-ui/submit-button";
 import { useAppDispatch } from "@/redux/hooks";
 import { setSession } from "@/redux/features/auth/auth.slice";
 import { useSearchParams } from "next/navigation";
+import TowardGoalsLogo from "@/components/shared/toward-goals-logo";
 
 interface IFormValues {
   username: string;
@@ -72,6 +74,8 @@ const SignIn = () => {
         boxShadow="xs"
         bg="white"
       >
+        {/* show logo */}
+        <TowardGoalsLogo mt="2" />
         <Card.Header>
           <Card.Title fontSize="2xl">Welcome Back!</Card.Title>
           <Card.Description>Sign in to access your account</Card.Description>
@@ -116,6 +120,13 @@ const SignIn = () => {
             >
               Sign in
             </SubmitButton>
+            {/* show link to the signup page */}
+            <Text fontSize="sm" mt="2" textAlign="center">
+              Don&apos;t have an account?{" "}
+              <ChakraLink variant="underline" colorPalette="yellow" asChild>
+                <NavLink href="/signup">Sign up</NavLink>
+              </ChakraLink>
+            </Text>
           </Card.Footer>
         </Form>
       </Card.Root>

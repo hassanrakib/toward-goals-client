@@ -6,7 +6,8 @@ import { Alert } from "@/components/ui/alert";
 import { useCreateUserMutation } from "@/redux/features/user/user.api";
 import { createUserSchema } from "@/schemas/user";
 import { IUser } from "@/types/user";
-import { Card, Flex } from "@chakra-ui/react";
+import { Card, Flex, Text, Link as ChakraLink } from "@chakra-ui/react";
+import NavLink from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, LockKeyhole, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -14,6 +15,7 @@ import { UseFormReset } from "react-hook-form";
 import SubmitButton from "@/components/derived-ui/submit-button";
 import { useAppDispatch } from "@/redux/hooks";
 import { setSession } from "@/redux/features/auth/auth.slice";
+import TowardGoalsLogo from "@/components/shared/toward-goals-logo";
 
 type IFormValues = Pick<IUser, "username" | "email" | "password">;
 
@@ -53,6 +55,8 @@ const SignUp = () => {
   return (
     <Flex justify="center" align="center" minHeight="100vh" bg="gray.50" p={4}>
       <Card.Root maxW="sm" w="100%" borderRadius="lg" boxShadow="lg" bg="white">
+        {/* show logo */}
+        <TowardGoalsLogo mt="2" />
         <Card.Header>
           <Card.Title fontSize="2xl">Create Account</Card.Title>
           <Card.Description>
@@ -86,9 +90,11 @@ const SignUp = () => {
               startElement={<LockKeyhole size={18} />}
             />
           </Card.Body>
-          <Card.Footer flexDir="column">
+          <Card.Footer flexDir="column" alignItems="stretch">
             {!isCreatingUser && createUserError ? (
-              <Alert size="sm" variant="outline"
+              <Alert
+                size="sm"
+                variant="outline"
                 status="error"
                 title="There was an error processing your request"
               />
@@ -99,6 +105,13 @@ const SignUp = () => {
             >
               Sign up
             </SubmitButton>
+            {/* show link to the signup page */}
+            <Text fontSize="sm" mt="2" textAlign="center">
+              Have an account?{" "}
+              <ChakraLink variant="underline" colorPalette="yellow" asChild>
+                <NavLink href="/signin">Sign in</NavLink>
+              </ChakraLink>
+            </Text>
           </Card.Footer>
         </Form>
       </Card.Root>
