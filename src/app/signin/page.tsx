@@ -8,12 +8,12 @@ import { signInCredentialsSchema } from "@/schemas/auth";
 import { Card, Flex } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, LockKeyhole } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
 import StyledInput from "@/components/derived-ui/styled-input";
 import SubmitButton from "@/components/derived-ui/submit-button";
 import { useAppDispatch } from "@/redux/hooks";
 import { setSession } from "@/redux/features/auth/auth.slice";
+import { useSearchParams } from "next/navigation";
 
 interface IFormValues {
   username: string;
@@ -21,8 +21,9 @@ interface IFormValues {
 }
 
 const SignIn = () => {
-  // router from next/navigation
-  const router = useRouter();
+  // get the redirect search param from search params
+  const redirect = useSearchParams().get("redirect");
+
   const dispatch = useAppDispatch();
 
   const [signIn, { isLoading: isSigningIn, error: signInError }] =
@@ -46,8 +47,13 @@ const SignIn = () => {
       reset(defaultValues);
       // set the session in the redux store
       dispatch(setSession(result.data.data));
-      // redirect user to the home page
-      router.push("/");
+      // redirect user to the redirect path or home page
+      // not using router from next.js because /signin is an unprotected
+      // route, if router from next.js used it would do soft navigation to a protected route
+      // there are some protected routes that are intercepted to show
+      // route content in a dialog, we don't want protected route content to be shown
+      // on the unprotected route
+      window.location.replace(redirect ? redirect : "/");
     }
   };
 

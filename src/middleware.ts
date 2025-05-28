@@ -2,9 +2,10 @@ import { decrypt } from "@/services/auth";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const authRoutes = ["/login", "/register"];
+const authRoutes = ["/signin", "/signup"];
 
-export async function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
+  // which path the user is intending to go
   const { pathname } = request.nextUrl;
 
   // if the user is authenticated the cookie will be found
@@ -16,14 +17,15 @@ export async function middleware(request: NextRequest) {
   // if the user is uauthenticated
   if (!session) {
     // and trying to get into auth routes
-    if (authRoutes.includes(pathname)) {
+    // or root route(root route has a public version alongside private version)
+    if (authRoutes.includes(pathname) || pathname === "/") {
       // let the user go
       return NextResponse.next();
     } else {
-      // redirect the user to the /login route as the user is trying to access
-      // the protected routes from the matcher below
+      // redirect the user to the /signin route as the user is trying to access
+      // the protected routes
       return NextResponse.redirect(
-        new URL(`/login?redirect=${pathname}`, request.url)
+        new URL(`/signin?redirect=${pathname}`, request.url)
       );
     }
   }
@@ -32,25 +34,25 @@ export async function middleware(request: NextRequest) {
   if (session) {
     // and trying to get into the auth routes
     if (authRoutes.includes(pathname)) {
+      // redirect to the homepage
       return NextResponse.redirect(new URL("/", request.url));
     } else {
+      // else user want to go any protected route
       return NextResponse.next();
     }
   }
-
-  return NextResponse.redirect(new URL("/", request.url));
 }
 
 export const config = {
+  // matcher defines the routes to call middleware for
   matcher: [
-    /*
-     * Match all request paths except for:
-     * - The root route `/`
-     * - API routes (optional, if you want to exclude them)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico|$).*)",
+    "/",
+    "/signin",
+    "/signup",
+    "/feed",
+    "/goals/:path?",
+    "/habits/:path?",
+    "/subgoals/:path?",
+    "/tasks/:path?",
   ],
 };
