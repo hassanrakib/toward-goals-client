@@ -10,8 +10,8 @@ import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { createTaskSchema } from "@/schemas/task";
 import { Card, Flex } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
+import { revalidateCacheByTag } from "@/lib/revalidate-cache-apis";
 
 export interface ICreateTaskFormValues {
   // tiptap editor's data in html string format
@@ -42,9 +42,6 @@ const CreateTaskForm = () => {
     },
   };
 
-  // next js router
-  const router = useRouter();
-
   // create task mutation
   const [createTask, { isLoading: isCreatingTask, error: createTaskError }] =
     useCreateTaskMutation();
@@ -67,10 +64,11 @@ const CreateTaskForm = () => {
       reset(defaultValues);
       // after successfully creating task
       toaster.create({
-        title: result.message,
-        type: "success",
+        description: result.message,
+        type: "info",
       });
-      router.push("/tasks");
+      // revalidate client side router cache by the tag
+      revalidateCacheByTag("tasks");
     } catch (error: unknown) {
       // show a toaster if task creation fails
       toaster.create({

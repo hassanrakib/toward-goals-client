@@ -15,7 +15,7 @@ const habitProgressApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         // invalidates different cache tags for different goal id
-        { type: "habitsOfAGoal", id: arg.goal },
+        { type: "habitOfAGoal", id: arg.goal },
       ],
     }),
   }),

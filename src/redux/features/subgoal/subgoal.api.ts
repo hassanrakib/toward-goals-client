@@ -22,7 +22,7 @@ const subgoalApi = baseApi.injectEndpoints({
       }),
       // provide different cache tags for different goalId
       providesTags: (result, error, arg) => [
-        { type: "subgoalsOfAGoal", id: arg.goalId },
+        { type: "subgoalOfAGoal", id: arg.goalId },
       ],
     }),
   }),

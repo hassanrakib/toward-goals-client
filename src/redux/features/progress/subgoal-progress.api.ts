@@ -16,7 +16,7 @@ const subgoalProgressApi = baseApi.injectEndpoints({
         method: "POST",
         body: subgoalProgressCreationData,
       }),
-      invalidatesTags: (result, error, arg) => [{type: "subgoalsOfAGoal", id: arg.goal}],
+      invalidatesTags: (result, error, arg) => [{type: "subgoalOfAGoal", id: arg.goal}],
     }),
   }),
 });

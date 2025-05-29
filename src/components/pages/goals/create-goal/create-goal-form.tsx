@@ -6,6 +6,8 @@ import StyledInput from "@/components/derived-ui/styled-input";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
 import SubmitButton from "@/components/derived-ui/submit-button";
 import { Alert } from "@/components/ui/alert";
+import { toaster } from "@/components/ui/toaster";
+import { revalidateCacheByTag } from "@/lib/revalidate-cache-apis";
 import { useCreateGoalMutation } from "@/redux/features/goal/goal.api";
 import { useCreateGoalProgressMutation } from "@/redux/features/progress/goal-progress.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
@@ -14,7 +16,6 @@ import { GoalCreationData } from "@/types/goal";
 import { Card, Flex, Grid, GridItem } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { startOfTomorrow } from "date-fns";
-import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
 
 interface IFormValues {
@@ -25,9 +26,6 @@ interface IFormValues {
 }
 
 const CreateGoalForm = () => {
-  // router from next/navigation
-  const router = useRouter();
-
   const [createGoal, { isLoading: isCreatingGoal, error: createGoalError }] =
     useCreateGoalMutation();
 
@@ -61,8 +59,12 @@ const CreateGoalForm = () => {
       });
 
       if (goalProgressCreationResult.data?.data) {
+        // reset the form
         reset(defaultValues);
-        router.push("/goals");
+        // revalidate client side router cache by the tag
+        revalidateCacheByTag("goalsProgress");
+        // show a ui feedback
+        toaster.create({type: 'info', description: 'Goal created successfully'});
       }
     }
   };

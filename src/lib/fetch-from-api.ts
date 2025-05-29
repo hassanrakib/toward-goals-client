@@ -2,7 +2,7 @@ import { envConfig } from "@/config/envConfig";
 import { IResponse, QueryParams } from "@/types/global";
 import { cookies } from "next/headers";
 
-interface FetchOptions extends RequestInit {
+export interface FetchOptions extends RequestInit {
   skipCookies?: boolean;
   queryParams?: QueryParams;
 }

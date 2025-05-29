@@ -37,7 +37,7 @@ const habitApi = baseApi.injectEndpoints({
       }),
       providesTags: (result, error, arg) => [
         // different cache tags for different goalId
-        { type: "habitsOfAGoal", id: arg.goalId },
+        { type: "habitOfAGoal", id: arg.goalId },
       ],
     }),
   }),

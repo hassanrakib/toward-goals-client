@@ -31,10 +31,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { UseFormReset } from "react-hook-form";
 import { useGetMyJoinedGoalsQuery } from "@/redux/features/goal/goal.api";
+import { revalidateCacheByTag } from "@/lib/revalidate-cache-apis";
+import { toaster } from "@/components/ui/toaster";
 
 interface IFormValues {
   goalId: string[];
@@ -54,8 +55,6 @@ const CreateHabitForm = ({
   selectPortalRef?: React.RefObject<HTMLElement>;
 }) => {
   const [unit, setUnit] = useState("");
-
-  const router = useRouter();
 
   // query hooks
   const {
@@ -126,8 +125,15 @@ const CreateHabitForm = ({
 
         // after successful creation of habit progress
         if (habitProgressCreationResult.data?.data) {
+          // reset the form
           reset(defaultValues);
-          router.push("/habits");
+          // revalidate client side router cache by the tag
+          revalidateCacheByTag("habitsProgress");
+          // show a ui feedback
+          toaster.create({
+            type: "info",
+            description: "Habit created successfully",
+          });
         }
       }
     }

@@ -14,9 +14,10 @@ import { SubgoalCreationData } from "@/types/subgoal";
 import { generateAvailableGoalsCollection } from "@/utils/progress";
 import { Card, Flex } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { UseFormReset } from "react-hook-form";
 import { useGetMyJoinedGoalsQuery } from "@/redux/features/goal/goal.api";
+import { revalidateCacheByTag } from "@/lib/revalidate-cache-apis";
+import { toaster } from "@/components/ui/toaster";
 
 interface IFormValues {
   goalId: string[];
@@ -31,9 +32,6 @@ const CreateSubgoalForm = ({
   goalId?: string | null;
   selectPortalRef?: React.RefObject<HTMLElement>;
 }) => {
-  // router from next/navigation
-  const router = useRouter();
-
   const {
     data: goalsProgress,
     isLoading: isGettingGoalsProgress,
@@ -79,8 +77,15 @@ const CreateSubgoalForm = ({
 
       // after successful creation of subgoal progress
       if (subgoalProgressCreationResult.data?.data) {
+        // reset the form
         reset(defaultValues);
-        router.push("/subgoals");
+        // revalidate client side router cache by the tag
+        revalidateCacheByTag("subgoalsProgress");
+        // show a ui feedback
+        toaster.create({
+          type: "info",
+          description: "Subgoal created successfully",
+        });
       }
     }
   };

@@ -1,28 +1,25 @@
-import { envConfig } from "@/config/envConfig";
 import { fetchFromApi } from "@/lib/fetch-from-api";
-import { IResponse, QueryParams } from "@/types/global";
+import { QueryParams } from "@/types/global";
 import { ITask, ITimeSpan } from "@/types/task";
-import { cookies } from "next/headers";
 
 export const getMyTasks = async (queryParams?: QueryParams) => {
-  return fetchFromApi<ITask[]>("/tasks/my-tasks", { queryParams });
+  return fetchFromApi<ITask[]>("/tasks/my-tasks", {
+    queryParams,
+    // as it is user specific data
+    // & data cache (one of next.js caching mechanisms) is shared across users
+    // we are opting out from data cache
+    cache: "no-store",
+
+    // add tags to revalidate client side "router cache"
+    // as forward & backward navigation reuses already rendered pages
+    next: {
+      tags: ["tasks"],
+    },
+  });
 };
 
-export const getTaskTimeSpans = async (
-  taskId: string
-): Promise<IResponse<ITimeSpan[]>> => {
-  // send cookies explicitly
-  // as it is running in server not on the browser
-  const cookieStore = (await cookies()).toString();
-  try {
-    const res = await fetch(`${envConfig.baseApi}/tasks/${taskId}/time-spans`, {
-      headers: {
-        Cookie: cookieStore,
-      },
-    });
-
-    return res.json();
-  } catch (err) {
-    throw err;
-  }
+export const getTaskTimeSpans = async (taskId: string) => {
+  return fetchFromApi<ITimeSpan[]>(`/tasks/${taskId}/time-spans`, {
+    cache: "no-store",
+  });
 };
