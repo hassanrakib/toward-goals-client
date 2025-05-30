@@ -63,7 +63,6 @@ export default function Goal({
         borderRadius="3xl"
         bg="rgba(255, 255, 255, 0.7)"
         backdropFilter="blur(12px)"
-        fontWeight="bold"
         textAlign="center"
       >
         <Text fontSize="lg" fontWeight="semibold">

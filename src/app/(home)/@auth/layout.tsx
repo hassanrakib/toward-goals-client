@@ -1,16 +1,7 @@
-import {
-  Grid,
-  GridItem,
-  Box,
-  Flex,
-  IconButton,
-  VStack,
-  Container,
-} from "@chakra-ui/react";
-import { Avatar } from "@/components/ui/avatar";
-import { BellIcon } from "lucide-react";
+import { Grid, GridItem, Box, VStack, Container } from "@chakra-ui/react";
 import SidebarItems from "@/components/layout/auth/sidebar-items";
 import TowardGoalsLogo from "@/components/shared/toward-goals-logo";
+import TopNavbar from "@/components/layout/auth/top-navbar";
 
 export default async function Layout({
   children,
@@ -52,26 +43,7 @@ export default async function Layout({
         ml="236px"
       >
         {/* Top Navbar */}
-        <GridItem
-          as="header"
-          display="flex"
-          alignItems="center"
-          justifyContent="flex-end"
-          px={4}
-          borderRadius="3xl"
-        >
-          {/* Notification Icon & Avatar */}
-          <Flex align="center" gap={4}>
-            <IconButton
-              aria-label="Notifications"
-              variant="ghost"
-              rounded="full"
-            >
-              <BellIcon />
-            </IconButton>
-            <Avatar name="User" cursor="pointer" />
-          </Flex>
-        </GridItem>
+        <TopNavbar />
 
         {/* Main Content */}
         {/* min height is set by subtracting ((16 + 16)px padding to the top & bottom + 50px header navbar + 16px gap below the navbar) */}

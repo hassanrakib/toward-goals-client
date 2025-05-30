@@ -16,6 +16,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { setSession } from "@/redux/features/auth/auth.slice";
 import { useSearchParams } from "next/navigation";
 import TowardGoalsLogo from "@/components/shared/toward-goals-logo";
+import { toaster } from "@/components/ui/toaster";
 
 interface IFormValues {
   username: string;
@@ -47,14 +48,17 @@ const SignIn = () => {
     if (result.data?.data) {
       // reset the form
       reset(defaultValues);
+      // show a ui feedback
+      toaster.create({ type: "info", description: "Successfully signed in" });
       // set the session in the redux store
       dispatch(setSession(result.data.data));
+
       // redirect user to the redirect path or home page
       // not using router from next.js because /signin is an unprotected
       // route, if router from next.js used it would do soft navigation to a protected route
       // there are some protected routes that are intercepted to show
       // route content in a dialog, we don't want protected route content to be shown
-      // on the unprotected route
+      // on this unprotected route
       window.location.replace(redirect ? redirect : "/");
     }
   };

@@ -16,6 +16,7 @@ import SubmitButton from "@/components/derived-ui/submit-button";
 import { useAppDispatch } from "@/redux/hooks";
 import { setSession } from "@/redux/features/auth/auth.slice";
 import TowardGoalsLogo from "@/components/shared/toward-goals-logo";
+import { toaster } from "@/components/ui/toaster";
 
 type IFormValues = Pick<IUser, "username" | "email" | "password">;
 
@@ -45,6 +46,8 @@ const SignUp = () => {
     if (result.data?.data) {
       // reset the form
       reset(defaultValues);
+      // show a ui feedback
+      toaster.create({ type: "info", description: "Successfully signed up" });
       // set the session in the redux store
       dispatch(setSession(result.data.data));
       // redirect user to the home page
