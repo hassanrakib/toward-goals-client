@@ -1,4 +1,4 @@
-import { Grid, GridItem, Box, VStack, Container } from "@chakra-ui/react";
+import { Grid, GridItem, Box, VStack } from "@chakra-ui/react";
 import SidebarItems from "@/components/layout/auth/sidebar-items";
 import TowardGoalsLogo from "@/components/shared/toward-goals-logo";
 import TopNavbar from "@/components/layout/auth/top-navbar";
@@ -9,20 +9,24 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <Container position="relative" bgColor="bg.subtle" p={0}>
-      {/* Sidebar (Fixed) */}
+    <Grid templateColumns="220px 1fr">
+      {/* Sidebar (Sticky) */}
       <Box
         as="aside"
         p={3}
-        pt={5}
-        width="220px"
+        mb={4}
+        ml={4}
         bgColor="bg"
         boxShadow="xs"
         borderRadius="3xl"
-        position="fixed"
-        left={4}
+        // min height of this box is 100dvh because other grid item in the same row 
+        // is assigned min height of 100dvh
+        // and height will increase as height of other grid item increases
+        // also height will increase when margin given to the bottom
+        // subtract mb={4} & top={4}
+        maxHeight="calc(100dvh - 32px)"
+        position="sticky"
         top={4}
-        bottom={4}
       >
         <VStack gap={8} align="stretch">
           {/* Toward Goals Logo */}
@@ -38,9 +42,6 @@ export default async function Layout({
         minH="100dvh"
         gap={4}
         p={4}
-        // Offsets content so that it doesn't go under the sidebar
-        // sidebar width + left prop value
-        ml="236px"
       >
         {/* Top Navbar */}
         <TopNavbar />
@@ -51,6 +52,6 @@ export default async function Layout({
           {children}
         </GridItem>
       </Grid>
-    </Container>
+    </Grid>
   );
 }

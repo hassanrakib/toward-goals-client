@@ -17,6 +17,8 @@ export default function Goal({
     <Box
       position="relative"
       w="250px"
+      maxW="280px"
+      flexGrow="1"
       h="300px"
       borderRadius="xl"
       overflow="hidden"
