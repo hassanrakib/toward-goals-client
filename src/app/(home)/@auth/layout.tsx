@@ -9,10 +9,10 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   return (
-    // 1 column from base to below md breakpoint
-    // from md breakpoint to above 2 columns (one for sidebar another for main content)
-    <Grid templateColumns={{ base: "1fr", md: "220px 1fr" }}>
-      {/* Sidebar (Sticky) shown from md breakpoint */}
+    // 1 column from base to below lg breakpoint
+    // from lg breakpoint to above 2 columns (one for sidebar another for main content)
+    <Grid templateColumns={{ base: "1fr", lg: "220px 1fr" }}>
+      {/* Sidebar (Sticky) shown from lg breakpoint */}
       <Sidebar />
       {/* fixed (relative to the viewport) navbar to the bottom shown before md breakpoint */}
       <FixedBottomNavbar />
@@ -24,7 +24,7 @@ export default async function Layout({
         gap={4}
         p={4}
         // from base to before md breakpoint pb is 60px = bottom navbar height + 16px
-        pb={{ base: "60px", md: 4 }}
+        pb={{ base: "60px", md: "78px", lg: 4 }}
       >
         {/* Top Navbar */}
         <TopNavbar />

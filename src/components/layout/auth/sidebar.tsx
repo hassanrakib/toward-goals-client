@@ -20,9 +20,9 @@ export default function Sidebar() {
       maxHeight="calc(100dvh - 32px)"
       position="sticky"
       top={4}
-      // hidden below md breakpoint
-      // as grid container template columns set to '1fr only' before md breakpoint
-      hideBelow="md"
+      // hidden below lg breakpoint
+      // as grid container template columns set to '1fr only' before lg breakpoint
+      hideBelow="lg"
     >
       <VStack gap={8} align="stretch">
         {/* Toward Goals Logo */}

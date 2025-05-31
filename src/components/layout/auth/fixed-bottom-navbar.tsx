@@ -1,4 +1,4 @@
-import { Flex, Icon } from "@chakra-ui/react";
+import { Box, Flex, Icon, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import {
   CircleFadingArrowUp,
@@ -10,22 +10,22 @@ import {
 
 // Sample data for nav items
 const navItems = [
-  { id: 1, icon: <Goal />, href: "/goals" },
-  { id: 2, icon: <Target />, href: "/subgoals" },
-  { id: 0, icon: <CircleFadingArrowUp />, href: "/" },
-  { id: 3, icon: <FerrisWheel />, href: "/habits" },
-  { id: 4, icon: <SquareCheck />, href: "/tasks" },
+  { id: 1, name: "Goals", icon: <Goal />, href: "/goals" },
+  { id: 2, name: "Subgoals", icon: <Target />, href: "/subgoals" },
+  { id: 0, name: "Home", icon: <CircleFadingArrowUp />, href: "/" },
+  { id: 3, name: "Habits", icon: <FerrisWheel />, href: "/habits" },
+  { id: 4, name: "Tasks", icon: <SquareCheck />, href: "/tasks" },
 ];
 
 // position fixed (relative to the viewport) always sticks to the bottom
-//   hidden from "md" breakpoint
+// hidden from "lg" breakpoint
 export default function FixedBottomNavbar() {
   return (
     <Flex
       as="nav"
-      hideFrom="md"
+      hideFrom="lg"
       position="fixed"
-      zIndex="2"
+      zIndex="999"
       bottom="0"
       left="0"
       right="0"
@@ -40,9 +40,17 @@ export default function FixedBottomNavbar() {
     >
       {navItems.map((item) => (
         <NextLink key={item.id} href={item.href}>
-          <Icon size="xl" color={item.href !== "/" ? "current" : "yellow.500"}>
-            {item.icon}
-          </Icon>
+          <Flex direction="column" alignItems='center'>
+            <Box>
+              <Icon
+                size="xl"
+                color={item.href !== "/" ? "current" : "yellow.500"}
+              >
+                {item.icon}
+              </Icon>
+            </Box>
+            <Text fontSize="xs" color="fg.muted" hideBelow="md">{item.name}</Text>
+          </Flex>
         </NextLink>
       ))}
     </Flex>

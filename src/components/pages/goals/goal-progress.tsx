@@ -14,7 +14,7 @@ const GoalProgress = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
         {/* Top section with goal image in the background */}
         <GoalProgressTop goalProgress={goalProgress} />
         {/* showing goal progress visually */}
-        <Grid templateColumns="repeat(2, 1fr)" gap={4} px="6" py="4">
+        <Grid templateColumns={{base: "1fr", md: "repeat(2, 1fr)"}} gap={4} py="4">
           <Analytics goalProgress={goalProgress} />
           <HabitCompletionsChart goalProgress={goalProgress} />
           <CurrentWorkStreak goalProgress={goalProgress} />

@@ -28,7 +28,7 @@ const StatusLabels = ({ task }: { task: ITask }) => {
     completedUnits > eliteRequirement ? completedUnits - eliteRequirement : 0;
 
   return (
-    <HStack mt="4">
+    <HStack flexWrap="wrap" mt="4">
       {/* completed status */}
       <CompletedStaus task={task} />
       {/* deadline status */}
@@ -40,7 +40,7 @@ const StatusLabels = ({ task }: { task: ITask }) => {
         )}{" "}
         Deadline
       </Badge>
-      {/* deadline status */}
+      {/* extra unit worked */}
       <Badge colorPalette="blue">
         <Box border="1px solid white" rounded="lg" px="2" shadow="sm">
           {extraUnit} {unitName}

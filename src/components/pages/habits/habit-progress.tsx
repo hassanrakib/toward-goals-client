@@ -29,7 +29,7 @@ const HabitProgress = ({
         </Heading>
       </Card.Header>
       <Card.Body>
-        <Grid gridTemplateColumns="1fr minmax(max-content, 1fr)" gap={3}>
+        <Grid gridTemplateColumns={{base: "1fr", md: "1fr minmax(max-content, 1fr)"}} gap={3}>
           {/* visual comparision of habit difficulty completions */}
           <HabitCompletionsChart habitProgress={habitProgress} />
           {/* habit difficulty completions in a table */}

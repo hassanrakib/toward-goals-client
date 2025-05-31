@@ -1,7 +1,7 @@
 import { HabitDifficultiesName } from "@/types/habit";
 import { IHabitProgress } from "@/types/progress";
 import { getDifficultyColorPalette } from "@/utils/habit";
-import { Status, Table} from "@chakra-ui/react";
+import { Status, Table } from "@chakra-ui/react";
 
 const HabitCompletionsTable = ({
   habitProgress,
@@ -46,39 +46,41 @@ const HabitCompletionsTable = ({
   });
 
   return (
-    <Table.Root size="sm" showColumnBorder striped>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader>Difficulty</Table.ColumnHeader>
-          <Table.ColumnHeader>Completions</Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="end">Subtotal</Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {tableData.map((item) => (
-          <Table.Row key={item.id}>
-            <Table.Cell>
-              <Status.Root mr="1" colorPalette={item.difficultyColorPalette}>
-                <Status.Indicator />
-              </Status.Root>
-              {item.difficultyDescription}
+    <Table.ScrollArea>
+      <Table.Root size="sm" showColumnBorder striped>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>Difficulty</Table.ColumnHeader>
+            <Table.ColumnHeader>Completions</Table.ColumnHeader>
+            <Table.ColumnHeader textAlign="end">Subtotal</Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {tableData.map((item) => (
+            <Table.Row key={item.id}>
+              <Table.Cell>
+                <Status.Root mr="1" colorPalette={item.difficultyColorPalette}>
+                  <Status.Indicator />
+                </Status.Root>
+                {item.difficultyDescription}
+              </Table.Cell>
+              <Table.Cell>{item.difficultyCompletions}</Table.Cell>
+              <Table.Cell textAlign="end">
+                {item.difficultyTotalUnitCompleted}
+              </Table.Cell>
+            </Table.Row>
+          ))}
+          <Table.Row>
+            <Table.Cell colSpan={2} textAlign="center">
+              Total Completed
             </Table.Cell>
-            <Table.Cell>{item.difficultyCompletions}</Table.Cell>
             <Table.Cell textAlign="end">
-              {item.difficultyTotalUnitCompleted}
+              = {totalUnitCompleted} {unitName}
             </Table.Cell>
           </Table.Row>
-        ))}
-        <Table.Row>
-          <Table.Cell colSpan={2} textAlign="center">
-            Total Completed
-          </Table.Cell>
-          <Table.Cell textAlign="end">
-            = {totalUnitCompleted} {unitName}
-          </Table.Cell>
-        </Table.Row>
-      </Table.Body>
-    </Table.Root>
+        </Table.Body>
+      </Table.Root>
+    </Table.ScrollArea>
   );
 };
 
