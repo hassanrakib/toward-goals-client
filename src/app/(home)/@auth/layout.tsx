@@ -1,7 +1,7 @@
-import { Grid, GridItem, Box, VStack } from "@chakra-ui/react";
-import SidebarItems from "@/components/layout/auth/sidebar-items";
-import TowardGoalsLogo from "@/components/shared/toward-goals-logo";
+import { Grid, GridItem } from "@chakra-ui/react";
 import TopNavbar from "@/components/layout/auth/top-navbar";
+import Sidebar from "@/components/layout/auth/sidebar";
+import FixedBottomNavbar from "@/components/layout/auth/fixed-bottom-navbar";
 
 export default async function Layout({
   children,
@@ -9,32 +9,13 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <Grid templateColumns="220px 1fr">
-      {/* Sidebar (Sticky) */}
-      <Box
-        as="aside"
-        p={3}
-        mb={4}
-        ml={4}
-        bgColor="bg"
-        boxShadow="xs"
-        borderRadius="3xl"
-        // min height of this box is 100dvh because other grid item in the same row 
-        // is assigned min height of 100dvh
-        // and height will increase as height of other grid item increases
-        // also height will increase when margin given to the bottom
-        // subtract mb={4} & top={4}
-        maxHeight="calc(100dvh - 32px)"
-        position="sticky"
-        top={4}
-      >
-        <VStack gap={8} align="stretch">
-          {/* Toward Goals Logo */}
-          <TowardGoalsLogo />
-          {/* Sidebar Items */}
-          <SidebarItems />
-        </VStack>
-      </Box>
+    // 1 column from base to below md breakpoint
+    // from md breakpoint to above 2 columns (one for sidebar another for main content)
+    <Grid templateColumns={{ base: "1fr", md: "220px 1fr" }}>
+      {/* Sidebar (Sticky) shown from md breakpoint */}
+      <Sidebar />
+      {/* fixed (relative to the viewport) navbar to the bottom shown before md breakpoint */}
+      <FixedBottomNavbar />
 
       {/* Grid Layout for Navbar + Main Content */}
       <Grid
@@ -42,6 +23,8 @@ export default async function Layout({
         minH="100dvh"
         gap={4}
         p={4}
+        // from base to before md breakpoint pb is 60px = bottom navbar height + 16px
+        pb={{ base: "60px", md: 4 }}
       >
         {/* Top Navbar */}
         <TopNavbar />

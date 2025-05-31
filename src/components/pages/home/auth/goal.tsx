@@ -16,16 +16,12 @@ export default function Goal({
     // a card with image in the background
     <Box
       position="relative"
-      w="250px"
-      maxW="280px"
-      flexGrow="1"
       h="300px"
       borderRadius="xl"
       overflow="hidden"
-      bgImg={`url(${goal.image ? goal.image : "/images/goal-card-background.png"})`}
+      bgImg={`url(${goal.image ? goal.image : "/images/goal-bg.webp"})`}
       backgroundSize="cover"
       backgroundPosition="top"
-      boxShadow="lg"
     >
       {/* Top Right Icons */}
       <Flex position="absolute" top="4" right="4" gap="2">

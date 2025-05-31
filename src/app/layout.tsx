@@ -2,6 +2,7 @@ import { sora } from "@/config/fonts";
 import Providers from "@/providers";
 import type { Metadata } from "next";
 import "./global.css";
+import { Container } from "@chakra-ui/react";
 
 export const metadata: Metadata = {
   title: "Toward Goals",
@@ -16,7 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={sora.className} suppressHydrationWarning>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {/* it takes all of the width of body */}
+          <Container bgColor="bg.subtle" fluid p="0">
+            {children}
+          </Container>
+        </Providers>
       </body>
     </html>
   );

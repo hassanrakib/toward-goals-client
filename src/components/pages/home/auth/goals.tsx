@@ -1,4 +1,4 @@
-import { Flex, Heading, VStack } from "@chakra-ui/react";
+import { Grid, Heading, VStack } from "@chakra-ui/react";
 import Goal from "./goal";
 import { IGoalProgress } from "@/types/progress";
 
@@ -16,11 +16,16 @@ export default async function Goals({
   return (
     <VStack align="stretch">
       <Heading size="xl">Goals You’re Chasing</Heading>
-      <Flex gap="3.5" wrap="wrap">
+      {/* fit min width columns as much as possible */}
+      {/* fill the space expanding columns when a new column can't be inserted */}
+      <Grid
+        gap="3.5"
+        gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+      >
         {goalsProgress.map((goalProgress) => (
           <Goal key={goalProgress._id} goalProgress={goalProgress} />
         ))}
-      </Flex>
+      </Grid>
     </VStack>
   );
 }

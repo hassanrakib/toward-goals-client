@@ -1,5 +1,5 @@
 import { Flex, Text, Icon, VStack } from "@chakra-ui/react";
-import { CalendarSync, Goal, Logs, SquareCheck, Target } from "lucide-react";
+import { FerrisWheel, Goal, ListTodo, SquareCheck, Target } from "lucide-react";
 import Link from "next/link";
 
 interface ISidebarItemProps {
@@ -35,9 +35,9 @@ const SidebarItems = () => {
   const items = [
     { id: 1, name: "Goals", icon: <Goal />, href: "/goals" },
     { id: 2, name: "Subgoals", icon: <Target />, href: "/subgoals" },
-    { id: 3, name: "Habits", icon: <CalendarSync />, href: "/habits" },
+    { id: 3, name: "Habits", icon: <FerrisWheel />, href: "/habits" },
     { id: 4, name: "My Tasks", icon: <SquareCheck />, href: "/tasks" },
-    { id: 5, name: "Tasks Feed", icon: <Logs />, href: "/feed" },
+    { id: 5, name: "Tasks Feed", icon: <ListTodo />, href: "/feed" },
   ];
 
   return (

@@ -7,7 +7,7 @@ import { useCreateUserMutation } from "@/redux/features/user/user.api";
 import { createUserSchema } from "@/schemas/user";
 import { IUser } from "@/types/user";
 import { Card, Flex, Text, Link as ChakraLink } from "@chakra-ui/react";
-import NavLink from "next/link";
+import NextLink from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, LockKeyhole, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -112,7 +112,7 @@ const SignUp = () => {
             <Text fontSize="sm" mt="2" textAlign="center">
               Have an account?{" "}
               <ChakraLink variant="underline" colorPalette="yellow" asChild>
-                <NavLink href="/signin">Sign in</NavLink>
+                <NextLink href="/signin">Sign in</NextLink>
               </ChakraLink>
             </Text>
           </Card.Footer>

@@ -6,7 +6,7 @@ import { useSignInMutation } from "@/redux/features/auth/auth.api";
 import { isFetchBaseQueryErrorWithData } from "@/redux/helpers";
 import { signInCredentialsSchema } from "@/schemas/auth";
 import { Card, Flex, Link as ChakraLink, Text } from "@chakra-ui/react";
-import NavLink from "next/link";
+import NextLink from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AtSign, LockKeyhole } from "lucide-react";
 import { UseFormReset } from "react-hook-form";
@@ -128,7 +128,7 @@ const SignIn = () => {
             <Text fontSize="sm" mt="2" textAlign="center">
               Don&apos;t have an account?{" "}
               <ChakraLink variant="underline" colorPalette="yellow" asChild>
-                <NavLink href="/signup">Sign up</NavLink>
+                <NextLink href="/signup">Sign up</NextLink>
               </ChakraLink>
             </Text>
           </Card.Footer>
