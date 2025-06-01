@@ -14,7 +14,7 @@ export default async function Layout({
     <Grid templateColumns={{ base: "1fr", lg: "220px 1fr" }}>
       {/* Sidebar (Sticky) shown from lg breakpoint */}
       <Sidebar />
-      {/* fixed (relative to the viewport) navbar to the bottom shown before md breakpoint */}
+      {/* fixed (relative to the viewport) navbar to the bottom shown before lg breakpoint */}
       <FixedBottomNavbar />
 
       {/* Grid Layout for Navbar + Main Content */}
@@ -22,9 +22,11 @@ export default async function Layout({
         templateRows="50px 1fr"
         minH="100dvh"
         gap={4}
-        p={4}
-        // from base to before md breakpoint pb is 60px = bottom navbar height + 16px
-        pb={{ base: "60px", md: "78px", lg: 4 }}
+        pt={4}
+        // from base to before lg breakpoint pb is 78px = bottom navbar height + 16px
+        pb={{ base: "78px", lg: 4 }}
+        // base to before md, padding left & right is minimal to give much more space
+        px={{ base: 1, md: 4 }}
       >
         {/* Top Navbar */}
         <TopNavbar />

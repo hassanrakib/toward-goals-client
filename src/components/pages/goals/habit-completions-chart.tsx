@@ -42,7 +42,12 @@ const HabitCompletionsChart = ({
 
   return (
     <Card.Root variant="subtle" rounded="xl">
-      <Card.Body position="relative">
+      <Card.Body
+        position="relative"
+        alignItems="stretch"
+        justifyContent="center"
+        px="2"
+      >
         <Badge
           fontSize="sm"
           position="absolute"
@@ -54,7 +59,8 @@ const HabitCompletionsChart = ({
         >
           <FerrisWheel size="16" /> Habit
         </Badge>
-        <Chart.Root w="full" h="full" chart={chart}>
+        {/* margin adjustment to give space to the badge above */}
+        <Chart.Root maxHeight="200px" mt={{ base: "5", sm: "0" }} chart={chart}>
           <PieChart>
             <Pie
               isAnimationActive={false}

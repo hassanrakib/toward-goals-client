@@ -94,7 +94,7 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   };
 
   return (
-    <Flex flexGrow="1" alignItems="center" spaceX="2">
+    <Flex flexGrow="1" alignItems="center">
       <Chart.Root maxH="70px" chart={chart}>
         <BarChart layout="vertical" data={chart.data}>
           <XAxis

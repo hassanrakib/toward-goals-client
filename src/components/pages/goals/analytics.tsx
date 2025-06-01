@@ -8,7 +8,12 @@ import { ChartNoAxesCombined } from "lucide-react";
 const Analytics = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   return (
     <Card.Root variant="subtle" rounded="xl">
-      <Card.Body position="relative">
+      <Card.Body
+        position="relative"
+        alignItems="stretch"
+        justifyContent="center"
+        px="2"
+      >
         <Badge
           fontSize="sm"
           position="absolute"
@@ -20,7 +25,7 @@ const Analytics = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
         >
           <ChartNoAxesCombined size="16" /> Analytics
         </Badge>
-        <VStack alignItems="stretch" p={6}>
+        <VStack alignItems="stretch" mt="4">
           <ConsistencyLevel goalProgress={goalProgress} />
           <DeepFocusLevel goalProgress={goalProgress} />
           <CommitmentLevel goalProgress={goalProgress} />

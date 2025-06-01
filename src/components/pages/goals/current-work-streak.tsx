@@ -15,9 +15,9 @@ export default function CurrentWorkStreak({
     <Card.Root variant="subtle" rounded="xl">
       <Card.Body
         position="relative"
-        display="flex"
         justifyContent="center"
         alignItems="center"
+        px="2"
       >
         <Badge
           fontSize="sm"
@@ -30,7 +30,7 @@ export default function CurrentWorkStreak({
         >
           <Tally5 size="16" /> Streak
         </Badge>
-        <VStack gap={3}>
+        <VStack gap={3} mt="4">
           <Flame color="orange" size={40} />
           <Text
             fontSize="4xl"

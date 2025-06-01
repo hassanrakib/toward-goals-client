@@ -49,7 +49,7 @@ const GoalProgressTop = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       <VStack
         alignItems="stretch"
         position="absolute"
-        left="4"
+        left="3"
         bottom="2"
         right="2"
         zIndex="1"
@@ -94,7 +94,7 @@ const GoalProgressTop = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
             </Text>
           </Flex>
         </VStack>
-        <Flex alignItems="center" spaceX="2">
+        <Flex alignItems="center">
           {/* show avatar with level */}
           <AvatarWithLevel
             size="lg"

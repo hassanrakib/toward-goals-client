@@ -2,13 +2,25 @@ import { Flex, Text, Icon, VStack } from "@chakra-ui/react";
 import { FerrisWheel, Goal, ListTodo, SquareCheck, Target } from "lucide-react";
 import Link from "next/link";
 
-interface ISidebarItemProps {
+// interface of nav item
+export interface INavItem {
+  id: number;
   name: string;
   icon: React.ReactNode;
   href: string;
 }
 
-const SidebarItem = ({ name, icon, href }: ISidebarItemProps) => {
+// nav items
+export const navItems: INavItem[] = [
+  { id: 1, name: "Goals", icon: <Goal />, href: "/goals" },
+  { id: 2, name: "Subgoals", icon: <Target />, href: "/subgoals" },
+  { id: 3, name: "Habits", icon: <FerrisWheel />, href: "/habits" },
+  { id: 4, name: "My Tasks", icon: <SquareCheck />, href: "/tasks" },
+  { id: 5, name: "Tasks Feed", icon: <ListTodo />, href: "/feed" },
+];
+
+const SidebarItem = ({ navItem }: { navItem: INavItem }) => {
+  const { name, icon, href } = navItem;
   return (
     <Link href={href}>
       <Flex
@@ -31,24 +43,10 @@ const SidebarItem = ({ name, icon, href }: ISidebarItemProps) => {
 };
 
 const SidebarItems = () => {
-  // Sample data for sidebar items
-  const items = [
-    { id: 1, name: "Goals", icon: <Goal />, href: "/goals" },
-    { id: 2, name: "Subgoals", icon: <Target />, href: "/subgoals" },
-    { id: 3, name: "Habits", icon: <FerrisWheel />, href: "/habits" },
-    { id: 4, name: "My Tasks", icon: <SquareCheck />, href: "/tasks" },
-    { id: 5, name: "Tasks Feed", icon: <ListTodo />, href: "/feed" },
-  ];
-
   return (
     <VStack gap={2} align="stretch">
-      {items.map((item) => (
-        <SidebarItem
-          key={item.id}
-          name={item.name}
-          icon={item.icon}
-          href={item.href}
-        />
+      {navItems.map((item) => (
+        <SidebarItem key={item.id} navItem={item} />
       ))}
     </VStack>
   );

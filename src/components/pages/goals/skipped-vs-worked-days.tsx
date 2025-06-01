@@ -65,7 +65,12 @@ const SkippedVsWorkedDays = ({
 
   return (
     <Card.Root variant="subtle" rounded="xl">
-      <Card.Body position="relative">
+      <Card.Body
+        position="relative"
+        alignItems="stretch"
+        justifyContent="center"
+        px="2"
+      >
         <Badge
           fontSize="sm"
           position="absolute"
