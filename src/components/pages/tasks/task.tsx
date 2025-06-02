@@ -1,15 +1,19 @@
 import { ITask } from "@/types/task";
 import { getTimeAgo } from "@/utils/task";
-import { Card, HStack, Stack, Text, VStack } from "@chakra-ui/react";
+import { Box, Card, HStack, Stack, Text, VStack } from "@chakra-ui/react";
 import HabitDifficultiesProgress from "./habit-difficulties-progress";
 import TimeSpans from "./time-spans";
 import StatusLabels from "./status-labels";
 import AvatarWithLevel from "@/components/shared/avatar-with-level";
+import { HabitUnitType } from "@/types/habit";
+import RecordCustomUnit from "./record-custom-unit";
+import RecordTimeUnit from "./record-time-unit";
 
 const Task = async ({ task }: { task: ITask }) => {
   // destructure necessary props
   const {
     goal,
+    habit: { unit },
     user: { username },
     description,
     createdAt,
@@ -40,11 +44,20 @@ const Task = async ({ task }: { task: ITask }) => {
           <TimeSpans taskId={task._id} />
           {/* show task progress */}
           <HabitDifficultiesProgress task={task} />
-          {/* show completed, deadline, extra unit status */}
-          <StatusLabels task={task} />
+          {/* show option to record work unit */}
+          <Box mt="2">
+            {unit.type === HabitUnitType.Custom ? (
+              <RecordCustomUnit task={task} />
+            ) : (
+              <RecordTimeUnit task={task} />
+            )}
+          </Box>
         </VStack>
       </Card.Body>
-      {/* add footer here */}
+      <Card.Footer>
+        {/* show completed, deadline, extra unit status */}
+        <StatusLabels task={task} />
+      </Card.Footer>
     </Card.Root>
   );
 };

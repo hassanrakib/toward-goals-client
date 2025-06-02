@@ -91,7 +91,7 @@ const CreateSubgoalForm = ({
   };
 
   return (
-    <Flex justify="center" align="center">
+    <Flex justify="center" alignItems="center">
       <Card.Root maxW="lg" w="100%" borderRadius="2xl" boxShadow="xs" bg="bg">
         <Card.Header>
           <Card.Title fontSize="2xl">Create a Subgoal</Card.Title>

@@ -16,6 +16,11 @@ export default function debounce<T extends (...args: any[]) => any>(
   };
 }
 
+// capitalize first letter
+export const capitalizeFirstLetter = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 // get percentage
 export function getPercentage(part: number, total: number): number {
   // if total is 0 avoid part to be devided by 0

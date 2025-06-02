@@ -13,6 +13,7 @@ const CreateProgressLink = ({
 }) => {
   return (
     <Box
+      w="full"
       display="flex"
       alignItems="center"
       justifyContent="space-around"

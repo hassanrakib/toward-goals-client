@@ -1,29 +1,29 @@
 import { HabitDifficultiesName, IHabitDifficulties } from "@/types/habit";
 
 export const getActiveDifficulty = (
-    difficulties: IHabitDifficulties,
-    totalCompletedUnit: number
-  ) => {
-    const activeDifficultyName =
-      (Object.keys(difficulties) as Array<HabitDifficultiesName>).find(
-        (difficulty) => totalCompletedUnit < difficulties[difficulty]
-      ) || "elite";
-  
-    return {
-      name: activeDifficultyName,
-      requirement: difficulties[activeDifficultyName],
-    };
+  difficulties: IHabitDifficulties,
+  totalCompletedUnit: number
+) => {
+  const activeDifficultyName =
+    (Object.keys(difficulties) as Array<HabitDifficultiesName>).find(
+      (difficulty) => totalCompletedUnit < difficulties[difficulty]
+    ) || "elite";
+
+  return {
+    name: activeDifficultyName,
+    requirement: difficulties[activeDifficultyName],
   };
+};
 
 export function getDifficultyColorPalette(difficulty: HabitDifficultiesName) {
   switch (difficulty) {
     case "mini":
       return "green";
     case "plus":
-      return "purple";
+      return "teal";
     case "elite":
-      return "red";
+      return "purple";
     default:
-      return "gray";
+      return "pink";
   }
 }

@@ -72,7 +72,7 @@ const GoalSearchResults = ({
   }, [isLastPage, showMore]);
 
   return (
-    <Box overflow="auto" p="4" bgColor="bg" borderRadius="md">
+    <Box maxHeight="400px" overflow="auto">
       {/* if searchStatus loading */}
       {(searchStatus === "loading" || searchStatus === "stalled") && (
         <Alert status="neutral" variant="surface">

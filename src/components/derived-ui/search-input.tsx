@@ -57,6 +57,9 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             placeholder={placeholder}
             type={type}
             borderRadius="2xl"
+            bgColor="bg"
+            border="2px solid"
+            borderColor="yellow.400"
             {...rest}
             {...register(name, registerOptions)}
           />

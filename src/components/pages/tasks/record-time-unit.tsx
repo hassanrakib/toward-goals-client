@@ -1,12 +1,12 @@
 "use client";
 
 import StyledButton from "@/components/derived-ui/styled-button";
-import StyledDialog from "@/components/derived-ui/styled-dialog";
 import StyledProgressBar from "@/components/derived-ui/styled-progress";
 import {
   ProgressCircleRing,
   ProgressCircleRoot,
 } from "@/components/ui/progress-circle";
+import { toaster } from "@/components/ui/toaster";
 import {
   useCreateTimeSpanMutation,
   useUpdateTaskMutation,
@@ -14,9 +14,9 @@ import {
 import { ITask, TimeSpanCreationData } from "@/types/task";
 import { getPercentage } from "@/utils/global";
 import { getActiveDifficulty, getDifficultyColorPalette } from "@/utils/habit";
-import { Badge, Box, Stack, Text, VStack } from "@chakra-ui/react";
-import { format, secondsToMinutes } from "date-fns";
-import { Check, Plus, Timer } from "lucide-react";
+import { Badge, Card, Stack, Text } from "@chakra-ui/react";
+import { secondsToMinutes } from "date-fns";
+import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -37,11 +37,6 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
 
   // handler update completedUnits
   const [updateTask] = useUpdateTaskMutation();
-
-  // dialog component is not unmounting
-  // so it preservs the isSuccessful state of useUpdateTaskMutation() hook
-  // this state will help us to set and reset whenever needed
-  const [isTaskUpdateSuccessful, setIsTaskUpdateSuccessful] = useState(false);
 
   // show timer
   // startTime of the timer
@@ -72,6 +67,14 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
   const activeDifficultyColorPalette = getDifficultyColorPalette(
     activeDifficulty.name
   );
+
+  // get active difficulty completion
+  // as totalCompletedDurationInMinWithRemainingSec can be greater than current difficulty requirement
+  // we are handling it here
+  const activeDifficultyCompletion =
+    totalCompletedDurationInMinWithRemainingSec > activeDifficulty.requirement
+      ? activeDifficulty.requirement
+      : totalCompletedDurationInMinWithRemainingSec;
 
   // run the timer
   useEffect(() => {
@@ -124,126 +127,94 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
 
         // if successfully updated completedUnits
         if (updatedTask.data?.data) {
-          // set isTaskUpdateSuccessful to true
-          setIsTaskUpdateSuccessful(true);
+          // show a ui feedback
+          toaster.create({
+            type: "info",
+            description: `${newCompletedDurationInMin} minute worked`,
+          });
+
+          // refresh the current route
+          router.refresh();
+
+          // reset the state
+          setNewCompletedDurationInSec(0);
         }
       }
     }
   };
 
   return (
-    <StyledDialog
-      triggerElement={
-        // trigger the dialog
-        <Box cursor="pointer">
-          <Timer size="18px" color={activeDifficultyColorPalette} />
-        </Box>
-      }
-      // know when the close trigger completed
-      onExitComplete={() => {
-        // stop the timer before the dialog closes
-        setStartTime(null);
-        // clear the states
-        setNewCompletedDurationInSec(0);
-        // refresh the current route
-        if (isTaskUpdateSuccessful) {
-          setIsTaskUpdateSuccessful(false);
-          router.refresh();
-        }
-      }}
+    <Card.Root
+      variant="elevated"
+      rounded="2xl"
+      border="2px dashed"
+      borderColor="yellow.500"
     >
-      {/* if successfully updated the task */}
-      {isTaskUpdateSuccessful && (
-        <Text
-          fontSize="2xl"
-          textAlign="center"
-        >{`Congrats! ${newCompletedDurationInMin} minute worked.`}</Text>
-      )}
-      {/* is task not updated */}
-      {!isTaskUpdateSuccessful && (
-        <VStack alignItems="stretch">
-          <Text fontSize="2xl" textAlign="center" mb="4">
-            {`Started at @${startTime ? format(startTime, "p") : ""}`}
-          </Text>
-          {/* progress bar */}
-          <StyledProgressBar
-            // width equals to the progress bar (filled part) within the progress container
-            barWidthInContainer={`${getPercentage(totalCompletedDurationInMinWithRemainingSec, activeDifficulty.requirement)}%`}
-            // progress bar label
-            label={`${activeDifficulty.name} ${totalCompletedDurationInMinWithRemainingSec > activeDifficulty.requirement ? activeDifficulty.requirement : totalCompletedDurationInMin}/${activeDifficulty.requirement} ${unit.name}`}
-            // label will be shown on the top of the progress bar
-            labelPosition="top"
-            // max value for progress bar
-            max={activeDifficulty.requirement}
-            // ProgressRoot value can not be greater than max
-            // as totalCompletedDurationInMinWithRemainingSec can be greater than current difficulty requirement
-            // we are handling it here
-            value={
-              totalCompletedDurationInMinWithRemainingSec >
-              activeDifficulty.requirement
-                ? activeDifficulty.requirement
-                : totalCompletedDurationInMinWithRemainingSec
-            }
+      <Card.Body gap="2">
+        <StyledProgressBar
+          // width equals to the progress bar (filled part) within the progress container
+          progressPercentage={`${getPercentage(activeDifficultyCompletion, activeDifficulty.requirement)}%`}
+          // progress bar label
+          label={`${totalCompletedDurationInMinWithRemainingSec > activeDifficulty.requirement ? activeDifficulty.requirement : totalCompletedDurationInMin}/${activeDifficulty.requirement} ${unit.name}`}
+          // label will be shown on the top of the progress bar
+          labelPosition="top"
+          // max value for progress bar
+          max={activeDifficulty.requirement}
+          value={activeDifficultyCompletion}
+          colorPalette={activeDifficultyColorPalette}
+          animated={startTime ? true : false}
+          size="xl"
+        />
+        {/* see current completed duration + start timer + add completed duration */}
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          spaceX="2"
+        >
+          <Badge
+            size="lg"
+            variant="subtle"
             colorPalette={activeDifficultyColorPalette}
-            animated={startTime ? true : false}
-            size="xl"
-          />
-          {/* see current completed duration + start timer + add completed duration */}
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
-            spaceX="2"
           >
-            <Badge
-              size="lg"
-              variant="subtle"
+            {/* show an animated  spinner when startTime is set */}
+            <ProgressCircleRoot
+              key={startTime ? "animated" : "static"}
+              value={startTime ? null : undefined}
+              animationDuration="1s"
+              size="xs"
               colorPalette={activeDifficultyColorPalette}
             >
-              {/* show an animated  spinner when startTime is set */}
-              <ProgressCircleRoot
-                key={startTime ? "animated" : "static"}
-                value={startTime ? null : undefined}
-                animationDuration="1s"
-                size="xs"
-                colorPalette={activeDifficultyColorPalette}
-              >
-                <ProgressCircleRing />
-              </ProgressCircleRoot>
-              {/* plus icon */}
-              <Plus />
-              {/* show current completed duration */}
-              <Text>
-                {newCompletedDurationInMin} minute {newDurationRemainingSeconds}{" "}
-                seconds
-              </Text>
-            </Badge>
+              <ProgressCircleRing />
+            </ProgressCircleRoot>
+            {/* plus icon */}
+            <Plus />
+            {/* show current completed duration */}
+            <Text>
+              {newCompletedDurationInMin} minute {newDurationRemainingSeconds}{" "}
+              seconds
+            </Text>
+          </Badge>
 
-            {/* if startTime, allow to update task */}
-            {startTime ? (
-              <StyledButton
-                onClick={() => recordCompletedTimeUnit(new Date())}
-                // keep the button disabled if duration is less than 1 minute
-                disabled={newCompletedDurationInMin < 1}
-                size="xs"
-                bgColor={activeDifficultyColorPalette}
-              >
-                <Check />
-              </StyledButton>
-            ) : (
-              // start the timer by setting startTime
-              <StyledButton
-                onClick={() => setStartTime(new Date())}
-                size="xs"
-                bgColor={activeDifficultyColorPalette}
-              >
-                <Timer />
-              </StyledButton>
-            )}
-          </Stack>
-        </VStack>
-      )}
-    </StyledDialog>
+          {/* if startTime, allow to update task */}
+          {startTime ? (
+            <StyledButton
+              onClick={() => recordCompletedTimeUnit(new Date())}
+              // keep the button disabled if duration is less than 1 minute
+              disabled={newCompletedDurationInMin < 1}
+              size="xs"
+            >
+              Done
+            </StyledButton>
+          ) : (
+            // start the timer by setting startTime
+            <StyledButton onClick={() => setStartTime(new Date())} size="xs">
+              Start
+            </StyledButton>
+          )}
+        </Stack>
+      </Card.Body>
+    </Card.Root>
   );
 };
 

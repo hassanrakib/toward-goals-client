@@ -26,7 +26,7 @@ export default async function Layout({
         // from base to before lg breakpoint pb is 78px = bottom navbar height + 16px
         pb={{ base: "78px", lg: 4 }}
         // base to before md, padding left & right is minimal to give much more space
-        px={{ base: 1, md: 4 }}
+        px={{ base: 3, md: 4 }}
       >
         {/* Top Navbar */}
         <TopNavbar />

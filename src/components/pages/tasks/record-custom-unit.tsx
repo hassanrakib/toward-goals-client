@@ -1,16 +1,15 @@
 "use client";
 
 import Form from "@/components/derived-ui/form";
-import StyledDialog from "@/components/derived-ui/styled-dialog";
 import StyledNumberInput from "@/components/derived-ui/styled-number-input";
 import StyledProgressBar from "@/components/derived-ui/styled-progress";
 import SubmitButton from "@/components/derived-ui/submit-button";
+import { toaster } from "@/components/ui/toaster";
 import { useUpdateTaskMutation } from "@/redux/features/task/task.api";
 import { ITask } from "@/types/task";
 import { getPercentage } from "@/utils/global";
 import { getActiveDifficulty, getDifficultyColorPalette } from "@/utils/habit";
-import { Box, HStack, Text, VStack } from "@chakra-ui/react";
-import { Check, CirclePlus } from "lucide-react";
+import { Box, Card, HStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { UseFormReset } from "react-hook-form";
@@ -31,12 +30,7 @@ const RecordCustomUnit = ({ task }: { task: ITask }) => {
   const router = useRouter();
 
   // task update handler
-  const [updateTask] = useUpdateTaskMutation();
-
-  // dialog component is not unmounting
-  // so it preservs the isSuccessful state of useUpdateTaskMutation() hook
-  // this state will help use to set and reset whenever needed
-  const [isTaskUpdateSuccessful, setIsTaskUpdateSuccessful] = useState(false);
+  const [updateTask, { isLoading: isUpdatingTask }] = useUpdateTaskMutation();
 
   // state for form input controlling
   const [newCompletedUnits, setNewCompletedUnits] = useState(0);
@@ -55,113 +49,96 @@ const RecordCustomUnit = ({ task }: { task: ITask }) => {
     activeDifficulty.name
   );
 
+  // get active difficulty completion
+  // as totalCompletedUnit can be greater than current difficulty requirement
+  // we are handling it here
+  const activeDifficultyCompletion =
+    totalCompletedUnit > activeDifficulty.requirement
+      ? activeDifficulty.requirement
+      : totalCompletedUnit;
+
   // form submit handler
   const onSubmit = async (
     data: IFormValues,
     reset: UseFormReset<IFormValues>
   ) => {
     // if new completed units less than 1, just return don't do anything
-    if (newCompletedUnits < 1) {
+    if (data.newCompletedUnits < 1) {
       return;
     }
 
     // update the task
     const res = await updateTask({
       taskId,
-      newCompletedUnits: newCompletedUnits,
+      newCompletedUnits: data.newCompletedUnits,
     });
 
     if (res.data?.data) {
+      // show a ui feedback
+      toaster.create({
+        type: "info",
+        description: `${data.newCompletedUnits} ${unit.name} completed`,
+      });
       // reset the form
       reset({ newCompletedUnits: 0 });
-
-      // set isTaskUpdateSuccessful
-      setIsTaskUpdateSuccessful(true);
+      // refresh the current route
+      router.refresh();
+      // clear the state
+      setNewCompletedUnits(0);
     }
   };
 
   return (
-    <StyledDialog
-      triggerElement={
-        // trigger the popover
-        <Box cursor="pointer">
-          <CirclePlus size="18px" color={activeDifficultyColorPalette} />
-        </Box>
-      }
-      onExitComplete={() => {
-        // clear the state after the dialog closes
-        setNewCompletedUnits(0);
-        // refresh the current page
-        if (isTaskUpdateSuccessful) {
-          setIsTaskUpdateSuccessful(false);
-          router.refresh();
-        }
-      }}
+    <Card.Root
+      variant="elevated"
+      rounded="2xl"
+      border="2px dashed"
+      borderColor="yellow.500"
     >
-      {/* if successful task update */}
-      {isTaskUpdateSuccessful && (
-        <Text fontSize="2xl" textAlign="center">
-          Congrats! {`${newCompletedUnits} ${unit.name} completed!`}
-        </Text>
-      )}
-
-      {/* if no successful task update */}
-      {!isTaskUpdateSuccessful && (
-        <VStack alignItems="stretch">
-          <Text fontSize="2xl" textAlign="center" mb="4">
-            Do your best!
-          </Text>
-          {/* progress bar */}
-          <StyledProgressBar
-            // width equals to the progress bar (filled part) within the progress container
-            barWidthInContainer={`${getPercentage(totalCompletedUnit, activeDifficulty.requirement)}%`}
-            // progress bar label
-            label={`${activeDifficulty.name} ${totalCompletedUnit > activeDifficulty.requirement ? activeDifficulty.requirement : totalCompletedUnit}/${activeDifficulty.requirement} ${unit.name}`}
-            // label will be shown on the top of the progress bar
-            labelPosition="top"
-            // max value for progress bar
-            max={activeDifficulty.requirement}
-            // ProgressRoot value can not be greater than max
-            // as totalCompletedUnit can be greater than current difficulty requirement
-            // we are handling it here
-            value={
-              totalCompletedUnit > activeDifficulty.requirement
-                ? activeDifficulty.requirement
-                : totalCompletedUnit
-            }
-            colorPalette={activeDifficultyColorPalette}
-            size="xl"
-          />
-          <Box alignSelf="center">
-            <Form
-              onSubmit={onSubmit}
-              useFormProps={{
-                defaultValues: { newCompletedUnits: 0 },
-              }}
-            >
-              <HStack alignItems="center">
-                <StyledNumberInput
-                  name="newCompletedUnits"
-                  placeholder={`How many ${unit.name} did you complete?`}
-                  unit={unit.name}
-                  onNumberInputChange={(value) => {
-                    setNewCompletedUnits(value);
-                  }}
-                />
-                <SubmitButton
-                  isServerActionLoading={false}
-                  size="xs"
-                  bgColor={activeDifficultyColorPalette}
-                  disabled={newCompletedUnits < 1}
-                >
-                  <Check />
-                </SubmitButton>
-              </HStack>
-            </Form>
-          </Box>
-        </VStack>
-      )}
-    </StyledDialog>
+      <Card.Body gap="2">
+        {/* progress bar */}
+        <StyledProgressBar
+          // label will be shown on the top of the progress bar
+          labelPosition="top"
+          // width equals to the progress bar (filled part) within the progress container
+          progressPercentage={`${getPercentage(activeDifficultyCompletion, activeDifficulty.requirement)}%`}
+          // progress bar label
+          label={`${activeDifficultyCompletion}/${activeDifficulty.requirement} ${unit.name}`}
+          // max value for progress bar
+          max={activeDifficulty.requirement}
+          value={activeDifficultyCompletion}
+          colorPalette={activeDifficultyColorPalette}
+          size="xl"
+        />
+        <Box alignSelf="center">
+          <Form
+            onSubmit={onSubmit}
+            useFormProps={{
+              defaultValues: { newCompletedUnits: 0 },
+            }}
+          >
+            <HStack alignItems="center">
+              <StyledNumberInput
+                name="newCompletedUnits"
+                placeholder={`How many ${unit.name} did you complete?`}
+                min={0}
+                unit={unit.name}
+                onNumberInputChange={(value) => {
+                  setNewCompletedUnits(value);
+                }}
+              />
+              <SubmitButton
+                isServerActionLoading={isUpdatingTask}
+                size="xs"
+                disabled={newCompletedUnits < 1}
+              >
+                Done
+              </SubmitButton>
+            </HStack>
+          </Form>
+        </Box>
+      </Card.Body>
+    </Card.Root>
   );
 };
 

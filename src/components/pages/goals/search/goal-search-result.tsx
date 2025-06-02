@@ -49,13 +49,21 @@ const GoalSearchResult = ({
   };
 
   return (
-    <Card.Root flexDirection="row" alignItems="center" overflow="hidden">
-      <Card.Body p="3">
+    <Card.Root
+      flexDirection={{ base: "column", md: "row" }}
+      alignItems={{base: "flex-start", md: "center"}}
+      overflow="hidden"
+      p="3"
+      gap="2"
+    >
+      <Card.Body p="0">
         <Card.Title mb="1">{goalSearchResult.title}</Card.Title>
         <VStack alignItems="flex-start" gap="2">
           <Box display="flex" alignItems="center" spaceX="1">
             <CalendarDays />
-            <Text>Starting on {format(goalSearchResult.startDate, "PPpp")}</Text>
+            <Text>
+              Starting on {format(goalSearchResult.startDate, "PPpp")}
+            </Text>
           </Box>
           <Box display="flex" alignItems="center" spaceX="1">
             <Hourglass />
@@ -64,7 +72,7 @@ const GoalSearchResult = ({
           <Badge>{goalSearchResult.userCount} people joined</Badge>
         </VStack>
       </Card.Body>
-      <Card.Footer pb="0">
+      <Card.Footer p="0">
         <StyledButton
           onClick={async () =>
             await handleCreateGoalProgress(goalSearchResult.objectID)

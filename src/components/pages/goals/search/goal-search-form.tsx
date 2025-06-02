@@ -6,9 +6,8 @@ import InstantSearchProvider from "@/lib/instant-search-provider";
 import { SearchIndices } from "@/types/global";
 import { Search } from "lucide-react";
 import GoalSearchResults from "./goal-search-results";
-import { Box, Grid } from "@chakra-ui/react";
+import { Box, Card } from "@chakra-ui/react";
 import { Configure } from "react-instantsearch";
-import { Alert } from "@/components/ui/alert";
 import CreateProgressLink from "@/components/shared/create-progress-link";
 import { useGetMyJoinedGoalsQuery } from "@/redux/features/goal/goal.api";
 import { MyJoinedGoal } from "@/types/goal";
@@ -39,46 +38,46 @@ const GoalSearchForm = () => {
   };
 
   return (
-    <Form onSubmit={onSubmit} useFormProps={{ defaultValues }}>
-      <InstantSearchProvider indexName={SearchIndices.goals}>
-        {/* configure filtering */}
-        {/* filter out the goals whose startDate already passed */}
-        <Configure filters={`startDate > ${Date.now()}`} />
-        <Grid
-          // max height is set by subtracting ((16 + 16)px padding to the top & bottom + 50px header navbar + 16px gap below the navbar)
-          maxH="calc(100dvh - 98px)"
-          templateRows="50px 1fr auto"
-        >
-          {/* show search goal input */}
-          <Box>
-            <SearchInput
-              name="goalName"
-              type="text"
-              placeholder="Search for a goal to start"
-              startElement={<Search size={18} />}
-              bgColor="bg"
-            />
-          </Box>
-          {/* show goal search results */}
-          {isJoinedGoalsLoading && (
-            <Alert status="neutral" variant="surface">
-              Loading...
-            </Alert>
-          )}
-          {!isJoinedGoalsLoading && !isErrorGettingJoinedGoals && (
-            <GoalSearchResults
-              joinedGoals={joinedGoals!.data as MyJoinedGoal[]}
-            />
-          )}
+    <Card.Root shadow="xs" rounded="2xl">
+      <Card.Header>
+        <Card.Title fontSize="2xl">Search Goals</Card.Title>
+        <Card.Description>
+          Join with others in completing a goal.
+        </Card.Description>
+      </Card.Header>
+      <Form onSubmit={onSubmit} useFormProps={{ defaultValues }}>
+        <Card.Body gap="2">
+          <InstantSearchProvider indexName={SearchIndices.goals}>
+            {/* configure filtering */}
+            {/* filter out the goals whose startDate already passed */}
+            <Configure filters={`startDate > ${Date.now()}`} />
+            {/* show search goal input */}
+            <Box>
+              <SearchInput
+                name="goalName"
+                type="text"
+                placeholder="Search for a goal to start"
+                startElement={<Search size={18} />}
+              />
+            </Box>
+            {/* show goal search results */}
+            {!isJoinedGoalsLoading && !isErrorGettingJoinedGoals && (
+              <GoalSearchResults
+                joinedGoals={joinedGoals!.data as MyJoinedGoal[]}
+              />
+            )}
+          </InstantSearchProvider>
+        </Card.Body>
+        <Card.Footer>
           {/* show create goal button */}
           <CreateProgressLink
             callToAction="Haven't you found your goal?"
             actionLink="/goals/create-goal"
             actionLabel="Create goal"
           />
-        </Grid>
-      </InstantSearchProvider>
-    </Form>
+        </Card.Footer>
+      </Form>
+    </Card.Root>
   );
 };
 

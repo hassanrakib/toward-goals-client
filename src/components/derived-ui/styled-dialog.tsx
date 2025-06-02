@@ -40,8 +40,11 @@ const StyledDialog = React.forwardRef<HTMLDivElement, StyledDialogProps>(
           portalRef={portalRef}
           backdrop={backdrop}
           ref={ref}
+          mx="2.5"
+          bgColor="transparent"
+          borderRadius="full"
         >
-          <DialogBody pt="6">{children}</DialogBody>
+          <DialogBody p="0">{children}</DialogBody>
           {showCloseTrigger && (
             <Dialog.CloseTrigger
               bg="gray.300"
