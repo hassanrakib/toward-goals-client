@@ -2,11 +2,13 @@ import {
   Box,
   HStack,
   ProgressRootProps,
-  ProgressValueText,
+  Progress as ChakraProgress,
 } from "@chakra-ui/react";
-import { ProgressBar, ProgressLabel, ProgressRoot } from "../ui/progress";
+import { ProgressLabel, ProgressRoot, ProgressValueText } from "../ui/progress";
+import { forwardRef } from "react";
 
 interface StyledProgressBarProps extends ProgressRootProps {
+  barColorPalette?: ChakraProgress.RangeProps["bgColor"];
   progressPercentage: string;
   labelPosition?: "inside" | "top" | "inline";
   label: string;
@@ -14,6 +16,7 @@ interface StyledProgressBarProps extends ProgressRootProps {
 
 const StyledProgressBar = (props: StyledProgressBarProps) => {
   const {
+    barColorPalette = "gray",
     progressPercentage,
     labelPosition = "inside",
     label,
@@ -25,7 +28,8 @@ const StyledProgressBar = (props: StyledProgressBarProps) => {
       position="relative"
       size="md"
       shape="full"
-      {...(labelPosition === "top" ? { mt: "6" } : {})}
+      striped
+      {...(labelPosition === "top" ? { mt: "7" } : {})}
       {...rest}
     >
       {/* progress label */}
@@ -51,14 +55,15 @@ const StyledProgressBar = (props: StyledProgressBarProps) => {
             justifyContent="flex-end"
           >
             <Box
-              border="2px solid"
-              borderColor={props.colorPalette}
               {...(labelPosition === "top"
                 ? {
                     position: "relative",
-                    bgColor: "yellow.200",
+                    border: "2px solid",
+                    borderColor: barColorPalette,
+                    bgColor: "yellow.100",
                     padding: "2px 13px",
                     rounded: "xl",
+                    shadow: "md",
                     _after: {
                       content: '""',
                       position: "absolute",
@@ -67,7 +72,8 @@ const StyledProgressBar = (props: StyledProgressBarProps) => {
                       transform: "translateX(-50%)",
                       borderWidth: "6px",
                       borderStyle: "solid",
-                      borderColor: `${props.colorPalette} transparent transparent transparent`,
+                      borderColor: "transparent",
+                      borderTopColor: barColorPalette,
                     },
                   }
                 : {
@@ -77,17 +83,32 @@ const StyledProgressBar = (props: StyledProgressBarProps) => {
               {label}
             </Box>
           </ProgressLabel>
-          <ProgressBar />
+          <ProgressBar barColor={barColorPalette} />
         </>
       ) : (
         <HStack gap="3">
           <ProgressLabel>{label}</ProgressLabel>
-          <ProgressBar flex="1" />
+          <ProgressBar flex="1" barColor={barColorPalette} />
           <ProgressValueText>{progressPercentage}</ProgressValueText>
         </HStack>
       )}
     </ProgressRoot>
   );
 };
+
+export interface ProgressBarProps extends ChakraProgress.TrackProps {
+  barColor: ChakraProgress.RangeProps["bgColor"];
+}
+
+export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
+  function ProgressBar(props, ref) {
+    const { barColor, ...rest } = props;
+    return (
+      <ChakraProgress.Track {...rest} ref={ref}>
+        <ChakraProgress.Range bgColor={barColor} />
+      </ChakraProgress.Track>
+    );
+  }
+);
 
 export default StyledProgressBar;

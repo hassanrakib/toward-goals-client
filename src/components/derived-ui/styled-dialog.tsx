@@ -47,11 +47,11 @@ const StyledDialog = React.forwardRef<HTMLDivElement, StyledDialogProps>(
           <DialogBody p="0">{children}</DialogBody>
           {showCloseTrigger && (
             <Dialog.CloseTrigger
-              bg="gray.300"
+              bgColor="gray.100"
               rounded="full"
               position="absolute"
-              top="0"
-              insetEnd="-12"
+              top={{ base: "-3", md: "0" }}
+              insetEnd={{ base: "0", md: "-12" }}
               asChild
             >
               <CloseButton size="sm" />

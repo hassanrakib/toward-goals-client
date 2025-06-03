@@ -99,7 +99,7 @@ const CreateGoalForm = () => {
               <GridItem>
                 <StyledNumberInput
                   name="duration"
-                  label="Duration (in days)"
+                  label="Duration"
                   placeholder="Enter Goal Duration"
                   unit="days"
                   min={7}

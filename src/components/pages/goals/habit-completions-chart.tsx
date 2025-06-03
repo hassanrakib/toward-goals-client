@@ -2,6 +2,7 @@
 
 import { IGoalProgress } from "@/types/progress";
 import { getPercentage } from "@/utils/global";
+import { getDifficultyColor } from "@/utils/habit";
 import { Chart, useChart } from "@chakra-ui/charts";
 import { Badge, Card } from "@chakra-ui/react";
 import { FerrisWheel } from "lucide-react";
@@ -25,17 +26,17 @@ const HabitCompletionsChart = ({
       {
         name: "Mini",
         value: totalHabitCompletion === 0 ? 1 : totalMiniCompletion,
-        color: "teal.200",
+        color: getDifficultyColor("mini"),
       },
       {
         name: "Plus",
         value: totalHabitCompletion === 0 ? 1 : totalPlusCompletion,
-        color: "yellow.200",
+        color: getDifficultyColor("plus"),
       },
       {
         name: "Elite",
         value: totalHabitCompletion === 0 ? 1 : totalEliteCompletion,
-        color: "red.200",
+        color: getDifficultyColor("elite"),
       },
     ],
   });

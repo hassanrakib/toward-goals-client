@@ -2,7 +2,7 @@ import { HabitDifficultiesName } from "@/types/habit";
 import { capitalizeFirstLetter, getPercentage } from "@/utils/global";
 import { VStack } from "@chakra-ui/react";
 import { ITask } from "@/types/task";
-import { getDifficultyColorPalette } from "@/utils/habit";
+import { getDifficultyColor } from "@/utils/habit";
 import StyledProgressBar from "@/components/derived-ui/styled-progress";
 
 const HabitDifficultiesProgress = ({ task }: { task: ITask }) => {
@@ -39,9 +39,7 @@ const HabitDifficultiesProgress = ({ task }: { task: ITask }) => {
             // progress bar max value
             max={difficultyRequirement}
             value={currentDifficultyCompletion}
-            colorPalette={getDifficultyColorPalette(
-              difficulty as HabitDifficultiesName
-            )}
+            barColorPalette={getDifficultyColor(difficulty as HabitDifficultiesName)}
           />
         );
       })}

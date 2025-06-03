@@ -1,6 +1,6 @@
 import { HabitDifficultiesName } from "@/types/habit";
 import { IHabitProgress } from "@/types/progress";
-import { getDifficultyColorPalette } from "@/utils/habit";
+import { getDifficultyColor } from "@/utils/habit";
 import { Status, Table } from "@chakra-ui/react";
 
 const HabitCompletionsTable = ({
@@ -31,8 +31,8 @@ const HabitCompletionsTable = ({
         >
       ];
 
-    // get difficulty color palette
-    const difficultyColorPalette = getDifficultyColorPalette(
+    // get difficulty color
+    const difficultyColor = getDifficultyColor(
       difficultyName as HabitDifficultiesName
     );
 
@@ -41,7 +41,7 @@ const HabitCompletionsTable = ({
       difficultyDescription: `${difficulty} ${unitName} completed`,
       difficultyCompletions: `${difficultyCompletions} times`,
       difficultyTotalUnitCompleted: `${difficulty}x${difficultyCompletions} = ${difficulty * difficultyCompletions} ${unitName}`,
-      difficultyColorPalette,
+      difficultyColor,
     };
   });
 
@@ -59,8 +59,8 @@ const HabitCompletionsTable = ({
           {tableData.map((item) => (
             <Table.Row key={item.id}>
               <Table.Cell>
-                <Status.Root mr="1" colorPalette={item.difficultyColorPalette}>
-                  <Status.Indicator />
+                <Status.Root mr="1">
+                  <Status.Indicator bgColor={item.difficultyColor} />
                 </Status.Root>
                 {item.difficultyDescription}
               </Table.Cell>

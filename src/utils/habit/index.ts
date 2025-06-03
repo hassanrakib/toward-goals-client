@@ -15,15 +15,15 @@ export const getActiveDifficulty = (
   };
 };
 
-export function getDifficultyColorPalette(difficulty: HabitDifficultiesName) {
+export function getDifficultyColor(difficulty: HabitDifficultiesName) {
   switch (difficulty) {
     case "mini":
-      return "green";
+      return "yellow.400";
     case "plus":
-      return "teal";
+      return "teal.400";
     case "elite":
-      return "purple";
+      return "red.400";
     default:
-      return "pink";
+      return "green.400";
   }
 }

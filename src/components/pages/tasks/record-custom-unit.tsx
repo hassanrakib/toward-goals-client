@@ -8,7 +8,7 @@ import { toaster } from "@/components/ui/toaster";
 import { useUpdateTaskMutation } from "@/redux/features/task/task.api";
 import { ITask } from "@/types/task";
 import { getPercentage } from "@/utils/global";
-import { getActiveDifficulty, getDifficultyColorPalette } from "@/utils/habit";
+import { getActiveDifficulty, getDifficultyColor } from "@/utils/habit";
 import { Box, Card, HStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -44,10 +44,8 @@ const RecordCustomUnit = ({ task }: { task: ITask }) => {
     totalCompletedUnit
   );
 
-  // get active difficulty color palet
-  const activeDifficultyColorPalette = getDifficultyColorPalette(
-    activeDifficulty.name
-  );
+  // get active difficulty color
+  const activeDifficultyColor = getDifficultyColor(activeDifficulty.name);
 
   // get active difficulty completion
   // as totalCompletedUnit can be greater than current difficulty requirement
@@ -103,11 +101,11 @@ const RecordCustomUnit = ({ task }: { task: ITask }) => {
           // width equals to the progress bar (filled part) within the progress container
           progressPercentage={`${getPercentage(activeDifficultyCompletion, activeDifficulty.requirement)}%`}
           // progress bar label
-          label={`${activeDifficultyCompletion}/${activeDifficulty.requirement} ${unit.name}`}
+          label={`${totalCompletedUnit}/${activeDifficulty.requirement} ${unit.name}`}
           // max value for progress bar
           max={activeDifficulty.requirement}
           value={activeDifficultyCompletion}
-          colorPalette={activeDifficultyColorPalette}
+          barColorPalette={activeDifficultyColor}
           size="xl"
         />
         <Box alignSelf="center">
@@ -126,6 +124,7 @@ const RecordCustomUnit = ({ task }: { task: ITask }) => {
                 onNumberInputChange={(value) => {
                   setNewCompletedUnits(value);
                 }}
+                size="sm"
               />
               <SubmitButton
                 isServerActionLoading={isUpdatingTask}

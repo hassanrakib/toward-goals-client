@@ -13,12 +13,11 @@ import {
 } from "@/redux/features/task/task.api";
 import { ITask, TimeSpanCreationData } from "@/types/task";
 import { getPercentage } from "@/utils/global";
-import { getActiveDifficulty, getDifficultyColorPalette } from "@/utils/habit";
+import { getActiveDifficulty, getDifficultyColor } from "@/utils/habit";
 import { Badge, Card, Stack, Text } from "@chakra-ui/react";
 import { secondsToMinutes } from "date-fns";
-import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const RecordTimeUnit = ({ task }: { task: ITask }) => {
   // router from next/navigation
@@ -49,23 +48,25 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
   const newDurationRemainingSeconds = newCompletedDurationInSec % 60;
 
   // total completed duration in minute new and prev
-  const totalCompletedDurationInMin =
-    prevCompletedDurationInMin + newCompletedDurationInMin;
+  const totalCompletedDurationInMin = useMemo(
+    () => prevCompletedDurationInMin + newCompletedDurationInMin,
+    [prevCompletedDurationInMin, newCompletedDurationInMin]
+  );
 
   // prevCompletedDurationInMin + current completed duration in minute + remaining seconds in min
   const totalCompletedDurationInMinWithRemainingSec =
-    prevCompletedDurationInMin +
-    newCompletedDurationInMin +
-    newDurationRemainingSeconds / 60;
+    totalCompletedDurationInMin + newDurationRemainingSeconds / 60;
 
   // get active difficulty (even after starting the timer)
-  const activeDifficulty = getActiveDifficulty(
-    difficulties,
-    totalCompletedDurationInMinWithRemainingSec
+  const activeDifficulty = useMemo(
+    () => getActiveDifficulty(difficulties, totalCompletedDurationInMin),
+    [difficulties, totalCompletedDurationInMin]
   );
-  // active difficulty color palette
-  const activeDifficultyColorPalette = getDifficultyColorPalette(
-    activeDifficulty.name
+
+  // active difficulty color
+  const activeDifficultyColor = useMemo(
+    () => getDifficultyColor(activeDifficulty.name),
+    [activeDifficulty.name]
   );
 
   // get active difficulty completion
@@ -155,40 +156,27 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
           // width equals to the progress bar (filled part) within the progress container
           progressPercentage={`${getPercentage(activeDifficultyCompletion, activeDifficulty.requirement)}%`}
           // progress bar label
-          label={`${totalCompletedDurationInMinWithRemainingSec > activeDifficulty.requirement ? activeDifficulty.requirement : totalCompletedDurationInMin}/${activeDifficulty.requirement} ${unit.name}`}
+          label={`${totalCompletedDurationInMin}/${activeDifficulty.requirement} ${unit.name}`}
           // label will be shown on the top of the progress bar
           labelPosition="top"
           // max value for progress bar
           max={activeDifficulty.requirement}
           value={activeDifficultyCompletion}
-          colorPalette={activeDifficultyColorPalette}
+          barColorPalette={activeDifficultyColor}
           animated={startTime ? true : false}
           size="xl"
         />
         {/* see current completed duration + start timer + add completed duration */}
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="center"
-          spaceX="2"
-        >
-          <Badge
-            size="lg"
-            variant="subtle"
-            colorPalette={activeDifficultyColorPalette}
-          >
+        <Stack alignSelf="center" direction="row" alignItems="center">
+          <Badge size="lg" variant="outline" rounded="xl">
             {/* show an animated  spinner when startTime is set */}
             <ProgressCircleRoot
               key={startTime ? "animated" : "static"}
               value={startTime ? null : undefined}
-              animationDuration="1s"
               size="xs"
-              colorPalette={activeDifficultyColorPalette}
             >
               <ProgressCircleRing />
             </ProgressCircleRoot>
-            {/* plus icon */}
-            <Plus />
             {/* show current completed duration */}
             <Text>
               {newCompletedDurationInMin} minute {newDurationRemainingSeconds}{" "}

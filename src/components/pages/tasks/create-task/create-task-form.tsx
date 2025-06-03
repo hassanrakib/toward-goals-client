@@ -95,7 +95,7 @@ const CreateTaskForm = () => {
             reValidateMode: "onSubmit",
           }}
         >
-          <Card.Body>
+          <Card.Body px="3">
             {/* tiptap editor */}
             <CreateTaskInput />
           </Card.Body>
