@@ -6,11 +6,12 @@ import InstantSearchProvider from "@/lib/instant-search-provider";
 import { SearchIndices } from "@/types/global";
 import { Search } from "lucide-react";
 import GoalSearchResults from "./goal-search-results";
-import { Box, Card } from "@chakra-ui/react";
+import { Box, Card, Flex, Text } from "@chakra-ui/react";
 import { Configure } from "react-instantsearch";
 import CreateProgressLink from "@/components/shared/create-progress-link";
 import { useGetMyJoinedGoalsQuery } from "@/redux/features/goal/goal.api";
 import { MyJoinedGoal } from "@/types/goal";
+import NextImage from "next/image";
 
 interface IFormValues {
   goalName: string;
@@ -60,6 +61,18 @@ const GoalSearchForm = () => {
                 startElement={<Search size={18} />}
               />
             </Box>
+            {/* algolia logo */}
+            <Flex gap="1" alignItems="center" alignSelf="flex-end">
+              <Text fontSize="xs" color="fg.muted">
+                Search by
+              </Text>
+              <NextImage
+                src="/images/algolia-logo.webp"
+                alt="algolia-logo"
+                width={64}
+                height={19}
+              />
+            </Flex>
             {/* show goal search results */}
             {!isJoinedGoalsLoading && !isErrorGettingJoinedGoals && (
               <GoalSearchResults

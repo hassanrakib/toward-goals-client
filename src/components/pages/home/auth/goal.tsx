@@ -18,6 +18,7 @@ export default function Goal({
       position="relative"
       h="300px"
       borderRadius="xl"
+      shadow="md"
       overflow="hidden"
       bgImg={`url(${goal.image ? goal.image : "/images/goal-bg.webp"})`}
       backgroundSize="cover"
@@ -58,9 +59,8 @@ export default function Goal({
         left="4"
         right="4"
         p="4"
-        borderRadius="3xl"
-        bg="rgba(255, 255, 255, 0.7)"
-        backdropFilter="blur(12px)"
+        borderRadius="2xl"
+        bg="rgba(255, 255, 255, 0.2)"
         textAlign="center"
       >
         <Text fontSize="lg" fontWeight="semibold">

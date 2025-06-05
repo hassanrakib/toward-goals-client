@@ -17,7 +17,7 @@ const GoalProgressTop = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       overflow="hidden"
       bgImg={`url(${goal.image ? goal.image : "/images/goal-bg.webp"})`}
       backgroundSize="cover"
-      backgroundPosition="top"
+      backgroundPosition="center"
       _after={{
         content: '""',
         position: "absolute",
