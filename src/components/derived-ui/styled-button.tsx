@@ -3,6 +3,7 @@
 import { ButtonProps, Button } from "@chakra-ui/react";
 import { forwardRef } from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface StyledButtonProps extends ButtonProps {}
 
 const StyledButton = forwardRef<HTMLButtonElement, ButtonProps>(
