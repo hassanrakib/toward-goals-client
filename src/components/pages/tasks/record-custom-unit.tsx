@@ -88,7 +88,6 @@ const RecordCustomUnit = ({ task }: { task: ITask }) => {
 
   return (
     <Card.Root
-      variant="elevated"
       rounded="2xl"
       border="2px dashed"
       borderColor="yellow.500"
@@ -108,34 +107,37 @@ const RecordCustomUnit = ({ task }: { task: ITask }) => {
           barColorPalette={activeDifficultyColor}
           size="xl"
         />
-        <Box alignSelf="center">
-          <Form
-            onSubmit={onSubmit}
-            useFormProps={{
-              defaultValues: { newCompletedUnits: 0 },
-            }}
-          >
-            <HStack alignItems="center">
-              <StyledNumberInput
-                name="newCompletedUnits"
-                placeholder={`How many ${unit.name} did you complete?`}
-                min={0}
-                unit={unit.name}
-                onNumberInputChange={(value) => {
-                  setNewCompletedUnits(value);
-                }}
-                size="sm"
-              />
-              <SubmitButton
-                isServerActionLoading={isUpdatingTask}
-                size="xs"
-                disabled={newCompletedUnits < 1}
-              >
-                Done
-              </SubmitButton>
-            </HStack>
-          </Form>
-        </Box>
+        {/* when task is not completed, show the ui to record custom unit */}
+        {!task.isCompleted && (
+          <Box alignSelf="center">
+            <Form
+              onSubmit={onSubmit}
+              useFormProps={{
+                defaultValues: { newCompletedUnits: 0 },
+              }}
+            >
+              <HStack alignItems="center">
+                <StyledNumberInput
+                  name="newCompletedUnits"
+                  placeholder={`How many ${unit.name} did you complete?`}
+                  min={0}
+                  unit={unit.name}
+                  onNumberInputChange={(value) => {
+                    setNewCompletedUnits(value);
+                  }}
+                  size="sm"
+                />
+                <SubmitButton
+                  isServerActionLoading={isUpdatingTask}
+                  size="xs"
+                  disabled={newCompletedUnits < 1}
+                >
+                  Done
+                </SubmitButton>
+              </HStack>
+            </Form>
+          </Box>
+        )}
       </Card.Body>
     </Card.Root>
   );

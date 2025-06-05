@@ -42,7 +42,7 @@ const StyledDialog = React.forwardRef<HTMLDivElement, StyledDialogProps>(
           ref={ref}
           mx="2.5"
           bgColor="transparent"
-          borderRadius="full"
+          shadow="unset"
         >
           <DialogBody p="0">{children}</DialogBody>
           {showCloseTrigger && (

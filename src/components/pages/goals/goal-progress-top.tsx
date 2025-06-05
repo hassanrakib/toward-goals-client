@@ -1,13 +1,14 @@
 import AvatarWithLevel from "@/components/shared/avatar-with-level";
-import { Badge, Box, Flex, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import { addDays, differenceInDays, format, isAfter } from "date-fns";
-import { Calendar, Circle, CircleCheckBig, Gem } from "lucide-react";
+import { Calendar, Gem } from "lucide-react";
 import GoalLevel from "./goal-level";
 import { IGoalProgress } from "@/types/progress";
+import GoalCompletedStatus from "./goal-completed-status";
 
 const GoalProgressTop = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   // destructuring properties from the goal progress
-  const { goal, user, isCompleted } = goalProgress;
+  const { goal, user } = goalProgress;
   return (
     <Box
       position="relative"
@@ -61,29 +62,8 @@ const GoalProgressTop = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
             <Heading display="inline" size="2xl" mr="2">
               {goal.title}
             </Heading>
-            {/* show completed badge */}
-            {isCompleted ? (
-              <Badge
-                variant="solid"
-                rounded="2xl"
-                size="sm"
-                colorPalette="green"
-              >
-                <CircleCheckBig size="12" />
-                Completed
-              </Badge>
-            ) : (
-              <Badge
-                variant="surface"
-                rounded="2xl"
-                size="sm"
-                colorPalette="yellow"
-                cursor="pointer"
-              >
-                <Circle size="12" />
-                Mark Completed
-              </Badge>
-            )}
+            {/* show completed badge or mark goal completed */}
+            <GoalCompletedStatus goalProgress={goalProgress} />
           </Box>
           <Flex color="gray.300" alignItems="center" spaceX="1">
             <Calendar size="16" />

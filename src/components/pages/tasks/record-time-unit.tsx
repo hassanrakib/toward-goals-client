@@ -2,10 +2,6 @@
 
 import StyledButton from "@/components/derived-ui/styled-button";
 import StyledProgressBar from "@/components/derived-ui/styled-progress";
-import {
-  ProgressCircleRing,
-  ProgressCircleRoot,
-} from "@/components/ui/progress-circle";
 import { toaster } from "@/components/ui/toaster";
 import {
   useCreateTimeSpanMutation,
@@ -14,7 +10,7 @@ import {
 import { ITask, TimeSpanCreationData } from "@/types/task";
 import { getPercentage } from "@/utils/global";
 import { getActiveDifficulty, getDifficultyColor } from "@/utils/habit";
-import { Badge, Card, Stack, Text } from "@chakra-ui/react";
+import { Badge, Card, Spinner, Stack, Text } from "@chakra-ui/react";
 import { secondsToMinutes } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -146,7 +142,6 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
 
   return (
     <Card.Root
-      variant="elevated"
       rounded="2xl"
       border="2px dashed"
       borderColor="yellow.500"
@@ -167,40 +162,41 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
           size="xl"
         />
         {/* see current completed duration + start timer + add completed duration */}
-        <Stack alignSelf="center" direction="row" alignItems="center">
-          <Badge size="lg" variant="outline" rounded="xl">
-            {/* show an animated  spinner when startTime is set */}
-            <ProgressCircleRoot
-              key={startTime ? "animated" : "static"}
-              value={startTime ? null : undefined}
-              size="xs"
-            >
-              <ProgressCircleRing />
-            </ProgressCircleRoot>
-            {/* show current completed duration */}
-            <Text>
-              {newCompletedDurationInMin} minute {newDurationRemainingSeconds}{" "}
-              seconds
-            </Text>
-          </Badge>
+        {/* don't render when the task is completed */}
+        {!task.isCompleted && (
+          <Stack alignSelf="center" direction="row" alignItems="center">
+            <Badge size="lg" variant="outline" rounded="xl">
+              {/* show an animated  spinner when startTime is set */}
+              <Spinner size="xs" />
+              {/* show current completed duration */}
+              <Text>
+                {newCompletedDurationInMin} minute {newDurationRemainingSeconds}{" "}
+                seconds
+              </Text>
+            </Badge>
 
-          {/* if startTime, allow to update task */}
-          {startTime ? (
-            <StyledButton
-              onClick={() => recordCompletedTimeUnit(new Date())}
-              // keep the button disabled if duration is less than 1 minute
-              disabled={newCompletedDurationInMin < 1}
-              size="xs"
-            >
-              Done
-            </StyledButton>
-          ) : (
-            // start the timer by setting startTime
-            <StyledButton onClick={() => setStartTime(new Date())} size="xs">
-              Start
-            </StyledButton>
-          )}
-        </Stack>
+            {/* if startTime, allow to update task */}
+            {startTime ? (
+              <StyledButton
+                onClick={() => recordCompletedTimeUnit(new Date())}
+                // keep the button disabled if duration is less than 1 minute
+                disabled={newCompletedDurationInMin < 1}
+                size="xs"
+              >
+                Done
+              </StyledButton>
+            ) : (
+              // start the timer by setting startTime
+              <StyledButton
+                disabled={task.isCompleted}
+                onClick={() => setStartTime(new Date())}
+                size="xs"
+              >
+                Start
+              </StyledButton>
+            )}
+          </Stack>
+        )}
       </Card.Body>
     </Card.Root>
   );

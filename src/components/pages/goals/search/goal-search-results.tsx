@@ -76,7 +76,7 @@ const GoalSearchResults = ({
       {/* if searchStatus loading */}
       {(searchStatus === "loading" || searchStatus === "stalled") && (
         <Alert status="neutral" variant="surface">
-          Loading...
+          Loading goals...
         </Alert>
       )}
       {/* if no goals found for the search */}

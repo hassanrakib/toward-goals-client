@@ -6,12 +6,13 @@ import InstantSearchProvider from "@/lib/instant-search-provider";
 import { SearchIndices } from "@/types/global";
 import { Search } from "lucide-react";
 import GoalSearchResults from "./goal-search-results";
-import { Box, Card, Flex, Text } from "@chakra-ui/react";
+import { Box, Card, Flex, Text, Image as ChakraImage } from "@chakra-ui/react";
 import { Configure } from "react-instantsearch";
 import CreateProgressLink from "@/components/shared/create-progress-link";
 import { useGetMyJoinedGoalsQuery } from "@/redux/features/goal/goal.api";
 import { MyJoinedGoal } from "@/types/goal";
 import NextImage from "next/image";
+import { Alert } from "@/components/ui/alert";
 
 interface IFormValues {
   goalName: string;
@@ -31,6 +32,7 @@ const GoalSearchForm = () => {
     data: joinedGoals,
     isLoading: isJoinedGoalsLoading,
     isError: isErrorGettingJoinedGoals,
+    isSuccess: isSuccessGettingJoinedGoals,
   } = useGetMyJoinedGoalsQuery({ isCompleted: false });
 
   // form submit handler
@@ -66,15 +68,29 @@ const GoalSearchForm = () => {
               <Text fontSize="xs" color="fg.muted">
                 Search by
               </Text>
-              <NextImage
-                src="/images/algolia-logo.webp"
-                alt="algolia-logo"
-                width={64}
-                height={19}
-              />
+              <ChakraImage width="full" maxWidth="60px" height="auto" asChild>
+                <NextImage
+                  src="/images/algolia-logo.webp"
+                  alt="algolia-logo"
+                  width="879"
+                  height="230"
+                />
+              </ChakraImage>
             </Flex>
+            {/* if is joined goals loading */}
+            {isJoinedGoalsLoading && (
+              <Alert status="neutral" variant="surface">
+                Loading goals...
+              </Alert>
+            )}
+            {/* if is error getting joined goals */}
+            {isErrorGettingJoinedGoals && (
+              <Alert status="error" variant="surface">
+                Error processing your request
+              </Alert>
+            )}
             {/* show goal search results */}
-            {!isJoinedGoalsLoading && !isErrorGettingJoinedGoals && (
+            {isSuccessGettingJoinedGoals && (
               <GoalSearchResults
                 joinedGoals={joinedGoals!.data as MyJoinedGoal[]}
               />

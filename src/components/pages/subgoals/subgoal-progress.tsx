@@ -1,8 +1,9 @@
 import { Alert } from "@/components/ui/alert";
 import { ISubgoalProgress } from "@/types/progress";
-import { Badge, Box, Card, Heading, List, Stack, Text } from "@chakra-ui/react";
+import { Box, Card, Heading, List, Stack, Text } from "@chakra-ui/react";
 import { addDays, format } from "date-fns";
-import { Circle, CircleCheck, CircleCheckBig } from "lucide-react";
+import { CircleCheck } from "lucide-react";
+import SubgoalCompletedStatus from "./subgoal-completed-status";
 
 const SubgoalProgress = ({
   subgoalProgress,
@@ -14,29 +15,13 @@ const SubgoalProgress = ({
     subgoal: { title, duration },
     keyMilestones,
     createdAt,
-    isCompleted,
   } = subgoalProgress;
 
   return (
     <Card.Root position="relative">
       {/* Completed or  Mark Complete */}
       <Box position="absolute" right="2" top="2">
-        {isCompleted ? (
-          <Badge variant="solid" size="sm" colorPalette="green">
-            <CircleCheckBig size="12" />
-            Completed
-          </Badge>
-        ) : (
-          <Badge
-            variant="surface"
-            size="sm"
-            colorPalette="yellow"
-            cursor="pointer"
-          >
-            <Circle size="12" />
-            Mark Completed
-          </Badge>
-        )}
+        <SubgoalCompletedStatus subgoalProgress={subgoalProgress} />
       </Box>
       <Card.Header gap="unset">
         <Heading size="xl">{title}</Heading>
