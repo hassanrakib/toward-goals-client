@@ -15,8 +15,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/:path*", // Match any request starting with /api/
-        destination: `${envConfig.baseApi}/:path*`, // Proxy it to the backend
+        source: `${envConfig.baseApi}/:path*`,
+        destination: `${envConfig.externalBaseApi}/:path*`, // Proxy it to the backend
       },
     ];
   },
