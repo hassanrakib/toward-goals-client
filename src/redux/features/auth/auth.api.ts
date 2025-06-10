@@ -1,10 +1,10 @@
 import { baseApi } from "@/redux/baseApi";
-import { ILoginCredentials, ISessionPayload } from "../../../types/auth";
+import { ILoginCredentials } from "../../../types/auth";
 import { IResponse } from "@/types/global";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    signIn: build.mutation<IResponse<ISessionPayload>, ILoginCredentials>({
+    signIn: build.mutation<IResponse<{ session: string }>, ILoginCredentials>({
       query: (loginCredentials) => ({
         url: "auth/login",
         method: "POST",

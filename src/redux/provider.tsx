@@ -3,13 +3,12 @@
 import { useRef } from "react";
 import { Provider as StoreProvider } from "react-redux";
 import { AppStore, makeStore } from "./store";
-import { ISessionPayload } from "@/types/auth";
 import { setSession } from "./features/auth/auth.slice";
 
 export function Provider({
   session,
   children,
-}: Readonly<{ session: ISessionPayload | null; children: React.ReactNode }>) {
+}: Readonly<{ session: string | undefined; children: React.ReactNode }>) {
   const storeRef = useRef<AppStore | null>(null);
 
   if (!storeRef.current) {

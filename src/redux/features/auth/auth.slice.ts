@@ -1,23 +1,22 @@
-import { ISessionPayload } from "@/types/auth";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface IAuthState {
-  session: ISessionPayload | null;
+  session: string | undefined;
 }
 
 const initialState: IAuthState = {
-  session: null,
+  session: undefined,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setSession: (state, action: PayloadAction<ISessionPayload>) => {
+    setSession: (state, action: PayloadAction<string>) => {
       state.session = action.payload;
     },
     clearSession: (state) => {
-      state.session = null;
+      state.session = undefined;
     },
   },
 });

@@ -3,7 +3,6 @@ import { IResponse, QueryParams } from "@/types/global";
 import { cookies } from "next/headers";
 
 export interface FetchOptions extends RequestInit {
-  skipCookies?: boolean;
   queryParams?: QueryParams;
 }
 
@@ -13,7 +12,7 @@ export async function fetchFromApi<T>(
   options: FetchOptions = {}
 ): Promise<IResponse<T>> {
   // destructure options
-  const { skipCookies, queryParams, headers, ...restOptions } = options;
+  const { queryParams, headers, ...restOptions } = options;
 
   // construct the query string if queryParams not undefined
   const queryString = queryParams
@@ -38,16 +37,15 @@ export async function fetchFromApi<T>(
       ).toString()}`
     : "";
 
-  // send cookies explicitly
-  // as it is running in server not on the browser
-  const cookieStore = skipCookies ? "" : (await cookies()).toString();
+  // get the session from the cookie store
+  const session = (await cookies()).get("session")?.value;
 
   try {
     // get response
     const res = await fetch(`${envConfig.baseApi}${endPoint}${queryString}`, {
       headers: {
-        // send cookies within headers
-        ...(cookieStore ? { Cookie: cookieStore } : {}),
+        // send the authorization headers if session found
+        ...(session ? { authorization: `Bearer ${session}` } : {}),
         ...headers,
       },
       ...restOptions,

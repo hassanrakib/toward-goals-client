@@ -1,6 +1,6 @@
-import { decrypt } from "@/services/auth";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { decrypt } from "./utils/auth";
 
 const authRoutes = ["/signin", "/signup"];
 
@@ -8,14 +8,14 @@ export default async function middleware(request: NextRequest) {
   // which path the user is intending to go
   const { pathname } = request.nextUrl;
 
-  // if the user is authenticated the cookie will be found
-  const cookie = (await cookies()).get("session")?.value;
+  // if the user is authenticated the session will be found
+  const session = (await cookies()).get("session")?.value;
 
   // optimistic check
-  const session = await decrypt(cookie);
+  const sessionPayload = decrypt(session);
 
   // if the user is uauthenticated
-  if (!session) {
+  if (!sessionPayload) {
     // and trying to get into auth routes
     // or root route(root route has a public version alongside private version)
     if (authRoutes.includes(pathname) || pathname === "/") {
@@ -31,7 +31,7 @@ export default async function middleware(request: NextRequest) {
   }
 
   // if the user is authenticated
-  if (session) {
+  if (sessionPayload) {
     // and trying to get into the auth routes
     if (authRoutes.includes(pathname)) {
       // redirect to the homepage

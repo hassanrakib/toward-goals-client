@@ -17,6 +17,7 @@ import { setSession } from "@/redux/features/auth/auth.slice";
 import { useSearchParams } from "next/navigation";
 import TowardGoalsLogo from "@/components/shared/toward-goals-logo";
 import { toaster } from "@/components/ui/toaster";
+import { setSessionInCookie } from "@/services/auth";
 
 interface IFormValues {
   username: string;
@@ -50,8 +51,16 @@ const SignIn = () => {
       reset(defaultValues);
       // show a ui feedback
       toaster.create({ type: "info", description: "Successfully signed in" });
-      // set the session in the redux store
-      dispatch(setSession(result.data.data));
+
+      // set the session in the cookie to be used by the next.js server components
+      // using the cookies() api
+      // notice => the cookie is being set by next.js server mutation
+      await setSessionInCookie(result.data.data.session);
+
+      // set the session in the redux store to be used by the client components
+      // for direct external server api call
+      // backend server domain doesn't have cookie to send from the browser
+      dispatch(setSession(result.data.data.session));
 
       // redirect user to the redirect path or home page
       // not using router from next.js because /signin is an unprotected
