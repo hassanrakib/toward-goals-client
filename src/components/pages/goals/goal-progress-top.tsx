@@ -1,10 +1,11 @@
 import AvatarWithLevel from "@/components/shared/avatar-with-level";
 import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/react";
-import { addDays, differenceInDays, format, isAfter } from "date-fns";
 import { Calendar, Gem } from "lucide-react";
 import GoalLevel from "./goal-level";
 import { IGoalProgress } from "@/types/progress";
 import GoalCompletedStatus from "./goal-completed-status";
+import DurationInfo from "@/components/shared/duration-info";
+import { addDays } from "date-fns";
 
 const GoalProgressTop = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
   // destructuring properties from the goal progress
@@ -67,11 +68,10 @@ const GoalProgressTop = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
           </Box>
           <Flex color="gray.300" alignItems="center" spaceX="1">
             <Calendar size="16" />
-            <Text fontSize="sm" fontWeight="medium">
-              {isAfter(new Date(), goal.startDate)
-                ? `Ends in ${goal.duration - differenceInDays(new Date(), goal.startDate)} days (${format(addDays(goal.startDate, goal.duration), "PPpp")})`
-                : `Starting on ${format(goal.startDate, "PPpp")}`}
-            </Text>
+            <DurationInfo
+              startDate={goal.startDate}
+              endDate={addDays(goal.startDate, goal.duration).toISOString()}
+            />
           </Flex>
         </VStack>
         <Flex alignItems="center">

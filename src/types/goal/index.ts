@@ -8,14 +8,14 @@ export interface IGoal {
   admins: string[];
   users: string[];
   userLimit: number;
-  startDate: Date;
+  startDate: string;
   duration: number;
 }
 
 export type GoalCreationData = Pick<
   IGoal,
-  "title" | "userLimit" | "duration"
-> & { startDate: string };
+  "title" | "userLimit" | "duration" | "startDate"
+>;
 
 type GoalSearchResult = Omit<IGoal, "_id" | "creator" | "admins" | "users"> & {
   userCount: number;

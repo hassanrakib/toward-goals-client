@@ -29,14 +29,14 @@ export type GoalProgressCreationData = { goal: string };
 export interface ISubgoalProgress {
   _id: string;
   user: string;
-  goal: string;
+  goal: IGoal;
   subgoal: ISubgoal;
   keyMilestones: string[];
   reward?: string;
   isCompleted: boolean;
   isRewarded?: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type SubgoalProgressCreationData = { goal: string; subgoal: string };
