@@ -1,6 +1,7 @@
 "use client";
 
 import MarkCompleted from "@/components/shared/mark-completed";
+import { toaster } from "@/components/ui/toaster";
 import { ISubgoalProgress } from "@/types/progress";
 
 export default function SubgoalCompletedStatus({
@@ -13,7 +14,7 @@ export default function SubgoalCompletedStatus({
 
   // do update from here
   const markSubgoalComplete = () => {
-    console.log("subgoal is complete!!!");
+    toaster.create({type: "info", description: "Developer is working on it..."});
   };
 
   return (

@@ -44,7 +44,7 @@ export type SubgoalProgressCreationData = { goal: string; subgoal: string };
 export interface IHabitProgress {
   _id: string;
   user: string;
-  goal: string;
+  goal: IGoal;
   habit: IHabit;
   totalUnitCompleted: number;
   miniCompletion: number;

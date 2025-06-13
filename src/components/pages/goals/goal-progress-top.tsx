@@ -71,6 +71,8 @@ const GoalProgressTop = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
             <DurationInfo
               startDate={goal.startDate}
               endDate={addDays(goal.startDate, goal.duration).toISOString()}
+              fontSize="sm"
+              fontWeight="medium"
             />
           </Flex>
         </VStack>

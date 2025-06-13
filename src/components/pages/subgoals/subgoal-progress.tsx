@@ -4,7 +4,8 @@ import { Box, Card, Heading, List, Stack, Text } from "@chakra-ui/react";
 import { CircleCheck } from "lucide-react";
 import SubgoalCompletedStatus from "./subgoal-completed-status";
 import DurationInfo from "@/components/shared/duration-info";
-import { isAfter, isBefore } from "date-fns";
+import { addDays, isAfter, isBefore } from "date-fns";
+import { Tag } from "@/components/ui/tag";
 
 const SubgoalProgress = ({
   subgoalProgress,
@@ -13,16 +14,25 @@ const SubgoalProgress = ({
 }) => {
   // destructure
   const {
-    goal: { startDate: goalStartDate, duration: goalDuration },
+    goal: {
+      title: goalTitle,
+      startDate: goalStartDate,
+      duration: goalDuration,
+    },
     subgoal: { title, duration: subgoalDuration },
     keyMilestones,
     createdAt: subgoalCreationDate,
   } = subgoalProgress;
 
   // get goal end date
-  const goalEndDate = goalStartDate + goalDuration;
+  const goalEndDate = addDays(goalStartDate, goalDuration).toISOString();
   // get subgoal end date (subgoal end date can be greater than goal end date, see => backend create subgoal service)
-  const subgoalEndDate = subgoalCreationDate + subgoalDuration;
+  // if subgoal created before goal start date
+  // subgoal end date will be goal start date + subgoal duration
+  // otherwise subgoal creation date + subgoal duration
+  const subgoalEndDate = isBefore(subgoalCreationDate, goalStartDate)
+    ? addDays(goalStartDate, subgoalDuration).toISOString()
+    : addDays(subgoalCreationDate, subgoalDuration).toISOString();
 
   return (
     <Card.Root position="relative">
@@ -32,6 +42,7 @@ const SubgoalProgress = ({
       </Box>
       <Card.Header gap="unset">
         <Heading size="xl">{title}</Heading>
+        <Tag colorPalette="yellow" variant="outline">@goal {goalTitle}</Tag>
         {/* if subgoal created before goal startDate, startDate = goal startDate */}
         {/* if subgoal created after goal startDate, startDate = subgoal createdAt */}
         <DurationInfo
@@ -47,6 +58,8 @@ const SubgoalProgress = ({
             isAfter(subgoalEndDate, goalEndDate) ? goalEndDate : subgoalEndDate
           }
           color="fg.muted"
+          fontSize="xs"
+          mt="2"
         />
       </Card.Header>
       <Card.Body>
