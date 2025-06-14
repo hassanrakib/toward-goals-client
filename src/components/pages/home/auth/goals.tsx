@@ -20,7 +20,10 @@ export default async function Goals({
       {/* fill the space expanding columns when a new column can't be inserted */}
       <Grid
         gap="3.5"
-        gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+        gridTemplateColumns={{
+          base: "repeat(auto-fit, minmax(250px, 1fr))",
+          md: "repeat(auto-fit, minmax(250px, 280px))",
+        }}
       >
         {goalsProgress.map((goalProgress) => (
           <Goal key={goalProgress._id} goalProgress={goalProgress} />
