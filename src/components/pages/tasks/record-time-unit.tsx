@@ -11,7 +11,7 @@ import { ITask, TimeSpanCreationData } from "@/types/task";
 import { getPercentage } from "@/utils/global";
 import { getActiveDifficulty, getDifficultyColor } from "@/utils/habit";
 import { Badge, Card, Spinner, Stack, Text } from "@chakra-ui/react";
-import { secondsToMinutes } from "date-fns";
+import { differenceInSeconds, secondsToMinutes } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -28,13 +28,15 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
 
   // rtk query
   // create time span mutation
-  const [createTimeSpan] = useCreateTimeSpanMutation();
+  const [createTimeSpan, { isLoading: isCreatingTimeSpan }] =
+    useCreateTimeSpanMutation();
 
-  // handler update completedUnits
-  const [updateTask] = useUpdateTaskMutation();
+  // handler to update task's completedUnits
+  const [updateTask, { isLoading: isUpdatingCompletedUnits }] =
+    useUpdateTaskMutation();
 
-  // show timer
-  // startTime of the timer
+  // show stopwatch
+  // startTime of the stopwatch
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [newCompletedDurationInSec, setNewCompletedDurationInSec] = useState(0);
 
@@ -73,15 +75,19 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
       ? activeDifficulty.requirement
       : totalCompletedDurationInMinWithRemainingSec;
 
-  // run the timer
+  // run the stopwatch
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval>;
 
-    // if startTime is set by the user means timer is running
+    // if startTime is set by the user means stopwatch is running
     if (startTime) {
       // set an interval that sets the duration state every 1s
       intervalId = setInterval(() => {
-        setNewCompletedDurationInSec((prev) => prev + 1);
+        // get the differnce in seconds from the startTime to the current time
+        // and set the state setNewCompletedDurationInSec
+        setNewCompletedDurationInSec(
+          differenceInSeconds(new Date(), startTime)
+        );
       }, 1000);
     }
 
@@ -157,7 +163,7 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
           animated={startTime ? true : false}
           size="xl"
         />
-        {/* see current completed duration + start timer + add completed duration */}
+        {/* see current completed duration + start stopwatch + add completed duration */}
         {/* don't render when the task is completed */}
         {!task.isCompleted && (
           <Stack alignSelf="center" direction="row" alignItems="center">
@@ -178,6 +184,7 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
                 // keep the button disabled if duration is less than 1 minute
                 disabled={newCompletedDurationInMin < 1}
                 size="xs"
+                loading={isCreatingTimeSpan || isUpdatingCompletedUnits}
               >
                 Done
               </StyledButton>
