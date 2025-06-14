@@ -23,6 +23,10 @@ const taskApi = baseApi.injectEndpoints({
         method: "POST",
         body: timeSpan,
       }),
+      invalidatesTags: (result, error, arg) => [
+        // invalidates different cache tags for different task id
+        { type: "timeSpanOfATask", id: arg.task },
+      ],
     }),
     updateTask: build.mutation<IResponse<ITask>, TaskUpdateData>({
       query: ({ taskId, ...updateData }) => ({
@@ -38,6 +42,10 @@ const taskApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: (result, error, arg) => [
+        // different cache tags for different taskId
+        { type: "timeSpanOfATask", id: arg.taskId },
+      ],
     }),
   }),
 });
