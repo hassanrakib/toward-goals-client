@@ -31,6 +31,14 @@ const taskApi = baseApi.injectEndpoints({
         body: updateData,
       }),
     }),
+    getTimeSpans: build.query<IResponse<ITimeSpan[]>, { taskId: string }>({
+      query: ({ taskId }) => {
+        return {
+          url: `/tasks/${taskId}/time-spans`,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
@@ -38,4 +46,5 @@ export const {
   useCreateTaskMutation,
   useCreateTimeSpanMutation,
   useUpdateTaskMutation,
+  useGetTimeSpansQuery,
 } = taskApi;

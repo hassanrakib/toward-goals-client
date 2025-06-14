@@ -1,14 +1,19 @@
+"use client";
+
+// keep it a client component, date formatting needs to be done in
+// user's local time zone
+
 import { Tag } from "@/components/ui/tag";
-import { getTaskTimeSpans } from "@/services/task";
+import { useGetTimeSpansQuery } from "@/redux/features/task/task.api";
 import { HStack, Text } from "@chakra-ui/react";
 import { format } from "date-fns";
 
-const TimeSpans = async ({ taskId }: { taskId: string }) => {
+const TimeSpans = ({ taskId }: { taskId: string }) => {
   // get all the timespans for the task
-  const timeSpans = await getTaskTimeSpans(taskId);
+  const {data: timeSpans} = useGetTimeSpansQuery({ taskId });
 
   // if no timeSpans
-  if (!timeSpans.data?.length) {
+  if (!timeSpans?.data?.length) {
     return null;
   }
 

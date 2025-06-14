@@ -1,6 +1,6 @@
 import { fetchFromApi } from "@/lib/fetch-from-api";
 import { QueryParams } from "@/types/global";
-import { ITask, ITimeSpan } from "@/types/task";
+import { ITask } from "@/types/task";
 
 export const getMyTasks = async (queryParams?: QueryParams) => {
   return fetchFromApi<ITask[]>("/tasks/my-tasks", {
@@ -15,11 +15,5 @@ export const getMyTasks = async (queryParams?: QueryParams) => {
     next: {
       tags: ["tasks"],
     },
-  });
-};
-
-export const getTaskTimeSpans = async (taskId: string) => {
-  return fetchFromApi<ITimeSpan[]>(`/tasks/${taskId}/time-spans`, {
-    cache: "no-store",
   });
 };
