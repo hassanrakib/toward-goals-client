@@ -141,11 +141,7 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
   };
 
   return (
-    <Card.Root
-      rounded="2xl"
-      border="2px dashed"
-      borderColor="yellow.500"
-    >
+    <Card.Root rounded="2xl" border="2px dashed" borderColor="yellow.500">
       <Card.Body gap="2">
         <StyledProgressBar
           // width equals to the progress bar (filled part) within the progress container
@@ -167,7 +163,7 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
           <Stack alignSelf="center" direction="row" alignItems="center">
             <Badge size="lg" variant="outline" rounded="xl">
               {/* show an animated  spinner when startTime is set */}
-              <Spinner size="xs" />
+              {startTime && <Spinner size="xs" />}
               {/* show current completed duration */}
               <Text>
                 {newCompletedDurationInMin} minute {newDurationRemainingSeconds}{" "}
