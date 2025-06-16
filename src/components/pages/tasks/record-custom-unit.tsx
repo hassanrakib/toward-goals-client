@@ -129,6 +129,7 @@ const RecordCustomUnit = ({ task }: { task: ITask }) => {
                 />
                 <SubmitButton
                   isServerActionLoading={isUpdatingTask}
+                  loadingText="Saving..."
                   size="xs"
                   disabled={newCompletedUnits < 1}
                 >

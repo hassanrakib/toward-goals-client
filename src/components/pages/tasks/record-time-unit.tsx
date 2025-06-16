@@ -79,8 +79,9 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval>;
 
-    // if startTime is set by the user means stopwatch is running
-    if (startTime) {
+    // if startTime is set & not doing any of the mutations
+    // then you keep running the stopwatch
+    if (!isCreatingTimeSpan && !isUpdatingCompletedUnits && startTime) {
       // set an interval that sets the duration state every 1s
       intervalId = setInterval(() => {
         // get the differnce in seconds from the startTime to the current time
@@ -93,7 +94,7 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
 
     // clear the interval before unmounting
     return () => clearInterval(intervalId);
-  }, [startTime]);
+  }, [startTime, isCreatingTimeSpan, isUpdatingCompletedUnits]);
 
   // record newly completed time unit
   const recordCompletedTimeUnit = async (endTime: Date) => {
@@ -105,9 +106,6 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
         startTime: startTime.toISOString(),
         endTime: endTime.toISOString(),
       };
-
-      // stop the timer
-      setStartTime(null);
 
       // if newCompletedDurationInMin is less than 1
       // we will not do any operation
@@ -130,17 +128,20 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
 
         // if successfully updated completedUnits
         if (updatedTask.data?.data) {
+          // set startTime to null to stop the timer
+          // stopping the timer stops setting newCompletedDurationInSec state
+          setStartTime(null);
+          // reset the state newCompletedDurationInSec
+          setNewCompletedDurationInSec(0);
+
+          // refresh the current route
+          router.refresh();
+
           // show a ui feedback
           toaster.create({
             type: "info",
             description: `${newCompletedDurationInMin} minute worked`,
           });
-
-          // refresh the current route
-          router.refresh();
-
-          // reset the state
-          setNewCompletedDurationInSec(0);
         }
       }
     }
@@ -185,6 +186,7 @@ const RecordTimeUnit = ({ task }: { task: ITask }) => {
                 disabled={newCompletedDurationInMin < 1}
                 size="xs"
                 loading={isCreatingTimeSpan || isUpdatingCompletedUnits}
+                loadingText="Saving..."
               >
                 Done
               </StyledButton>
