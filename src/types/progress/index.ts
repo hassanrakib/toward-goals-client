@@ -25,6 +25,7 @@ export interface IGoalProgress {
 }
 
 export type GoalProgressCreationData = { goal: string };
+export type GoalProgressUpdateData = { goalProgressId: string; isCompleted: true };
 
 export interface ISubgoalProgress {
   _id: string;
