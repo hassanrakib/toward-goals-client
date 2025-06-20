@@ -8,7 +8,7 @@ export const createTaskSchema = z.object({
       .string()
       .min(1, { message: "Title is required" })
       .min(5, { message: "Title must be at least 5 characters long" })
-      .max(50, { message: "Title cannot exceed 50 characters" }),
+      .max(60, { message: "Title cannot exceed 60 characters" }),
     goalId: z
       .string()
       .min(1, { message: "Please select goal writing @goal" })

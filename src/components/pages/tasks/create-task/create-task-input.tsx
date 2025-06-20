@@ -20,7 +20,7 @@ import { ICreateTaskFormValues } from "./create-task-form";
 
 const CreateTaskInput = () => {
   // character limit for the input
-  const characterLimit = 280;
+  const characterLimit = 400;
 
   // html field will hold html string data of tiptap editor
   const { field: html } = useController({

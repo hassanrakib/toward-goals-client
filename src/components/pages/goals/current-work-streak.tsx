@@ -1,7 +1,7 @@
 import { IGoalProgress } from "@/types/progress";
 import { Text, Badge, VStack, Card } from "@chakra-ui/react";
-import { format, isToday, isYesterday } from "date-fns";
 import { Flame, Tally5 } from "lucide-react";
+import LastStreakDate from "./last-streak-date";
 
 export default function CurrentWorkStreak({
   goalProgress,
@@ -9,7 +9,7 @@ export default function CurrentWorkStreak({
   goalProgress: IGoalProgress;
 }) {
   const {
-    workStreak: { current: streakDays, streakDates },
+    workStreak: { current: currentStreak, streakDates },
   } = goalProgress;
   return (
     <Card.Root variant="subtle" rounded="xl">
@@ -40,13 +40,13 @@ export default function CurrentWorkStreak({
             gradientTo="red.400"
             bgClip="text"
           >
-            {streakDays} Day{streakDays !== 1 && "s"}
+            {currentStreak} Day{currentStreak > 1 && "s"}
           </Text>
-          <Text color="gray.600" fontSize="md">
-            {streakDays > 0
-              ? `Last worked on ${isToday(streakDates[streakDates.length - 1]) ? "Today" : isYesterday(streakDates[streakDates.length - 1]) ? "Yesterday" : format(streakDates[streakDates.length - 1], "PP")} ${format(streakDates[streakDates.length - 1], "h:mm a")} 💪`
-              : "Stop thinking, start doing!"}
-          </Text>
+          {/* shows the last streak date */}
+          <LastStreakDate
+            currentStreak={currentStreak}
+            streakDates={streakDates}
+          />
         </VStack>
       </Card.Body>
     </Card.Root>

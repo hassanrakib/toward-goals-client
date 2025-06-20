@@ -59,7 +59,7 @@ export const createHabitSchema = z.object({
     .string()
     .min(1, "Habit title is required.")
     .min(3, "Habit title must be at least 3 characters long.")
-    .max(50, "Habit title must be at most 50 characters long."),
+    .max(60, "Habit title can be at most 60 characters long."),
   unit: createHabitUnitSchema,
   difficulties: createHabitDifficultiesSchema,
 });
