@@ -3,6 +3,7 @@ import { IResponse } from "@/types/global";
 import {
   ISubgoalProgress,
   SubgoalProgressCreationData,
+  SubgoalProgressUpdateData,
 } from "@/types/progress";
 
 const subgoalProgressApi = baseApi.injectEndpoints({
@@ -16,10 +17,30 @@ const subgoalProgressApi = baseApi.injectEndpoints({
         method: "POST",
         body: subgoalProgressCreationData,
       }),
-      invalidatesTags: (result, error, arg) => [{type: "subgoalOfAGoal", id: arg.goal}],
+      invalidatesTags: (result, error, arg) => [
+        { type: "subgoalOfAGoal", id: arg.goal },
+      ],
+    }),
+    updateSubgoalProgress: build.mutation<
+      IResponse<ISubgoalProgress>,
+      SubgoalProgressUpdateData
+    >({
+      query: ({ subgoalProgressId, ...update }) => ({
+        url: `/progress/my-subgoals-progress/${subgoalProgressId}`,
+        method: "PATCH",
+        body: update,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        {
+          type: "subgoalOfAGoal",
+          id: arg.goalId,
+        },
+      ],
     }),
   }),
 });
 
-export const { useCreateSubgoalProgressMutation } =
-  subgoalProgressApi;
+export const {
+  useCreateSubgoalProgressMutation,
+  useUpdateSubgoalProgressMutation,
+} = subgoalProgressApi;

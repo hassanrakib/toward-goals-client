@@ -41,6 +41,11 @@ export interface ISubgoalProgress {
 
 export type SubgoalProgressCreationData = { goal: string; subgoal: string };
 
+export type SubgoalProgressUpdateData = {
+  subgoalProgressId: string;
+  goalId: string;
+} & Partial<Pick<ISubgoalProgress, "isCompleted" | "keyMilestones">>;
+
 export interface IHabitProgress {
   _id: string;
   user: string;
