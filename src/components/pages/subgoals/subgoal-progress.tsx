@@ -6,6 +6,7 @@ import SubgoalCompletedStatus from "./subgoal-completed-status";
 import DurationInfo from "@/components/shared/duration-info";
 import { addDays, isAfter, isBefore } from "date-fns";
 import { Tag } from "@/components/ui/tag";
+import AddKeyMilestones from "./add-key-milestones";
 
 const SubgoalProgress = ({
   subgoalProgress,
@@ -22,6 +23,7 @@ const SubgoalProgress = ({
     subgoal: { title, duration: subgoalDuration },
     keyMilestones,
     createdAt: subgoalCreationDate,
+    isCompleted,
   } = subgoalProgress;
 
   // get goal end date
@@ -42,7 +44,9 @@ const SubgoalProgress = ({
       </Box>
       <Card.Header gap="unset">
         <Heading size="xl">{title}</Heading>
-        <Tag colorPalette="yellow" variant="outline">@goal {goalTitle}</Tag>
+        <Tag colorPalette="yellow" variant="outline">
+          @goal {goalTitle}
+        </Tag>
         {/* if subgoal created before goal startDate, startDate = goal startDate */}
         {/* if subgoal created after goal startDate, startDate = subgoal createdAt */}
         <DurationInfo
@@ -65,18 +69,23 @@ const SubgoalProgress = ({
       <Card.Body>
         <Stack gap="1">
           <Text>Key Milestones:</Text>
-          {keyMilestones.length ? (
-            <List.Root gap="2" variant="plain" align="center">
-              {keyMilestones.map((milestone, index) => (
-                <List.Item key={index}>
-                  <List.Indicator asChild color="green.500">
-                    <CircleCheck />
-                  </List.Indicator>
-                  {milestone}
-                </List.Item>
-              ))}
-            </List.Root>
-          ) : (
+          {/* show already added milestones */}
+          <List.Root gap="1" variant="plain" align="center">
+            {keyMilestones.map((milestone, index) => (
+              <List.Item key={index} fontSize="14px" color="fg.muted">
+                <List.Indicator asChild color="yellow.500">
+                  <CircleCheck size={14} />
+                </List.Indicator>
+                {milestone}
+              </List.Item>
+            ))}
+          </List.Root>
+          {/* if subgoal is not completed and milestones added less than 5 */}
+          {!isCompleted && keyMilestones.length < 5 && (
+            <AddKeyMilestones subgoalProgress={subgoalProgress} />
+          )}
+          {/* if subgoal is completed and no milestones added */}
+          {isCompleted && !keyMilestones.length && (
             <Alert
               size="sm"
               variant="subtle"
