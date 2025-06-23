@@ -5,6 +5,7 @@ import { ComponentType } from "react";
 import { PluginKey } from "@tiptap/pm/state";
 import { ReactRenderer } from "@tiptap/react";
 import tippy, { Instance } from "tippy.js";
+import { ICreateTaskFormValues } from "@/components/pages/tasks/create-task/create-task-form";
 
 export function makeMentionExtension({
   name,
@@ -17,17 +18,18 @@ export function makeMentionExtension({
     // name of the extension
     name,
   }).configure({
-    // class attribute will be added to the inserted node by this extension
-    HTMLAttributes: { class: `mention ${name}` },
+    // class attribute will be added to the rendered html by this extension
+    HTMLAttributes: { class: "mention" },
     // suggestion option config
     suggestion: {
       // @ will trigger the suggestion inside editor
       char: "@",
+      // if you didn’t assign a unique pluginKey,
+      // and made multiple mention extensions using this utility,
+      // they would all share the same default key, potentially causing state conflicts
       pluginKey: new PluginKey(name),
       // don't trigger the suggestion only at the start of a line
       startOfLine: false,
-      // allow spaces in the query
-      allowSpaces: true,
       //allow any prefix character before suggestion char "@"
       allowedPrefixes: null,
       // items to show in the suggestion popup
@@ -36,24 +38,31 @@ export function makeMentionExtension({
       // render function decides what to render
       render: () => {
         // declare variables to store the ReactRenderer and Tippy.js popup instance
+        // ReactRenderer is responsible for rendering react components inside editor
         let reactRenderer: ReactRenderer;
         let popup: Instance;
 
         return {
-          // onStart will be triggered when user starts writing after suggestion char @
+          // onStart will be triggered when user types suggestion char @
           onStart: (props) => {
-            // If there's no reference position (cursor position), do nothing
+            // A client rectangle (or client rect) is a DOMRect object that describes
+            // the position and size of an element (query, like: '@goal')
+            // relative to the viewport
+            // This clientRect is then used to position the suggestion dropdown (tippy popup)
+            // relative to that character.
             if (!props.clientRect) {
               return;
             }
-            // Create a ReactRenderer instance to render the suggestion component
+            // Create a ReactRenderer instance to render the suggestion component inside editor
             reactRenderer = new ReactRenderer(Component, {
+              // The initial props object {query, command} to be passed to your Component
               props,
+              // This is a required option for ReactRenderer, because it needs access to the Tiptap editor instance to attach itself to the editor’s lifecycle
               editor: props.editor,
             });
             // Create a Tippy.js popup to show the suggestion dropdown
             popup = tippy(document.body, {
-              // Position the popup near the cursor
+              // Position the popup near the suggestion query
               getReferenceClientRect: props.clientRect as () => DOMRect,
               // Rendered React component as content
               content: reactRenderer.element,
@@ -70,11 +79,13 @@ export function makeMentionExtension({
           // Called when the suggestion data (query, items, etc) or cursor position updates
           onUpdate(props) {
             reactRenderer.updateProps(props);
-            // if no cursor position found or popup is already destroyed
+            // if no clientRect found or popup is already destroyed
             // don't do anything
             if (!props.clientRect || popup.state.isDestroyed) {
               return;
             }
+            // when the suggestion query or cursor position changes (like when you type more characters, or move the cursor)
+            // the suggestion system needs to re-render the component with new props.
             popup.setProps({
               getReferenceClientRect: props.clientRect as () => DOMRect,
             });
@@ -94,9 +105,10 @@ export function makeMentionExtension({
         editor
           .chain()
           .focus()
+          // insert multiple node at the suggestion query position
           .insertContentAt(range, [
             {
-              // insert a custom node such "goalMention"
+              // insert a custom node such as "goalMention"
               type: name,
               // pass the selected suggestion data as attributes
               // props are sent by command at the time of selection
@@ -113,18 +125,19 @@ export function makeMentionExtension({
 
 export function extractDataFromDoc(doc: Node) {
   // put the mention nodes id attribute here from the doc
-  // and title text from the heading node
-  const extracted = {
-    title: "",
+  const extracted: ICreateTaskFormValues["extracted"] = {
     goalId: "",
     subgoalId: "",
     habitId: "",
     deadline: "",
   };
 
-  // go through all the nodes of the doc and if any type of mention node is found
+  // go through all the descendant nodes of the doc node and if any type of mention node is found
   // add the mention nodes id in the mentions
   doc.descendants((node) => {
+    // the name of node type & node attrs assigned inside
+    // makeMentionExtension utitliy functions
+    // Mention config => suggestion utility => command method
     if (node.type.name === "goalMention") {
       extracted.goalId = node.attrs.id;
     } else if (node.type.name === "subgoalMention") {
@@ -133,8 +146,6 @@ export function extractDataFromDoc(doc: Node) {
       extracted.habitId = node.attrs.id;
     } else if (node.type.name === "deadlineMention") {
       extracted.deadline = node.attrs.id;
-    } else if (node.type.name === "heading") {
-      extracted.title = node.textContent;
     }
   });
 

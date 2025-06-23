@@ -76,7 +76,10 @@ export const GoalMentionList = ({
           onClick={() => {
             // send the command to insert goalMention node
             // command goes to the GoalMentionExtension which is rendering this component
-            command({ id: goal._id, label: `goal ${goal.title}` });
+            // send props to GoalMentionExtension command menthod
+            // id is later extracted from the editor.state
+            // & label is used by tiptap editor to render html with something showable
+            command({ id: goal._id, label: `goal_${goal.title}` });
           }}
         >
           {goal.title}

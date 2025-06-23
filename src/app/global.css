@@ -1,30 +1,27 @@
-/* basic editor styles */
-.create-task-input {
-  flex-basis: 140px;
+/* titap editor wrapper styles */
+.task-description-input {
+  flex-basis: 80px;
   overflow-y: auto;
 }
 
-.create-task-input .tiptap {
+/* actual editor will take the full height of its parent wrapper */
+.tiptap {
   height: 100%;
 }
 
-.create-task-input .tiptap:focus {
+/* no outline when focused within the tiptap editor */
+.tiptap:focus {
   outline: none;
 }
 
-/* Display a Placeholder for empty nodes inside editor */
-.create-task-input .is-empty::before {
+/* Display a placeholder for empty editor */
+/* .is-eidtor-empty class is given by the Placeholder extension */
+.tiptap .is-editor-empty::before {
   content: attr(data-placeholder);
   color: #999;
   float: left;
   height: 0;
   pointer-events: none;
-}
-
-/* task title style within editor */
-.create-task-input .task-title {
-  border-bottom: 1px dashed #ccc;
-  padding-bottom: 8px;
 }
 
 /* all the mentions style => within editor + without editor */
@@ -35,25 +32,4 @@
   border-radius: 6px;
   font-weight: 400;
   line-height: 1.7;
-}
-
-/* all the tasks title style => within editor + without editor */
-.task-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-/* Show # before the title => within editor + without editor */
-.task-title::before {
-  content: "#";
-  color: #666;
-  margin-right: 0.25rem;
-  font-weight: normal;
-}
-
-/* style without editor */
-.task {
-  font-size: 15px;
-  font-weight: 300;
 }

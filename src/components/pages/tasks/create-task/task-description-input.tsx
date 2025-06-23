@@ -1,91 +1,99 @@
 "use client";
 
 import { EditorContent, useEditor } from "@tiptap/react";
+import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import TextExtension from "@tiptap/extension-text";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
-import { Box, Flex, Icon, Text } from "@chakra-ui/react";
+import { Flex, Icon, Text, VStack } from "@chakra-ui/react";
 import { extractDataFromDoc } from "@/utils/tiptap";
 import {
-  CustomDocument,
-  CustomHeading,
   DeadlineMentionExtension,
   GoalMentionExtension,
   HabitMentionExtension,
   SubgoalMentionExtension,
 } from "@/lib/tiptap-extensions";
-import { useController, useFormContext } from "react-hook-form";
+import { FieldError, useController, useFormContext } from "react-hook-form";
 import { ICreateTaskFormValues } from "./create-task-form";
+import { getHookFormError } from "@/utils/form";
 
-const CreateTaskInput = () => {
+const TaskDescriptionInput = () => {
   // character limit for the input
   const characterLimit = 400;
 
   // html field will hold html string data of tiptap editor
-  const { field: html } = useController({
+  const { field: html } = useController<ICreateTaskFormValues, "html">({
     name: "html",
   });
 
   // extracted field will hold extracted data from editor content
-  const { field: extracted } = useController({ name: "extracted" });
+  const { field: extracted } = useController<
+    ICreateTaskFormValues,
+    "extracted"
+  >({ name: "extracted" });
 
   // get all the hook form errors
   const {
     formState: {
-      errors: { extracted: extractedFieldError },
+      errors: createTaskFormErrors,
+      errors: { extracted: extractedFieldsError },
     },
   } = useFormContext<ICreateTaskFormValues>();
+
+  // assign the first field error of extractedFieldsError
+  let extractedFieldError: FieldError | undefined;
+
+  // if error happens for extracted fields
+  if (extractedFieldsError) {
+    // get the first field from error fields
+    const firstErrorField = Object.keys(extractedFieldsError)[0];
+
+    // assign the extractedFieldError to the first error field's FieldError object
+    extractedFieldError = getHookFormError(
+      createTaskFormErrors,
+      `extracted.${firstErrorField}`
+    );
+  }
 
   // editor config
   const editor = useEditor({
     // initial content at the time of mounting the editor
     content: html.value,
+    // To suppress Tiptap error: SSR has been detected,
+    // please set `immediatelyRender` explicitly to `false` to avoid hydration mismatches.
     immediatelyRender: false,
+    // Extensions enhance Tiptap by adding new capabilities to the editor
     extensions: [
-      // custom document extension to force strict structure of 'heading paragraph',
-      // heading means heading node and paragraph means paragraph node
-      CustomDocument,
-      CustomHeading.configure({
-        HTMLAttributes: {
-          class: "task-title",
-        },
-        levels: [2],
-      }),
-      Paragraph.configure({
-        HTMLAttributes: {
-          class: "task-details",
-        },
-      }),
+      // Document node is home to all other nodes
+      Document,
+      // Paragraph node renders paragraph <p></p>
+      Paragraph,
+      // Text node renders plain text
       TextExtension,
+      // show a placeholder inside the editor
       Placeholder.configure({
-        placeholder: ({ node }) => {
-          // for the heading show this placeholder
-          if (node.type.name === "heading") {
-            return "# Write your task title here";
-          }
-
-          // if node is not heading then it is a paragraph
-          // show this placeholder for the paragraph
-          return "Type @goal, @subgoal, @habit & @deadline to select every one of these to create the task";
-        },
-        includeChildren: true,
-        showOnlyCurrent: false,
+        // placeholder text
+        placeholder:
+          "Describe your task and mention @goal, @subgoal, @habit, or @deadline as needed.",
+        // Show placeholder only when editor is editable
         showOnlyWhenEditable: true,
       }),
+      // CharacterCount extension handles character count
       CharacterCount.configure({
         limit: characterLimit,
       }),
       // these extensions are custom made
-      // GoalMentionExtension works with inserting goalMention type node in the doc
+      // GoalMentionExtension works with inserting "goalMention" type node in the doc
       GoalMentionExtension,
       SubgoalMentionExtension,
       HabitMentionExtension,
       DeadlineMentionExtension,
     ],
-    // this runs whenever the content of the editor changes
+    // this 'update' event listener runs whenever the content of the editor changes
     onUpdate({ editor }) {
       // extract data from the editor top node => doc node
+      // editor.state.doc returns ProseMirror document node
       const extractedData = extractDataFromDoc(editor.state.doc);
 
       // tiptap editor content in html string format
@@ -105,20 +113,17 @@ const CreateTaskInput = () => {
     : 0;
 
   return (
-    <>
-      <Box
-        display="flex"
-        flexDirection="column"
+    <VStack alignItems="stretch">
+      <VStack
+        alignItems="stretch"
         borderStyle="solid"
         borderWidth="thin"
-        borderColor="bg.emphasized"
+        borderColor={extractedFieldError ? "red.600" : "bg.emphasized"}
         p="3"
         rounded="xl"
-        overflow="hidden"
-        mb="2"
       >
-        {/* editor where the user will write */}
-        <EditorContent editor={editor} className="create-task-input" />
+        {/* editor wrapper */}
+        <EditorContent editor={editor} className="task-description-input" />
         {/* shows character count against character limit */}
         {editor && (
           <Flex
@@ -161,22 +166,13 @@ const CreateTaskInput = () => {
             </Text>
           </Flex>
         )}
-      </Box>
-      {/* show title required error if title is not provided */}
-      {/* or show error to mention required mentions if any other field found (except 'title') in the extractedFieldError */}
-      {/* or return null */}
-      {extractedFieldError?.title ? (
-        <Text color="red.700">{extractedFieldError.title.message}</Text>
-      ) : Object.keys(extractedFieldError || {}).some(
-          (key) => key !== "title"
-        ) ? (
-        <Text color="red.700">
-          Please mention goal, subgoal, habit & deadline by typing @goal,
-          @subgoal, @habit & @deadline
-        </Text>
-      ) : null}
-    </>
+      </VStack>
+      {/* show error here for extractedFieldsError */}
+      <Text fontSize="xs" fontWeight="medium" color="red.600">
+        {extractedFieldError?.message}
+      </Text>
+    </VStack>
   );
 };
 
-export default CreateTaskInput;
+export default TaskDescriptionInput;

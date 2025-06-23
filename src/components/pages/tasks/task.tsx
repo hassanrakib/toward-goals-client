@@ -1,6 +1,14 @@
 import { ITask } from "@/types/task";
 import { getTimeAgo } from "@/utils/task";
-import { Box, Card, HStack, Stack, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  Heading,
+  HStack,
+  Stack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import HabitDifficultiesProgress from "./habit-difficulties-progress";
 import TimeSpans from "./time-spans";
 import StatusLabels from "./status-labels";
@@ -15,6 +23,7 @@ const Task = async ({ task }: { task: ITask }) => {
     goal,
     habit: { unit },
     user: { username },
+    title,
     description,
     createdAt,
   } = task;
@@ -35,6 +44,18 @@ const Task = async ({ task }: { task: ITask }) => {
           </Stack>
         </HStack>
         <VStack alignItems="stretch">
+          {/* show the title */}
+          <Heading
+            size="xl"
+            _before={{
+              content: '"#"',
+              color: "#666",
+              marginRight: "0.25rem",
+              fontWeight: "normal",
+            }}
+          >
+            {title}
+          </Heading>
           {/* description is an html string */}
           <div
             className="task"

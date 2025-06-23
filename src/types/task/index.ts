@@ -21,6 +21,7 @@ export interface ITask {
   goal: string;
   subgoal: ISubgoal;
   habit: IHabit;
+  title: string;
   description: string;
   completedUnits: number;
   images?: string[];
