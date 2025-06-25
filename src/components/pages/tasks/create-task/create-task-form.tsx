@@ -72,7 +72,9 @@ const CreateTaskForm = ({ title }: { title?: string | null }) => {
         deadline: data.extracted.deadline,
       }).unwrap();
       // reset the form
-      reset({ title: "" });
+      // manually reset the title because its default value
+      // is set from the search params
+      reset({ title: "", json: "", ...defaultValues.extracted });
       // after successfully creating task
       toaster.create({
         description: result.message,
