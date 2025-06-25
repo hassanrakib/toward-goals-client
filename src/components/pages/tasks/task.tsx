@@ -1,5 +1,5 @@
 import { ITask } from "@/types/task";
-import { getTimeAgo } from "@/utils/task";
+import { generateHTMLFromJSON, getTimeAgo } from "@/utils/task";
 import {
   Box,
   Card,
@@ -27,8 +27,6 @@ const Task = async ({ task }: { task: ITask }) => {
     description,
     createdAt,
   } = task;
-
-  console.log(description);
 
   return (
     <Card.Root>
@@ -61,7 +59,9 @@ const Task = async ({ task }: { task: ITask }) => {
           {/* description converted from object to html string */}
           <div
             className="task"
-            dangerouslySetInnerHTML={{ __html: description }}
+            dangerouslySetInnerHTML={{
+              __html: generateHTMLFromJSON(description),
+            }}
           />
           {/* show time spans */}
           <TimeSpans taskId={task._id} />

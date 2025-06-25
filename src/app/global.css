@@ -42,3 +42,8 @@
 .task-description-global-css {
   font-size: 14px;
 }
+
+.task-description-broken-global-css {
+  font-size: 14px;
+  color: red;
+}

@@ -6,12 +6,13 @@ import { PluginKey } from "@tiptap/pm/state";
 import { ReactRenderer } from "@tiptap/react";
 import tippy, { Instance } from "tippy.js";
 import { ICreateTaskFormValues } from "@/components/pages/tasks/create-task/create-task-form";
+import { TiptapMentionExtensionNames } from "@/types/tiptap";
 
 export function makeMentionExtension({
   name,
   Component,
 }: {
-  name: string;
+  name: TiptapMentionExtensionNames;
   Component: ComponentType<SuggestionProps>;
 }) {
   return Mention.extend({
@@ -146,13 +147,13 @@ export function extractDataFromDoc(doc: Node) {
     // the name of node type & node attrs assigned inside
     // makeMentionExtension utitliy functions
     // Mention config => suggestion utility => command method
-    if (node.type.name === "goal") {
+    if (node.type.name === TiptapMentionExtensionNames.goal) {
       extracted.goalId = node.attrs.id;
-    } else if (node.type.name === "subgoal") {
+    } else if (node.type.name === TiptapMentionExtensionNames.subgoal) {
       extracted.subgoalId = node.attrs.id;
-    } else if (node.type.name === "habit") {
+    } else if (node.type.name === TiptapMentionExtensionNames.habit) {
       extracted.habitId = node.attrs.id;
-    } else if (node.type.name === "deadline") {
+    } else if (node.type.name === TiptapMentionExtensionNames.deadline) {
       extracted.deadline = node.attrs.id;
     }
   });

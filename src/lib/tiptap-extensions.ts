@@ -2,27 +2,28 @@ import { DeadlineMention } from "@/components/pages/tasks/create-task/deadline-m
 import { GoalMentionList } from "@/components/pages/tasks/create-task/goal-mention-list";
 import { HabitMentionList } from "@/components/pages/tasks/create-task/habit-mention-list";
 import { SubgoalMentionList } from "@/components/pages/tasks/create-task/subgoal-mention-list";
+import { TiptapMentionExtensionNames } from "@/types/tiptap";
 import { makeMentionExtension } from "@/utils/tiptap";
 import Document from "@tiptap/extension-document";
 
 // custom mention extensions to show different suggestion component
 export const GoalMentionExtension = makeMentionExtension({
-  name: "goal",
+  name: TiptapMentionExtensionNames.goal,
   Component: GoalMentionList,
 });
 
 export const SubgoalMentionExtension = makeMentionExtension({
-  name: "subgoal",
+  name: TiptapMentionExtensionNames.subgoal,
   Component: SubgoalMentionList,
 });
 
 export const HabitMentionExtension = makeMentionExtension({
-  name: "habit",
+  name: TiptapMentionExtensionNames.habit,
   Component: HabitMentionList,
 });
 
 export const DeadlineMentionExtension = makeMentionExtension({
-  name: "deadline",
+  name: TiptapMentionExtensionNames.deadline,
   Component: DeadlineMention,
 });
 

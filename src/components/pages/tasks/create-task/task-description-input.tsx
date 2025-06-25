@@ -74,12 +74,7 @@ const TaskDescriptionInput = ({
       // it can only take one paragraph node within
       CustomDocument,
       // Paragraph node renders paragraph <p></p>
-      Paragraph.configure({
-        // class attribute will be added to the rendered html only
-        HTMLAttributes: {
-          class: "task-description-global-css",
-        },
-      }),
+      Paragraph,
       // Text node renders plain text
       TextExtension,
       // show a placeholder inside the editor
