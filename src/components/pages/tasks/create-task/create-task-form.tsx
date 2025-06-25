@@ -17,8 +17,8 @@ import StyledInput from "@/components/derived-ui/styled-input";
 export interface ICreateTaskFormValues {
   // task title
   title: string;
-  // tiptap editor's data in html string format
-  html: string;
+  // tiptap editor's data in json string format
+  json: string;
   // extracted from the top node of tiptap editors state (editor.state.doc)
   extracted: {
     // keep the id for goal, subgoal, habit
@@ -34,7 +34,7 @@ const CreateTaskForm = () => {
   // form default values
   const defaultValues: ICreateTaskFormValues = {
     title: "",
-    html: "",
+    json: "",
     extracted: {
       goalId: "",
       subgoalId: "",
@@ -44,8 +44,14 @@ const CreateTaskForm = () => {
   };
 
   // create task mutation
-  const [createTask, { isLoading: isCreatingTask, error: createTaskError }] =
-    useCreateTaskMutation();
+  const [
+    createTask,
+    {
+      isLoading: isCreatingTask,
+      error: createTaskError,
+      isSuccess: isTaskCreationSuccessful,
+    },
+  ] = useCreateTaskMutation();
 
   // form submit handler
   const onSubmit = async (
@@ -55,7 +61,7 @@ const CreateTaskForm = () => {
     try {
       const result = await createTask({
         title: data.title,
-        description: data.html,
+        description: data.json,
         goal: data.extracted.goalId,
         subgoal: data.extracted.subgoalId,
         habit: data.extracted.habitId,
@@ -83,7 +89,14 @@ const CreateTaskForm = () => {
 
   return (
     <Flex justify="center" align="center">
-      <Card.Root size="sm" maxW="xl" w="100%" borderRadius="2xl" boxShadow="xs" bg="bg">
+      <Card.Root
+        size="sm"
+        maxW="xl"
+        w="100%"
+        borderRadius="2xl"
+        boxShadow="xs"
+        bg="bg"
+      >
         <Card.Header>
           <Card.Title fontSize="2xl">Create a Task</Card.Title>
         </Card.Header>
@@ -101,8 +114,10 @@ const CreateTaskForm = () => {
               placeholder="What do you have to complete?"
               type="text"
             />
-            {/* initializes 'html' & 'extracted' field */}
-            <TaskDescriptionInput />
+            {/* initializes 'json' & 'extracted' field */}
+            <TaskDescriptionInput
+              isTaskCreationSuccessful={isTaskCreationSuccessful}
+            />
           </Card.Body>
           <Card.Footer flexDir="column" alignItems="stretch">
             {!isCreatingTask && createTaskError && (

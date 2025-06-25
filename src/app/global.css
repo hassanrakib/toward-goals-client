@@ -1,19 +1,22 @@
 /* titap editor wrapper styles */
-.task-description-input {
+.task-description-input-global-css {
   flex-basis: 80px;
   overflow-y: auto;
 }
 
+/* titap generated class 'tiptap' */
 /* actual editor will take the full height of its parent wrapper */
 .tiptap {
   height: 100%;
 }
 
+/* titap generated class 'tiptap' */
 /* no outline when focused within the tiptap editor */
 .tiptap:focus {
   outline: none;
 }
 
+/* titap generated class 'tiptap' & 'is-editor-empty' */
 /* Display a placeholder for empty editor */
 /* .is-eidtor-empty class is given by the Placeholder extension */
 .tiptap .is-editor-empty::before {
@@ -24,12 +27,18 @@
   pointer-events: none;
 }
 
-/* all the mentions style => within editor + without editor */
-.mention {
+/* all the task mentions style => within editor + without editor */
+.task-mention-global-css {
   background-color: #fef3c7;
   color: #b45309;
   padding: 2px 6px;
   border-radius: 6px;
   font-weight: 400;
   line-height: 1.7;
+}
+
+/* all the task description style => within editor + without editor */
+
+.task-description-global-css {
+  font-size: 14px;
 }

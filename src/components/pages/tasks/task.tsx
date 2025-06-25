@@ -28,6 +28,8 @@ const Task = async ({ task }: { task: ITask }) => {
     createdAt,
   } = task;
 
+  console.log(description);
+
   return (
     <Card.Root>
       <Card.Body>
@@ -56,7 +58,7 @@ const Task = async ({ task }: { task: ITask }) => {
           >
             {title}
           </Heading>
-          {/* description is an html string */}
+          {/* description converted from object to html string */}
           <div
             className="task"
             dangerouslySetInnerHTML={{ __html: description }}

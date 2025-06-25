@@ -1,7 +1,6 @@
 "use client";
 
 import { EditorContent, useEditor } from "@tiptap/react";
-import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import TextExtension from "@tiptap/extension-text";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -9,6 +8,7 @@ import CharacterCount from "@tiptap/extension-character-count";
 import { Flex, Icon, Text, VStack } from "@chakra-ui/react";
 import { extractDataFromDoc } from "@/utils/tiptap";
 import {
+  CustomDocument,
   DeadlineMentionExtension,
   GoalMentionExtension,
   HabitMentionExtension,
@@ -17,14 +17,19 @@ import {
 import { FieldError, useController, useFormContext } from "react-hook-form";
 import { ICreateTaskFormValues } from "./create-task-form";
 import { getHookFormError } from "@/utils/form";
+import { useEffect } from "react";
 
-const TaskDescriptionInput = () => {
+const TaskDescriptionInput = ({
+  isTaskCreationSuccessful,
+}: {
+  isTaskCreationSuccessful: boolean;
+}) => {
   // character limit for the input
-  const characterLimit = 400;
+  const characterLimit = 300;
 
-  // html field will hold html string data of tiptap editor
-  const { field: html } = useController<ICreateTaskFormValues, "html">({
-    name: "html",
+  // json field will hold json string data of tiptap editor
+  const { field: json } = useController<ICreateTaskFormValues, "json">({
+    name: "json",
   });
 
   // extracted field will hold extracted data from editor content
@@ -59,23 +64,29 @@ const TaskDescriptionInput = () => {
   // editor config
   const editor = useEditor({
     // initial content at the time of mounting the editor
-    content: html.value,
+    content: json.value,
     // To suppress Tiptap error: SSR has been detected,
     // please set `immediatelyRender` explicitly to `false` to avoid hydration mismatches.
     immediatelyRender: false,
     // Extensions enhance Tiptap by adding new capabilities to the editor
     extensions: [
-      // Document node is home to all other nodes
-      Document,
+      // CustomDocument node is home to all other nodes
+      // it can only take one paragraph node within
+      CustomDocument,
       // Paragraph node renders paragraph <p></p>
-      Paragraph,
+      Paragraph.configure({
+        // class attribute will be added to the rendered html only
+        HTMLAttributes: {
+          class: "task-description-global-css",
+        },
+      }),
       // Text node renders plain text
       TextExtension,
       // show a placeholder inside the editor
       Placeholder.configure({
         // placeholder text
         placeholder:
-          "Describe your task and mention @goal, @subgoal, @habit, or @deadline as needed.",
+          "Describe your task and mention #goal, #subgoal, #habit and #deadline as needed...",
         // Show placeholder only when editor is editable
         showOnlyWhenEditable: true,
       }),
@@ -96,14 +107,21 @@ const TaskDescriptionInput = () => {
       // editor.state.doc returns ProseMirror document node
       const extractedData = extractDataFromDoc(editor.state.doc);
 
-      // tiptap editor content in html string format
-      const htmlString = editor.getHTML();
+      // tiptap editor content in json object format
+      const jsonObject = editor.getJSON();
 
-      // update the hook form html & extracted field
-      html.onChange(htmlString);
+      // update the hook form json & extracted field
+      json.onChange(jsonObject);
       extracted.onChange(extractedData);
     },
   });
+
+  useEffect(() => {
+    // clear the tiptap editor content
+    if (isTaskCreationSuccessful && editor) {
+      editor.commands.clearContent();
+    }
+  }, [editor, isTaskCreationSuccessful]);
 
   // character usage percentage
   const characterUsagePercentage = editor
@@ -123,7 +141,10 @@ const TaskDescriptionInput = () => {
         rounded="xl"
       >
         {/* editor wrapper */}
-        <EditorContent editor={editor} className="task-description-input" />
+        <EditorContent
+          editor={editor}
+          className="task-description-input-global-css"
+        />
         {/* shows character count against character limit */}
         {editor && (
           <Flex

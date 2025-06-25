@@ -107,7 +107,7 @@ export const HabitMentionList = ({
               // command goes to the HabitMentionExtension which is rendering this component
               command({
                 id: habit._id,
-                label: `habit ${habit.title}`,
+                label: `${habit.title}`,
               });
             }}
           >

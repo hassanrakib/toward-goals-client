@@ -79,7 +79,7 @@ export const GoalMentionList = ({
             // send props to GoalMentionExtension command menthod
             // id is later extracted from the editor.state
             // & label is used by tiptap editor to render html with something showable
-            command({ id: goal._id, label: `goal_${goal.title}` });
+            command({ id: goal._id, label: `${goal.title}` });
           }}
         >
           {goal.title}

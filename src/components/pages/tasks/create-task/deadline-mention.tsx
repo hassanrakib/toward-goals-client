@@ -29,7 +29,7 @@ export const DeadlineMention = ({
         // command goes to the DeadlineMentionExtension which is rendering this component
         command({
           id: date?.toISOString(),
-          label: `deadline ${format(date!, "p")}`,
+          label: `${format(date!, "p")}`,
         });
       }}
       // shows the calendar instantly without showing input field

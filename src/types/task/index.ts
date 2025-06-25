@@ -1,6 +1,8 @@
+import { z } from "zod";
 import { IHabit } from "../habit";
 import { ISubgoal } from "../subgoal";
 import { IUser } from "../user";
+import { TiptapDocSchema } from "@/schemas/task";
 
 export interface ITimeSpan {
   _id: string;
@@ -22,7 +24,8 @@ export interface ITask {
   subgoal: ISubgoal;
   habit: IHabit;
   title: string;
-  description: string;
+  // tiptap json doc type
+  description: z.infer<typeof TiptapDocSchema>;
   completedUnits: number;
   images?: string[];
   deadline: Date;
@@ -36,7 +39,8 @@ export type TaskCreationData = {
   subgoal: string;
   habit: string;
   title: string;
-  description: string;
+  // tiptap json object
+  description: unknown;
   deadline: string;
 };
 

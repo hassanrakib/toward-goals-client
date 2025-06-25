@@ -96,7 +96,7 @@ export const SubgoalMentionList = ({
           onClick={() => {
             // send the command to insert subgoalMention node
             // command goes to the SubgoalMentionExtension which is rendering this component
-            command({ id: subgoal._id, label: `subgoal ${subgoal.title}` });
+            command({ id: subgoal._id, label: `${subgoal.title}` });
           }}
         >
           {subgoal.title}

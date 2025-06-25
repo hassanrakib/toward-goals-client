@@ -3,24 +3,32 @@ import { GoalMentionList } from "@/components/pages/tasks/create-task/goal-menti
 import { HabitMentionList } from "@/components/pages/tasks/create-task/habit-mention-list";
 import { SubgoalMentionList } from "@/components/pages/tasks/create-task/subgoal-mention-list";
 import { makeMentionExtension } from "@/utils/tiptap";
+import Document from "@tiptap/extension-document";
 
 // custom mention extensions to show different suggestion component
 export const GoalMentionExtension = makeMentionExtension({
-  name: "goalMention",
+  name: "goal",
   Component: GoalMentionList,
 });
 
 export const SubgoalMentionExtension = makeMentionExtension({
-  name: "subgoalMention",
+  name: "subgoal",
   Component: SubgoalMentionList,
 });
 
 export const HabitMentionExtension = makeMentionExtension({
-  name: "habitMention",
+  name: "habit",
   Component: HabitMentionList,
 });
 
 export const DeadlineMentionExtension = makeMentionExtension({
-  name: "deadlineMention",
+  name: "deadline",
   Component: DeadlineMention,
+});
+
+// By default, Tiptap’s Document extension allows multiple block-level nodes like paragraphs, headings, etc.
+// Override this by customizing the Document extension schema to limit its content to a single paragraph block, which itself can contain inline nodes (like text, mention, etc.)
+export const CustomDocument = Document.extend({
+  // schema changed to only contain a single paragraph
+  content: "paragraph",
 });
