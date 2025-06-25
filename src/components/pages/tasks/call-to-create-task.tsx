@@ -55,7 +55,7 @@ export default function CallToCreateTask() {
           ),
         }}
       >
-        <Card.Body gap="2">
+        <Card.Body px={{ base: "2", sm: "3" }} gap="2">
           <HStack gap="3" alignItems="flex-start">
             {/* avatar */}
             <Avatar size="lg" name={sessionPayload?.username} />
@@ -64,7 +64,7 @@ export default function CallToCreateTask() {
               type="text"
               size="lg"
               name="title"
-              placeholder="What do you have to complete?"
+              placeholder="Anything to do?"
             />
           </HStack>
           <SubmitButton

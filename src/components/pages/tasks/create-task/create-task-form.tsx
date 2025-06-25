@@ -72,7 +72,7 @@ const CreateTaskForm = ({ title }: { title?: string | null }) => {
         deadline: data.extracted.deadline,
       }).unwrap();
       // reset the form
-      reset(defaultValues);
+      reset({ title: "" });
       // after successfully creating task
       toaster.create({
         description: result.message,
