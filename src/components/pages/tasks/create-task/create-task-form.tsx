@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UseFormReset } from "react-hook-form";
 import { revalidateCacheByTag } from "@/lib/revalidate-cache-apis";
 import StyledInput from "@/components/derived-ui/styled-input";
+import { useRouter } from "next/navigation";
 
 export interface ICreateTaskFormValues {
   // task title
@@ -30,10 +31,10 @@ export interface ICreateTaskFormValues {
   };
 }
 
-const CreateTaskForm = () => {
+const CreateTaskForm = ({ title }: { title?: string | null }) => {
   // form default values
   const defaultValues: ICreateTaskFormValues = {
-    title: "",
+    title: title || "",
     json: "",
     extracted: {
       goalId: "",
@@ -42,6 +43,9 @@ const CreateTaskForm = () => {
       deadline: "",
     },
   };
+
+  // next.js router
+  const router = useRouter();
 
   // create task mutation
   const [
@@ -76,6 +80,9 @@ const CreateTaskForm = () => {
       });
       // revalidate client side router cache by the tag
       revalidateCacheByTag("tasks");
+
+      // redirect to the '/tasks' route
+      router.push("/tasks");
     } catch (error: unknown) {
       // show a toaster if task creation fails
       toaster.create({

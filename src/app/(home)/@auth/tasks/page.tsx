@@ -1,5 +1,5 @@
+import CallToCreateTask from "@/components/pages/tasks/call-to-create-task";
 import Task from "@/components/pages/tasks/task";
-import CreateProgressLink from "@/components/shared/create-progress-link";
 import { getMyTasks } from "@/services/task";
 import { VStack } from "@chakra-ui/react";
 
@@ -14,20 +14,12 @@ const Tasks = async ({
   const tasks = await getMyTasks({ goal: goalId });
 
   return (
-    <>
-      {/* show create task option */}
-      {!tasks.data?.length && (
-        <CreateProgressLink
-          callToAction="Let's plan your next task?"
-          actionLink="/tasks/create-task"
-          actionLabel="Create task"
-        />
-      )}
-      {/* show tasks */}
       <VStack alignItems="stretch" maxW="xl" mx="auto" gap="3.5">
+        {/* call to create a new task */}
+        <CallToCreateTask />
+        {/* show list of tasks */}
         {tasks.data?.map((task) => <Task key={task._id} task={task} />)}
       </VStack>
-    </>
   );
 };
 
