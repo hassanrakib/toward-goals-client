@@ -35,7 +35,7 @@ const DeepFocusLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       },
     ],
     series: [
-      { name: "completedDeepFocus", color: "teal.200", stackId: "a" },
+      { name: "completedDeepFocus", color: "pink.300", stackId: "a" },
       { name: "incompleteDeepFocus", color: "white", stackId: "a" },
     ],
   });

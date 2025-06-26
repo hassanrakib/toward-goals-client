@@ -71,7 +71,7 @@ const GoalLevel = ({ goalProgress }: { goalProgress: IGoalProgress }) => {
       },
     ],
     series: [
-      { name: "totalCompletedRequirement", color: "teal.200", stackId: "a" },
+      { name: "totalCompletedRequirement", color: "yellow.200", stackId: "a" },
       { name: "incompleteRequirement", color: "white", stackId: "a" },
     ],
   });

@@ -7,7 +7,7 @@ export default function TopBanner() {
   return (
     <VStack textAlign="center" py="14" gap="5" w="full" maxW="lg" mx="auto">
       {/* Slogan in big font size */}
-      <Heading size="5xl">
+      <Heading size={{ base: "3xl", sm: "4xl", md: "5xl" }}>
         Plan Bold
         <StatusCircle size="sm" ml="0.5" bgColor="yellow.400" /> Track Smart
         <StatusCircle size="sm" ml="0.5" bgColor="yellow.400" /> Achieve More
@@ -19,7 +19,7 @@ export default function TopBanner() {
         Set clear goals, track your progress, and celebrate every step you take.
       </Text>
       <StyledButton asChild>
-        <Link href="/signup">Start Your Journey Toward Goals</Link>
+        <Link href="/signup">Start Journey Toward Goals</Link>
       </StyledButton>
     </VStack>
   );
