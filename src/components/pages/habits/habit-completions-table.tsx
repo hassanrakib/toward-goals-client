@@ -1,7 +1,8 @@
+import StatusCircle from "@/components/derived-ui/status-circle";
 import { HabitDifficultiesName } from "@/types/habit";
 import { IHabitProgress } from "@/types/progress";
 import { getDifficultyColor } from "@/utils/habit";
-import { Status, Table } from "@chakra-ui/react";
+import { Table } from "@chakra-ui/react";
 
 const HabitCompletionsTable = ({
   habitProgress,
@@ -59,9 +60,7 @@ const HabitCompletionsTable = ({
           {tableData.map((item) => (
             <Table.Row key={item.id}>
               <Table.Cell>
-                <Status.Root mr="1">
-                  <Status.Indicator bgColor={item.difficultyColor} />
-                </Status.Root>
+                <StatusCircle mr="1" bgColor={item.difficultyColor} />
                 {item.difficultyDescription}
               </Table.Cell>
               <Table.Cell>{item.difficultyCompletions}</Table.Cell>

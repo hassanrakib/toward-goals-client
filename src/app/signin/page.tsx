@@ -77,7 +77,6 @@ const SignIn = () => {
       justify="center"
       align="center"
       minHeight="100vh"
-      bg="bg.subtle"
       p={4}
     >
       <Card.Root

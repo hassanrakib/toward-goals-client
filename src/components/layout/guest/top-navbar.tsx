@@ -19,6 +19,7 @@ export default function TopNavbar() {
       {/* icon to show links within a dialog below sm breakpoint */}
       <StyledDialog
         size="full"
+        placement="top"
         triggerElement={
           <IconButton
             hideFrom="sm"
@@ -33,10 +34,10 @@ export default function TopNavbar() {
         {/* show links to signup signin */}
         <Card.Root height="100dvh">
           <Card.Body mt="2" gap="2">
-            <StyledButton size="sm" asChild>
+            <StyledButton asChild>
               <Link href="/signin">Sign In</Link>
             </StyledButton>
-            <StyledButton size="sm" variant="outline" asChild>
+            <StyledButton variant="outline" asChild>
               <Link href="/signup">Sign Up</Link>
             </StyledButton>
           </Card.Body>
@@ -44,10 +45,10 @@ export default function TopNavbar() {
       </StyledDialog>
       {/* links to show above sm breakpoint */}
       <Flex gap="3" hideBelow="sm">
-        <StyledButton size="sm" asChild>
+        <StyledButton asChild>
           <Link href="/signin">Sign In</Link>
         </StyledButton>
-        <StyledButton size="sm" variant="outline" asChild>
+        <StyledButton variant="outline" asChild>
           <Link href="/signup">Sign Up</Link>
         </StyledButton>
       </Flex>

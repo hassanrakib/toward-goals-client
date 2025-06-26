@@ -64,7 +64,7 @@ const SignUp = () => {
   };
 
   return (
-    <Flex justify="center" align="center" minHeight="100vh" bg="gray.50" p={4}>
+    <Flex justify="center" align="center" minHeight="100vh" p={4}>
       <Card.Root maxW="sm" w="100%" borderRadius="lg" boxShadow="lg" bg="white">
         {/* show logo */}
         <TowardGoalsLogo mt="2" />
