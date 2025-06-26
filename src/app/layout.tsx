@@ -19,7 +19,7 @@ export default function RootLayout({
       <body>
         <Providers>
           {/* it takes all of the width of body */}
-          <Container bgColor="bg.subtle" fluid p="0">
+          <Container bgColor="gray.100" fluid p="0">
             {children}
           </Container>
         </Providers>
