@@ -27,9 +27,18 @@ export default function FeatureCard({
         alignItems={{ base: "noraml", md: "center" }}
       >
         {/* screenshot image */}
-        <Box flexBasis={{ base: "normal", md: "sm" }}>
-          <Box w="sm" mx="auto">
-            <ChakraImage w="full" h="auto" shadow="sm" asChild>
+        <Box>
+          <Box
+            w={{ base: "unset", md: "sm" }}
+            maxW={{ base: "sm", md: "none" }}
+            mx={{ base: "auto", md: "unset" }}
+          >
+            <ChakraImage
+              w="full"
+              h="auto"
+              shadow="xs"
+              asChild
+            >
               {image}
             </ChakraImage>
           </Box>
