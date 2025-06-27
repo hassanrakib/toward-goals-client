@@ -4,24 +4,24 @@ import NextImage from "next/image";
 
 export default function OverviewImage() {
   return (
-    <Flex maxW="3xl" mx="auto">
-      <Box>
-        <ChakraImage w="full" h="auto" alt="goal-progress-overview" asChild>
+    <Flex alignItems="center" gap={{base: "1", sm: "2"}} mx="auto">
+      <Box shadow="xs">
+        <ChakraImage w="full" h="auto" alt="goal-progress-screenshot" asChild>
           <NextImage
-            src="/images/goal-progress-overview.webp"
-            alt="goal-progress-overview"
-            width="989"
-            height="911"
+            src="/images/landing-page/goal-progress-screenshot.webp"
+            alt="goal-progress-screenshot"
+            width="448"
+            height="558"
           />
         </ChakraImage>
       </Box>
-      <Box>
-        <ChakraImage w="full" h="auto" alt="task-progress-overview" asChild>
+      <Box shadow="xs">
+        <ChakraImage w="full" h="auto" alt="tasks-progress-screenshot" asChild>
           <NextImage
-            src="/images/task-progress-overview.webp"
-            alt="task-progress-overview"
-            width="495"
-            height="911"
+            src="/images/landing-page/tasks-progress-screenshot.webp"
+            alt="tasks-progress-screenshot"
+            width="266"
+            height="558"
           />
         </ChakraImage>
       </Box>
