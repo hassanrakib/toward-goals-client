@@ -101,7 +101,7 @@ const GoalSearchForm = () => {
           {/* show create goal button */}
           <CreateProgressLink
             callToAction="Haven't you found your goal?"
-            actionLink="/goals/create-goal"
+            actionLink="/goals/create-goal-new"
             actionLabel="Create goal"
           />
         </Card.Footer>
