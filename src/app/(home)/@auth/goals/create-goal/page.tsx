@@ -1,7 +1,7 @@
-import CreateGoalForm from "@/components/pages/goals/create-goal/create-goal-form";
+import CreateGoalMultiStepForm from "@/components/pages/goals/create-goal/create-goal-multistep-form";
 
-const CreateGoal = () => {
-  return <CreateGoalForm />;
-};
+const CreateGoal = async () => {
+    return <CreateGoalMultiStepForm />
+}
 
 export default CreateGoal;

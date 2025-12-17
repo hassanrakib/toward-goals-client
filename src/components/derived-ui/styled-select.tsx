@@ -46,7 +46,7 @@ export default function StyledSelect<
             collection={collection}
             {...rest}
           >
-            <SelectTrigger>
+            <SelectTrigger rounded='2xl'>
               <SelectValueText placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent rounded="2xl" portalRef={portalRef}>

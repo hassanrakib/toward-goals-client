@@ -1,5 +1,5 @@
 import InterceptorDialog from "@/components/derived-ui/interceptor-dialog";
-import CreateGoalForm from "@/components/pages/goals/create-goal/create-goal-form";
+import CreateGoalForm from "@/components/pages/goals/create-goal-v1/create-goal-form";
 
 const CreateGoalInterceptor = () => {
   return (
